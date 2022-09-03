@@ -6,8 +6,8 @@ pragma solidity ^0.8.0;
 import "../extensions/ERC1155Mintable.sol";
 import "../extensions/ERC1155Burnable.sol";
 import "../extensions/ERC1155Pausable.sol";
-import "../extensions/ERC1155URIStorage.sol";
 import "../extensions/ERC1155Offsetable.sol";
+import "../extensions/ERC1155URIStorable.sol";
 import "../extensions/ERC1155ERC20.sol";
 
 /**
@@ -30,8 +30,8 @@ contract ERC1155Preset is
     ERC1155Mintable,
     ERC1155Burnable,
     ERC1155Pausable,
-    ERC1155URIStorage,
     ERC1155Offsetable,
+    ERC1155URIStorable,
     ERC1155ERC20
 {
     /**
@@ -41,10 +41,10 @@ contract ERC1155Preset is
         public
         view
         virtual
-        override(ERC1155ERC20, ERC1155URIStorage)
+        override(ERC1155ERC20, ERC1155URIStorable)
         returns (bool)
     {
-        return ERC1155URIStorage.exists(tokenId);
+        return ERC1155URIStorable.exists(tokenId);
     }
 
     /**
@@ -60,7 +60,7 @@ contract ERC1155Preset is
     )
         internal
         virtual
-        override(ERC1155, ERC1155Pausable, ERC1155URIStorage, ERC1155ERC20)
+        override(ERC1155, ERC1155Pausable, ERC1155URIStorable, ERC1155ERC20)
     {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
     }

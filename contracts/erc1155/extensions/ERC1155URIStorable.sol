@@ -14,7 +14,11 @@ import "./ERC1155Accessible.sol";
  *
  * _Available since v4.6._
  */
-contract ERC1155URIStorage is EditRole, ERC1155Accessible, IERC1155MetadataURI {
+contract ERC1155URIStorable is
+    EditRole,
+    ERC1155Accessible,
+    IERC1155MetadataURI
+{
     using Strings for uint256;
 
     // Mapping for token URIs
@@ -23,7 +27,7 @@ contract ERC1155URIStorage is EditRole, ERC1155Accessible, IERC1155MetadataURI {
     /**
      *
      */
-    function setURI(uint256 tokenId, string memory tokenURI) internal virtual {
+    function setURI(uint256 tokenId, string memory tokenURI) public virtual {
         require(
             hasRole(EDITOR_ROLE, _msgSender()),
             "ERC1155: sender does not have role"

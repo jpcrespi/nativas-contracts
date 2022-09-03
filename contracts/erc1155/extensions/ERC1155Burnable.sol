@@ -29,7 +29,7 @@ contract ERC1155Burnable is BurnRole, ERC1155Accessible, IERC1155Burnable {
         address account,
         uint256 id,
         uint256 value
-    ) public virtual {
+    ) public virtual override {
         require(
             hasRole(BURNER_ROLE, _msgSender()),
             "ERC1155: sender does not have role"
@@ -49,7 +49,7 @@ contract ERC1155Burnable is BurnRole, ERC1155Accessible, IERC1155Burnable {
         address account,
         uint256[] memory ids,
         uint256[] memory values
-    ) public virtual {
+    ) public virtual override {
         require(
             hasRole(BURNER_ROLE, _msgSender()),
             "ERC1155: sender does not have role"

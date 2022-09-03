@@ -47,7 +47,7 @@ contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
     /**
      *
      */
-    function transferFromAdapter(
+    function safeAdapterTransferFrom(
         address operator,
         address from,
         address to,
@@ -59,7 +59,7 @@ contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
             _msgSender() == _adapters[id],
             "ERC1155: caller is not the token adapter"
         );
-        _transferFrom(operator, from, to, id, amount, data);
+        _safeAdapterTransferFrom(operator, from, to, id, amount, data);
     }
 
     /**
@@ -81,6 +81,33 @@ contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
     function _setAdapter(uint256 tokenId, address adapter) internal virtual {
         _adapters[tokenId] = adapter;
         emit Adapter(tokenId, adapter);
+    }
+
+    /**
+     * @dev Transfers `amount` tokens of token type `id` from `from` to `to`.
+     *
+     * Emits a {TransferSingle} event.
+     *
+     * Requirements:
+     *
+     * - `to` cannot be the zero address.
+     * - `from` must have a balance of tokens of type `id` of at least `amount`.
+     * - If `to` refers to a smart contract, it must implement {IERC1155Receiver-onERC1155Received} and return the
+     * acceptance magic value.
+     */
+    function _safeAdapterTransferFrom(
+        address operator,
+        address from,
+        address to,
+        uint256 id,
+        uint256 amount,
+        bytes memory data
+    ) internal virtual {
+        require(to != address(0), "ERC1155: transfer to the zero address");
+
+        _transferFrom(operator, from, to, id, amount, data);
+
+        _doSafeTransferAcceptanceCheck(operator, from, to, id, amount, data);
     }
 
     /**

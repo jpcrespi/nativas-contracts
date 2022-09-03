@@ -13,7 +13,7 @@ interface IERC1155ERC20 is IERC1155, IERC1155Supply {
     /**
      *
      */
-    function transferFromAdapter(
+    function safeAdapterTransferFrom(
         address operator,
         address from,
         address to,

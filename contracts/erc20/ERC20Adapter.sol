@@ -282,7 +282,7 @@ contract ERC20Adapter is
         address to,
         uint256 amount
     ) internal virtual {
-        IERC1155ERC20(_entity).transferFromAdapter(
+        IERC1155ERC20(_entity).safeAdapterTransferFrom(
             operator,
             from,
             to,

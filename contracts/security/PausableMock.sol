@@ -13,14 +13,14 @@ contract PausableMock is Pausable {
     /**
      *
      */
-    function pause() external {
+    function pause() external virtual {
         _pause();
     }
 
     /**
      *
      */
-    function unpause() external {
+    function unpause() external virtual {
         _unpause();
     }
 }

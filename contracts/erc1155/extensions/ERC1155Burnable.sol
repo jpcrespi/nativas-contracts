@@ -3,6 +3,7 @@
 
 pragma solidity ^0.8.0;
 
+import "../../../interfaces/erc1155/IERC1155Burnable.sol";
 import "../../access/roles/BurnRole.sol";
 import "./ERC1155Accessible.sol";
 
@@ -13,7 +14,7 @@ import "./ERC1155Accessible.sol";
  *
  * _Available since v3.1._
  */
-contract ERC1155Burnable is BurnRole, ERC1155Accessible {
+contract ERC1155Burnable is BurnRole, ERC1155Accessible, IERC1155Burnable {
     /**
      * @dev Grants `BURNER_ROLE` to the account that deploys the contract.
      */

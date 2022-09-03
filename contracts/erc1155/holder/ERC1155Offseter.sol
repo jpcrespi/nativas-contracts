@@ -5,19 +5,23 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
-import "../../interfaces/erc1155/IERC1155.sol";
-import "../../interfaces/erc1155/IERC1155TokenReceiver.sol";
+import "../../../interfaces/erc1155/IERC1155.sol";
+import "../../../interfaces/erc1155/IERC1155TokenReceiver.sol";
+import "../../../interfaces/erc1155/IERC1155Burnable.sol";
 
 /**
  *
  */
-contract ERC1155Holder is Context, ERC165, IERC1155TokenReceiver {
+contract ERC1155Offseter is Context, ERC165, IERC1155TokenReceiver {
+    //
+    address internal _entity;
+
     /**
      * @dev Grants `ApprovalForAll` to the account that
      * deploys the contract.
      */
-    constructor(address erc1155) {
-        _setApprovalForAll(erc1155, _msgSender(), true);
+    constructor(address entity_) {
+        _entity = entity_;
     }
 
     /**
@@ -40,11 +44,16 @@ contract ERC1155Holder is Context, ERC165, IERC1155TokenReceiver {
      */
     function onERC1155Received(
         address,
-        address,
-        uint256,
-        uint256,
+        address from,
+        uint256 id,
+        uint256 value,
         bytes memory
     ) public virtual override returns (bytes4) {
+        require(
+            _msgSender() == _entity,
+            "ERC1155: caller is not the token entity"
+        );
+        IERC1155Burnable(_entity).burn(from, id, value);
         return this.onERC1155Received.selector;
     }
 
@@ -53,26 +62,16 @@ contract ERC1155Holder is Context, ERC165, IERC1155TokenReceiver {
      */
     function onERC1155BatchReceived(
         address,
-        address,
-        uint256[] memory,
-        uint256[] memory,
+        address from,
+        uint256[] calldata ids,
+        uint256[] calldata values,
         bytes memory
     ) public virtual override returns (bytes4) {
-        return this.onERC1155BatchReceived.selector;
-    }
-
-    /**
-     * @dev See {IERC1155-setApprovalForAll}.
-     */
-    function _setApprovalForAll(
-        address erc1155,
-        address operator,
-        bool approved
-    ) internal virtual {
         require(
-            IERC165(erc1155).supportsInterface(type(IERC1155).interfaceId),
-            "ERC1155Holder: contract does not support IERC1155 interface"
+            _msgSender() == _entity,
+            "ERC1155: caller is not the token entity"
         );
-        IERC1155(erc1155).setApprovalForAll(operator, approved);
+        IERC1155Burnable(_entity).burnBatch(from, ids, values);
+        return this.onERC1155BatchReceived.selector;
     }
 }

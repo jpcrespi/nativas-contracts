@@ -1,0 +1,29 @@
+dotenv: .env
+wallets:
+  from_key: ${PRIVATE_KEY}
+dependencies:
+  - OpenZeppelin/openzeppelin-contracts@4.5.0
+compiler:
+  solc:
+    version: 0.8.13
+    remappings:
+      - '@openzeppelin=OpenZeppelin/openzeppelin-contracts@4.5.0'
+networks:
+  default: development
+  development:
+    verify: False
+    controller: ''
+    fee: 100000000000000000
+  ganache:
+    verify: False
+    controller: '0x3366E0D2C1C5A237A6CB91777FA34B5F08769007'
+    erc20preset: '0x3194cBDC3dbcd3E11a07892e7bA5c3394048Cc87'
+    fee: 100000000000000000
+  rinkeby:
+    verify: True
+    controller: ''
+    fee: 100000000000000000
+  mainnet-fork-infura:
+    verify: False
+    controller: ''
+    fee: 100000000000000000

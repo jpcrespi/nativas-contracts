@@ -1,0 +1,9 @@
+{
+    "python.formatting.provider": "black",
+    "solidity.compileUsingRemoteVersion": "v0.8.13+commit.abaa5c0e",
+    "solidity.defaultCompiler": "localNodeModule",
+    "solidity.remappings": [
+        "@openzeppelin/=/Users/juanpablo/.brownie/packages/OpenZeppelin/openzeppelin-contracts@4.5.0"
+        //,"@openzeppelin/=/home/jpcre/.brownie/packages/OpenZeppelin/openzeppelin-contracts@4.5.0"
+    ]
+}

@@ -15,6 +15,13 @@ import "./ERC1155Accessible.sol";
  */
 contract ERC1155Mintable is MintRole, ERC1155Accessible {
     /**
+     * @dev Grants `MINTER_ROLE` to the account that deploys the contract.
+     */
+    constructor() {
+        _grantRole(MINTER_ROLE, _msgSender());
+    }
+
+    /**
      * @dev Creates `amount` new tokens for `to`, of token type `id`.
      *
      * See {ERC1155-_mint}.

@@ -14,6 +14,9 @@ PauseRole = brownie.PauseRole
 ERC20Adapter = brownie.ERC20Adapter
 # ERC165
 ERC165 = brownie.ERC165Mock
+# ERC1155
+ERC1155 = brownie.ERC1155
+ERC1155Common = brownie.ERC1155Common
 # Security
 Pausable = brownie.PausableMock
 # Utils

@@ -23,12 +23,11 @@ contract ERC20Adapter is
     IERC20Approve
 {
     //
+    address internal _entity;
     uint256 internal _id;
     string internal _name;
     string internal _symbol;
     uint8 internal _decimals;
-    //
-    address internal _erc1155;
     //
     mapping(address => mapping(address => uint256)) internal _allowances;
 
@@ -36,13 +35,13 @@ contract ERC20Adapter is
      *
      */
     constructor(
-        address erc1155_,
+        address entity_,
         uint256 id_,
         string memory name_,
         string memory symbol_,
         uint8 decimals_
     ) {
-        _erc1155 = erc1155_;
+        _entity = entity_;
         _id = id_;
         _name = name_;
         _symbol = symbol_;
@@ -63,6 +62,13 @@ contract ERC20Adapter is
             interfaceId == type(IERC20).interfaceId ||
             interfaceId == type(IERC20Metadata).interfaceId ||
             super.supportsInterface(interfaceId);
+    }
+
+    /**
+     * @dev ERC1155 token address.
+     */
+    function entity() public view virtual returns (address) {
+        return _entity;
     }
 
     /**
@@ -97,14 +103,14 @@ contract ERC20Adapter is
      * @dev See {IBEP20-getOwner}.
      */
     function getOwner() public view override returns (address) {
-        return _erc1155;
+        return _entity;
     }
 
     /**
      * @dev See {IERC20-totalSupply}.
      */
     function totalSupply() public view virtual override returns (uint256) {
-        return IERC1155ERC20(_erc1155).totalSupply(_id);
+        return IERC1155ERC20(_entity).totalSupply(_id);
     }
 
     /**
@@ -117,7 +123,7 @@ contract ERC20Adapter is
         override
         returns (uint256)
     {
-        return IERC1155ERC20(_erc1155).balanceOf(account, _id);
+        return IERC1155ERC20(_entity).balanceOf(account, _id);
     }
 
     /**
@@ -276,7 +282,7 @@ contract ERC20Adapter is
         address to,
         uint256 amount
     ) internal virtual {
-        IERC1155ERC20(_erc1155).transferFromAdapter(
+        IERC1155ERC20(_entity).transferFromAdapter(
             operator,
             from,
             to,

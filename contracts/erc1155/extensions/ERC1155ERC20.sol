@@ -56,7 +56,7 @@ contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
         bytes memory data
     ) public virtual override {
         require(
-            _msgSender() == adapters(id),
+            _msgSender() == _adapters[id],
             "ERC1155: caller is not the token adapter"
         );
         _transferFrom(operator, from, to, id, amount, data);
@@ -72,7 +72,7 @@ contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
         override
         returns (bool)
     {
-        return adapters(tokenId) != address(0);
+        return _adapters[tokenId] != address(0);
     }
 
     /**

@@ -63,7 +63,7 @@ contract ERC1155URIStorage is EditRole, ERC1155Accessible, IERC1155MetadataURI {
      * @dev Indicates whether any token exist with a given id, or not.
      */
     function exists(uint256 tokenId) public view virtual returns (bool) {
-        return bytes(uri(tokenId)).length > 0;
+        return bytes(_tokenURIs[tokenId]).length > 0;
     }
 
     /**
@@ -71,7 +71,7 @@ contract ERC1155URIStorage is EditRole, ERC1155Accessible, IERC1155MetadataURI {
      */
     function _setURI(uint256 tokenId, string memory tokenURI) internal virtual {
         _tokenURIs[tokenId] = tokenURI;
-        emit URI(uri(tokenId), tokenId);
+        emit URI(tokenURI, tokenId);
     }
 
     /**

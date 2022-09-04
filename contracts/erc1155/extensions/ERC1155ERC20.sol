@@ -3,14 +3,18 @@
 
 pragma solidity ^0.8.0;
 
+import "@openzeppelin/contracts/proxy/Clones.sol";
 import "../../../interfaces/erc1155/IERC1155ERC20.sol";
 import "../../access/roles/EditRole.sol";
+import "../../erc20/ERC20Adapter.sol";
 import "./ERC1155Supply.sol";
 
 /**
  *
  */
 contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
+    // ERC20 Template
+    address internal _template;
     // Mapping token id to adapter address
     mapping(uint256 => address) internal _adapters;
 
@@ -24,17 +28,23 @@ contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
      */
     constructor() {
         _grantRole(EDITOR_ROLE, _msgSender());
+        _template = address(new ERC20Adapter());
     }
 
     /**
      *
      */
-    function setAdapter(uint256 tokenId, address adapter) public virtual {
+    function setAdapter(
+        uint256 id,
+        string memory name,
+        string memory symbol,
+        uint8 decimals
+    ) public virtual {
         require(
             hasRole(EDITOR_ROLE, _msgSender()),
             "ERC1155: caller is not the token adapter"
         );
-        _setAdapter(tokenId, adapter);
+        _setAdapter(id, name, symbol, decimals);
     }
 
     /**
@@ -78,9 +88,16 @@ contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
     /**
      *
      */
-    function _setAdapter(uint256 tokenId, address adapter) internal virtual {
-        _adapters[tokenId] = adapter;
-        emit Adapter(tokenId, adapter);
+    function _setAdapter(
+        uint256 id,
+        string memory name,
+        string memory symbol,
+        uint8 decimals
+    ) internal virtual {
+        address adapter = Clones.clone(_template);
+        ERC20Adapter(adapter).setup(id, name, symbol, decimals);
+        _adapters[id] = adapter;
+        emit Adapter(id, adapter);
     }
 
     /**

@@ -34,14 +34,17 @@ contract ERC20Adapter is
     /**
      *
      */
-    constructor(
-        address entity_,
+    function setup(
         uint256 id_,
         string memory name_,
         string memory symbol_,
         uint8 decimals_
-    ) {
-        _entity = entity_;
+    ) public {
+        require(
+            address(_entity) == address(0),
+            "ERC20Adapter: token already configured"
+        );
+        _entity = _msgSender();
         _id = id_;
         _name = name_;
         _symbol = symbol_;

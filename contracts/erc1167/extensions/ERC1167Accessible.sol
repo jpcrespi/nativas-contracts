@@ -4,18 +4,12 @@
 
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "../ERC1167.sol";
 
 /**
  *
  */
-contract ERC1167Accessible is AccessControlEnumerable, ERC1167 {
-    /**
-     * @dev Grants `DEFAULT_ADMIN_ROLE` to the account that
-     * deploys the contract.
-     */
-    constructor() {
-        _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
-    }
+contract ERC1167Accessible is Ownable, ERC1167 {
+
 }

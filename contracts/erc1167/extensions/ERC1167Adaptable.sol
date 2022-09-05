@@ -14,6 +14,8 @@ import "./ERC1167Accessible.sol";
 abstract contract ERC1167Adaptable is ERC1167Accessible {
     // ERC20Adapter template
     address internal _adapterTemplate;
+    // Mapping token id to adapter address
+    mapping(uint256 => address) internal _adapters;
 
     /**
      *
@@ -30,6 +32,13 @@ abstract contract ERC1167Adaptable is ERC1167Accessible {
     /**
      *
      */
+    function getAdapter(uint256 id) public view virtual returns (address) {
+        return _adapters[id];
+    }
+
+    /**
+     *
+     */
     function createAdapter(
         address entity,
         uint256 id,
@@ -38,7 +47,7 @@ abstract contract ERC1167Adaptable is ERC1167Accessible {
         uint8 decimals
     ) public virtual returns (address) {
         require(
-            hasRole(DEFAULT_ADMIN_ROLE, _msgSender()),
+            owner() == _msgSender(),
             "ERC1167Accessible: caller is not the token adapter"
         );
         return _createAdapter(entity, id, name, symbol, decimals);
@@ -56,7 +65,7 @@ abstract contract ERC1167Adaptable is ERC1167Accessible {
     ) internal virtual returns (address) {
         address adapter = deploy(_adapterTemplate);
         ERC20Adapter(adapter).setup(entity, id, name, symbol, decimals);
-        IERC1155ERC20(entity).setAdapter(id, adapter);
+        _adapters[id] = adapter;
         emit AdapterCreated(id, adapter);
         return adapter;
     }

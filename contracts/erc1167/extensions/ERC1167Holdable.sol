@@ -13,6 +13,8 @@ import "./ERC1167Accessible.sol";
 abstract contract ERC1167Holdable is ERC1167Accessible {
     // ERC1155TokenReceiver template
     address internal _holderTemplate;
+    // Mapping user id to holder address
+    mapping(uint256 => address) internal _holders;
 
     /**
      *
@@ -29,6 +31,13 @@ abstract contract ERC1167Holdable is ERC1167Accessible {
     /**
      *
      */
+    function getHolder(uint256 id) public view virtual returns (address) {
+        return _holders[id];
+    }
+
+    /**
+     *
+     */
     function createHolder(
         address entity,
         uint256 id,
@@ -36,7 +45,7 @@ abstract contract ERC1167Holdable is ERC1167Accessible {
         address operator
     ) public virtual returns (address) {
         require(
-            hasRole(DEFAULT_ADMIN_ROLE, _msgSender()),
+            owner() == _msgSender(),
             "ERC1167Accessible: caller is not the token adapter"
         );
         return _createHolder(entity, id, name, operator);
@@ -53,6 +62,7 @@ abstract contract ERC1167Holdable is ERC1167Accessible {
     ) internal virtual returns (address) {
         address holder = deploy(_holderTemplate);
         ERC1155Holder(holder).setup(entity, id, name, operator);
+        _holders[id] = holder;
         emit HolderCreated(id, holder);
         return holder;
     }

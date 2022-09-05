@@ -57,11 +57,7 @@ contract ERC1155Preset is
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory data
-    )
-        internal
-        virtual
-        override(ERC1155, ERC1155Pausable, ERC1155URIStorable, ERC1155ERC20)
-    {
+    ) internal virtual override(ERC1155, ERC1155Pausable, ERC1155Supply) {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
     }
 }

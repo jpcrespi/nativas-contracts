@@ -42,7 +42,7 @@ contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
     /**
      *
      */
-    function adapters(uint256 id) public view virtual returns (address) {
+    function getAdapter(uint256 id) public view virtual returns (address) {
         return _adapters[id];
     }
 
@@ -110,26 +110,5 @@ contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
         _transferFrom(operator, from, to, id, amount, data);
 
         _doSafeTransferAcceptanceCheck(operator, from, to, id, amount, data);
-    }
-
-    /**
-     * @dev See {ERC1155-_beforeTokenTransfer}.
-     */
-    function _beforeTokenTransfer(
-        address operator,
-        address from,
-        address to,
-        uint256[] memory ids,
-        uint256[] memory amounts,
-        bytes memory data
-    ) internal virtual override {
-        super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
-        for (uint256 i = 0; i < ids.length; ++i) {
-            uint256 tokenId = ids[i];
-            require(
-                exists(tokenId),
-                "ERC1155: token does not exist (missing ERC20Adapter)"
-            );
-        }
     }
 }

@@ -9,11 +9,11 @@ import "@openzeppelin/contracts/proxy/Clones.sol";
 /**
  *
  */
-abstract contract ERC1167 {
+contract ERC1167 {
     /**
      *
      */
-    function _deploy(address implementation)
+    function deploy(address implementation)
         internal
         virtual
         returns (address instance)

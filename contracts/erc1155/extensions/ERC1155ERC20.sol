@@ -13,38 +13,30 @@ import "./ERC1155Supply.sol";
  *
  */
 contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
-    // ERC20 Template
-    address internal _template;
     // Mapping token id to adapter address
     mapping(uint256 => address) internal _adapters;
 
     /**
      *
      */
-    event Adapter(uint256 indexed id, address indexed adapter);
+    event AdapterSet(uint256 indexed id, address indexed adapter);
 
     /**
      * @dev Grants `EDITOR_ROLE` to the account that deploys the contract.
      */
     constructor() {
         _grantRole(EDITOR_ROLE, _msgSender());
-        _template = address(new ERC20Adapter());
     }
 
     /**
      *
      */
-    function setAdapter(
-        uint256 id,
-        string memory name,
-        string memory symbol,
-        uint8 decimals
-    ) public virtual {
+    function setAdapter(uint256 id, address adapter) public virtual override {
         require(
             hasRole(EDITOR_ROLE, _msgSender()),
             "ERC1155: caller is not the token adapter"
         );
-        _setAdapter(id, name, symbol, decimals);
+        _setAdapter(id, adapter);
     }
 
     /**
@@ -88,16 +80,9 @@ contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
     /**
      *
      */
-    function _setAdapter(
-        uint256 id,
-        string memory name,
-        string memory symbol,
-        uint8 decimals
-    ) internal virtual {
-        address adapter = Clones.clone(_template);
-        ERC20Adapter(adapter).setup(id, name, symbol, decimals);
+    function _setAdapter(uint256 id, address adapter) internal virtual {
         _adapters[id] = adapter;
-        emit Adapter(id, adapter);
+        emit AdapterSet(id, adapter);
     }
 
     /**

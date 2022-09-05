@@ -25,6 +25,13 @@ contract ERC1155URIStorable is
     mapping(uint256 => string) private _tokenURIs;
 
     /**
+     * @dev Grants `EDITOR_ROLE` to the account that deploys the contract.
+     */
+    constructor() {
+        _grantRole(EDITOR_ROLE, _msgSender());
+    }
+
+    /**
      *
      */
     function setURI(uint256 tokenId, string memory tokenURI) public virtual {

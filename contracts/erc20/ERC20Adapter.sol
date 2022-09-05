@@ -35,6 +35,7 @@ contract ERC20Adapter is
      *
      */
     function setup(
+        address entiry_,
         uint256 id_,
         string memory name_,
         string memory symbol_,
@@ -44,7 +45,7 @@ contract ERC20Adapter is
             address(_entity) == address(0),
             "ERC20Adapter: token already configured"
         );
-        _entity = _msgSender();
+        _entity = entiry_;
         _id = id_;
         _name = name_;
         _symbol = symbol_;

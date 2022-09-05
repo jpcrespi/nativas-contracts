@@ -21,4 +21,9 @@ interface IERC1155ERC20 is IERC1155, IERC1155Supply {
         uint256 amount,
         bytes memory data
     ) external;
+
+    /**
+     *
+     */
+    function setAdapter(uint256 id, address adapter) external;
 }

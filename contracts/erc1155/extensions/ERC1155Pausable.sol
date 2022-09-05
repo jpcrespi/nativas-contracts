@@ -18,6 +18,13 @@ import "./ERC1155Accessible.sol";
  */
 contract ERC1155Pausable is PauseRole, Pausable, ERC1155Accessible {
     /**
+     * @dev Grants `PAUSER_ROLE` to the account that deploys the contract.
+     */
+    constructor() {
+        _grantRole(PAUSER_ROLE, _msgSender());
+    }
+
+    /**
      * @dev Pauses all token transfers.
      *
      * See {ERC1155Pausable} and {Pausable-_pause}.

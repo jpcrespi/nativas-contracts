@@ -12,12 +12,49 @@ import "../../../interfaces/erc1155/IERC1155TokenReceiver.sol";
  *
  */
 contract ERC1155Holder is Context, ERC165, IERC1155TokenReceiver {
+    //
+    address internal _entity;
+    uint256 internal _id;
+    string internal _name;
+
     /**
-     * @dev Grants `ApprovalForAll` to the account that
-     * deploys the contract.
+     *
      */
-    constructor(address entity) {
-        _setApprovalForAll(entity, _msgSender(), true);
+    function setup(
+        address entity_,
+        uint256 id_,
+        string memory name_,
+        address operator_
+    ) public {
+        require(
+            address(_entity) == address(0),
+            "ERC1155Holder: holder already configured"
+        );
+        _entity = entity_;
+        _id = id_;
+        _name = name_;
+        IERC1155(_entity).setApprovalForAll(operator_, true);
+    }
+
+    /**
+     *
+     */
+    function entity() public view virtual returns (address) {
+        return _entity;
+    }
+
+    /**
+     *
+     */
+    function id() public view virtual returns (uint256) {
+        return _id;
+    }
+
+    /**
+     * @dev See {IERC20-name}.
+     */
+    function name() public view virtual returns (string memory) {
+        return _name;
     }
 
     /**
@@ -59,16 +96,5 @@ contract ERC1155Holder is Context, ERC165, IERC1155TokenReceiver {
         bytes memory
     ) public virtual override returns (bytes4) {
         return this.onERC1155BatchReceived.selector;
-    }
-
-    /**
-     * @dev See {IERC1155-setApprovalForAll}.
-     */
-    function _setApprovalForAll(
-        address entity,
-        address operator,
-        bool approved
-    ) internal virtual {
-        IERC1155(entity).setApprovalForAll(operator, approved);
     }
 }

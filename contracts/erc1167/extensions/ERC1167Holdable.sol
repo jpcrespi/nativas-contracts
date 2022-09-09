@@ -43,11 +43,7 @@ abstract contract ERC1167Holdable is ERC1167Accessible {
         uint256 id,
         string memory name,
         address operator
-    ) public virtual returns (address) {
-        require(
-            owner() == _msgSender(),
-            "ERC1167Accessible: caller is not the token adapter"
-        );
+    ) public virtual onlyOwner returns (address) {
         return _createHolder(entity, id, name, operator);
     }
 
@@ -61,7 +57,7 @@ abstract contract ERC1167Holdable is ERC1167Accessible {
         address operator
     ) internal virtual returns (address) {
         address holder = deploy(_holderTemplate);
-        ERC1155Holder(holder).setup(entity, id, name, operator);
+        ERC1155Holder(holder).init(owner(), id, name, entity, operator);
         _holders[id] = holder;
         emit HolderCreated(id, holder);
         return holder;

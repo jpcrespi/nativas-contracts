@@ -1,8 +1,9 @@
 from scripts import AccessControl as Contract
 from scripts.utils.context import Context
+from scripts.erc165.erc165 import ERC165
 
 
-class AccessControl(Context):
+class AccessControl(Context, ERC165):
     __contract: Contract
 
     def __init__(self, sender):

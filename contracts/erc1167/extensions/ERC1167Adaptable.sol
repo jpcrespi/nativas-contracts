@@ -45,11 +45,7 @@ abstract contract ERC1167Adaptable is ERC1167Accessible {
         string memory name,
         string memory symbol,
         uint8 decimals
-    ) public virtual returns (address) {
-        require(
-            owner() == _msgSender(),
-            "ERC1167Accessible: caller is not the token adapter"
-        );
+    ) public virtual onlyOwner returns (address) {
         return _createAdapter(entity, id, name, symbol, decimals);
     }
 
@@ -64,7 +60,7 @@ abstract contract ERC1167Adaptable is ERC1167Accessible {
         uint8 decimals
     ) internal virtual returns (address) {
         address adapter = deploy(_adapterTemplate);
-        ERC20Adapter(adapter).setup(entity, id, name, symbol, decimals);
+        ERC20Adapter(adapter).init(entity, id, name, symbol, decimals);
         _adapters[id] = adapter;
         emit AdapterCreated(id, adapter);
         return adapter;

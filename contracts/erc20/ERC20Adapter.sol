@@ -5,6 +5,7 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
+import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 import "../../interfaces/erc1155/IERC1155ERC20.sol";
 import "../../interfaces/erc20/IERC20.sol";
 import "../../interfaces/bep20/IBEP20.sol";
@@ -17,6 +18,7 @@ import "../../interfaces/erc20/IERC20Approve.sol";
 contract ERC20Adapter is
     Context,
     ERC165,
+    Initializable,
     IERC20,
     IBEP20,
     IERC20Metadata,
@@ -34,17 +36,13 @@ contract ERC20Adapter is
     /**
      *
      */
-    function setup(
+    function init(
         address entiry_,
         uint256 id_,
         string memory name_,
         string memory symbol_,
         uint8 decimals_
-    ) public {
-        require(
-            address(_entity) == address(0),
-            "ERC20Adapter: token already configured"
-        );
+    ) public initializer {
         _entity = entiry_;
         _id = id_;
         _name = name_;

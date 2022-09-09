@@ -3,44 +3,39 @@
 
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/utils/Context.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
+import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 import "../../../interfaces/erc1155/IERC1155.sol";
 import "../../../interfaces/erc1155/IERC1155TokenReceiver.sol";
 
 /**
  *
  */
-contract ERC1155Holder is Context, ERC165, IERC1155TokenReceiver {
+contract ERC1155Holder is
+    Ownable,
+    ERC165,
+    Initializable,
+    IERC1155TokenReceiver
+{
     //
-    address internal _entity;
     uint256 internal _id;
     string internal _name;
 
     /**
      *
      */
-    function setup(
-        address entity_,
+    function init(
+        address owner_,
         uint256 id_,
         string memory name_,
+        address entity_,
         address operator_
-    ) public {
-        require(
-            address(_entity) == address(0),
-            "ERC1155Holder: holder already configured"
-        );
-        _entity = entity_;
+    ) public initializer {
         _id = id_;
         _name = name_;
-        IERC1155(_entity).setApprovalForAll(operator_, true);
-    }
-
-    /**
-     *
-     */
-    function entity() public view virtual returns (address) {
-        return _entity;
+        transferOwnership(owner_);
+        setApprovalForAll(entity_, operator_, true);
     }
 
     /**
@@ -96,5 +91,16 @@ contract ERC1155Holder is Context, ERC165, IERC1155TokenReceiver {
         bytes memory
     ) public virtual override returns (bytes4) {
         return this.onERC1155BatchReceived.selector;
+    }
+
+    /**
+     *
+     */
+    function setApprovalForAll(
+        address entity_,
+        address operator_,
+        bool approved
+    ) public virtual onlyOwner {
+        IERC1155(entity_).setApprovalForAll(operator_, approved);
     }
 }

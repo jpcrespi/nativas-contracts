@@ -17,6 +17,7 @@ ERC165 = brownie.ERC165Mock
 # ERC1155
 ERC1155 = brownie.ERC1155
 ERC1155Common = brownie.ERC1155Common
+ERC1155Accessible = brownie.ERC1155Accessible
 # Security
 Pausable = brownie.PausableMock
 # Utils

@@ -1,4 +1,4 @@
-from scripts import Utils
+from utils import Utils
 from scripts.access.ownable import Ownable
 from brownie import exceptions
 from pytest import raises, skip

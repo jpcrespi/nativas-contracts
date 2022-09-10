@@ -1,4 +1,4 @@
-from scripts import Utils
+from utils import Utils
 from scripts.erc20.erc20_adapter import ERC20Adapter
 from brownie import exceptions
 from pytest import skip, raises
@@ -10,7 +10,8 @@ def test_erc20_approve():
     owner = Utils.getAccount()
     account1 = Utils.getAccount(index=1)
     account2 = Utils.getAccount(index=2)
-    contract = ERC20Adapter(Utils.getAccountZero(), 0, "TestCoin", "TST", 18, owner)
+    contract = ERC20Adapter(owner)
+    contract.init(Utils.getAccountZero(), 0, "TestCoin", "TST", 6, owner)
     contract.approve(account2, 100, account1)
     assert contract.allowance(account1, account2) == 100
     assert contract.increaseAllowance(account2, 50, account1)

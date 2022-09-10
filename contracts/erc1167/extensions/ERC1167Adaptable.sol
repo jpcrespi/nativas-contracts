@@ -11,7 +11,7 @@ import "./ERC1167Ownable.sol";
 /**
  *
  */
-abstract contract ERC1167Adaptable is ERC1167Ownable {
+contract ERC1167Adaptable is ERC1167Ownable {
     // ERC20Adapter template
     address internal _adapterTemplate;
     // Mapping token id to adapter address

@@ -10,7 +10,7 @@ import "./ERC1167Ownable.sol";
 /**
  *
  */
-abstract contract ERC1167Holdable is ERC1167Ownable {
+contract ERC1167Holdable is ERC1167Ownable {
     // ERC1155TokenReceiver template
     address internal _holderTemplate;
     // Mapping user id to holder address

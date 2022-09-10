@@ -1,4 +1,4 @@
-from scripts import Utils
+from utils import Utils
 from scripts.access.access_control import AccessControl
 from brownie import exceptions
 from pytest import skip, raises

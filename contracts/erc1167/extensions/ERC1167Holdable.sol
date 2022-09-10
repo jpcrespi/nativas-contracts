@@ -57,7 +57,7 @@ abstract contract ERC1167Holdable is ERC1167Accessible {
         address operator
     ) internal virtual returns (address) {
         address holder = deploy(_holderTemplate);
-        ERC1155Holder(holder).init(owner(), id, name, entity, operator);
+        ERC1155Holder(holder).init(entity, operator, id, name);
         _holders[id] = holder;
         emit HolderCreated(id, holder);
         return holder;

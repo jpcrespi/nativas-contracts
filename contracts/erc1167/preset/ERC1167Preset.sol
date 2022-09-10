@@ -10,6 +10,6 @@ import "../extensions/ERC1167Holdable.sol";
 /**
  *
  */
-contract ERC1167Present is ERC1167Adaptable, ERC1167Holdable {
+contract ERC1167Preset is ERC1167Adaptable, ERC1167Holdable {
 
 }

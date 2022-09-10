@@ -19,14 +19,15 @@ contract ERC1155Offsetable is ERC1155Accessible {
     function offset(
         address account,
         uint256 id,
-        uint256 value
+        uint256 value,
+        bytes memory data
     ) public virtual {
         require(
             _isOwnerOrApproved(account),
             "ERC1155: caller is not owner nor approved"
         );
 
-        _burn(account, id, value);
+        _burn(account, id, value, data);
     }
 
     /**
@@ -35,13 +36,14 @@ contract ERC1155Offsetable is ERC1155Accessible {
     function offsetBatch(
         address account,
         uint256[] memory ids,
-        uint256[] memory values
+        uint256[] memory values,
+        bytes memory data
     ) public virtual {
         require(
             _isOwnerOrApproved(account),
             "ERC1155: caller is not owner nor approved"
         );
 
-        _burnBatch(account, ids, values);
+        _burnBatch(account, ids, values, data);
     }
 }

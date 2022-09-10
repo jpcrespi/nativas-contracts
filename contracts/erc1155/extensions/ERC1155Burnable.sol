@@ -3,7 +3,6 @@
 
 pragma solidity ^0.8.0;
 
-import "../../../interfaces/erc1155/IERC1155Burnable.sol";
 import "../../access/roles/BurnRole.sol";
 import "./ERC1155Accessible.sol";
 
@@ -14,7 +13,7 @@ import "./ERC1155Accessible.sol";
  *
  * _Available since v3.1._
  */
-contract ERC1155Burnable is BurnRole, ERC1155Accessible, IERC1155Burnable {
+contract ERC1155Burnable is BurnRole, ERC1155Accessible {
     /**
      * @dev Grants `BURNER_ROLE` to the account that deploys the contract.
      */
@@ -28,8 +27,9 @@ contract ERC1155Burnable is BurnRole, ERC1155Accessible, IERC1155Burnable {
     function burn(
         address account,
         uint256 id,
-        uint256 value
-    ) public virtual override {
+        uint256 value,
+        bytes memory data
+    ) public virtual {
         require(
             hasRole(BURNER_ROLE, _msgSender()),
             "ERC1155: sender does not have role"
@@ -39,7 +39,7 @@ contract ERC1155Burnable is BurnRole, ERC1155Accessible, IERC1155Burnable {
             "ERC1155: caller is not owner nor approved"
         );
 
-        _burn(account, id, value);
+        _burn(account, id, value, data);
     }
 
     /**
@@ -48,8 +48,9 @@ contract ERC1155Burnable is BurnRole, ERC1155Accessible, IERC1155Burnable {
     function burnBatch(
         address account,
         uint256[] memory ids,
-        uint256[] memory values
-    ) public virtual override {
+        uint256[] memory values,
+        bytes memory data
+    ) public virtual {
         require(
             hasRole(BURNER_ROLE, _msgSender()),
             "ERC1155: sender does not have role"
@@ -59,6 +60,6 @@ contract ERC1155Burnable is BurnRole, ERC1155Accessible, IERC1155Burnable {
             "ERC1155: caller is not owner nor approved"
         );
 
-        _burnBatch(account, ids, values);
+        _burnBatch(account, ids, values, data);
     }
 }

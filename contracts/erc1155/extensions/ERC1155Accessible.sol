@@ -42,7 +42,8 @@ contract ERC1155Accessible is AccessControlEnumerable, ERC1155 {
     function _burn(
         address from,
         uint256 id,
-        uint256 amount
+        uint256 amount,
+        bytes memory data
     ) internal virtual {
         require(from != address(0), "ERC1155: burn from the zero address");
 
@@ -50,7 +51,7 @@ contract ERC1155Accessible is AccessControlEnumerable, ERC1155 {
         uint256[] memory ids = _asSingletonArray(id);
         uint256[] memory amounts = _asSingletonArray(amount);
 
-        _beforeTokenTransfer(operator, from, address(0), ids, amounts, "");
+        _beforeTokenTransfer(operator, from, address(0), ids, amounts, data);
 
         uint256 fromBalance = _balances[id][from];
         require(fromBalance >= amount, "ERC1155: burn amount exceeds balance");
@@ -60,7 +61,7 @@ contract ERC1155Accessible is AccessControlEnumerable, ERC1155 {
 
         emit TransferSingle(operator, from, address(0), id, amount);
 
-        _afterTokenTransfer(operator, from, address(0), ids, amounts, "");
+        _afterTokenTransfer(operator, from, address(0), ids, amounts, data);
     }
 
     /**
@@ -73,7 +74,8 @@ contract ERC1155Accessible is AccessControlEnumerable, ERC1155 {
     function _burnBatch(
         address from,
         uint256[] memory ids,
-        uint256[] memory amounts
+        uint256[] memory amounts,
+        bytes memory data
     ) internal virtual {
         require(from != address(0), "ERC1155: burn from the zero address");
         require(
@@ -83,7 +85,7 @@ contract ERC1155Accessible is AccessControlEnumerable, ERC1155 {
 
         address operator = _msgSender();
 
-        _beforeTokenTransfer(operator, from, address(0), ids, amounts, "");
+        _beforeTokenTransfer(operator, from, address(0), ids, amounts, data);
 
         for (uint256 i = 0; i < ids.length; i++) {
             uint256 id = ids[i];
@@ -101,7 +103,7 @@ contract ERC1155Accessible is AccessControlEnumerable, ERC1155 {
 
         emit TransferBatch(operator, from, address(0), ids, amounts);
 
-        _afterTokenTransfer(operator, from, address(0), ids, amounts, "");
+        _afterTokenTransfer(operator, from, address(0), ids, amounts, data);
     }
 
     /**

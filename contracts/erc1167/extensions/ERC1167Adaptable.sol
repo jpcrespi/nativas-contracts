@@ -61,6 +61,7 @@ abstract contract ERC1167Adaptable is ERC1167Accessible {
     ) internal virtual returns (address) {
         address adapter = deploy(_adapterTemplate);
         ERC20Adapter(adapter).init(entity, id, name, symbol, decimals);
+        IERC1155ERC20(entity).setAdapter(id, adapter);
         _adapters[id] = adapter;
         emit AdapterCreated(id, adapter);
         return adapter;

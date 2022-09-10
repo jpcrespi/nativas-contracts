@@ -18,6 +18,14 @@ ERC165 = brownie.ERC165Mock
 ERC1155 = brownie.ERC1155
 ERC1155Common = brownie.ERC1155Common
 ERC1155Accessible = brownie.ERC1155Accessible
+ERC1155Burnable = brownie.ERC1155Burnable
+ERC1155ERC20 = brownie.ERC1155ERC20
+ERC1155Mintable = brownie.ERC1155Mintable
+ERC1155Offsetable = brownie.ERC1155Offsetable
+ERC1155Pausable = brownie.ERC1155Pausable
+ERC1155Supply = brownie.ERC1155Supply
+ERC1155URIStorable = brownie.ERC1155URIStorable
+ERC1155Preset = brownie.ERC1155Preset
 # Security
 Pausable = brownie.PausableMock
 # Utils

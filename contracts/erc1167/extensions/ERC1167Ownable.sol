@@ -10,6 +10,6 @@ import "../ERC1167.sol";
 /**
  *
  */
-contract ERC1167Accessible is Ownable, ERC1167 {
+contract ERC1167Ownable is Ownable, ERC1167 {
 
 }

@@ -5,12 +5,12 @@
 pragma solidity ^0.8.0;
 
 import "../../erc1155/holder/ERC1155Holder.sol";
-import "./ERC1167Accessible.sol";
+import "./ERC1167Ownable.sol";
 
 /**
  *
  */
-abstract contract ERC1167Holdable is ERC1167Accessible {
+abstract contract ERC1167Holdable is ERC1167Ownable {
     // ERC1155TokenReceiver template
     address internal _holderTemplate;
     // Mapping user id to holder address

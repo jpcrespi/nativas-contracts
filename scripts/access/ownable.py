@@ -8,14 +8,14 @@ class Ownable(Context):
     def __init__(self, sender):
         self.__contract = Contract.deploy({"from": sender})
 
-    def contract(self):
+    def contract(self) -> any:
         return self.__contract
 
-    def owner(self):
+    def owner(self) -> any:
         return self.contract().owner()
 
-    def renounceOwnership(self, sender):
-        return self.contract().renounceOwnership({"from": sender})
+    def renounceOwnership(self, sender: any):
+        self.contract().renounceOwnership({"from": sender})
 
-    def transferOwnership(self, newOwner, sender):
-        return self.contract().transferOwnership(newOwner, {"from": sender})
+    def transferOwnership(self, newOwner: any, sender: any):
+        self.contract().transferOwnership(newOwner, {"from": sender})

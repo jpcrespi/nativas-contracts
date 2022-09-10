@@ -26,6 +26,12 @@ ERC1155Pausable = brownie.ERC1155Pausable
 ERC1155Supply = brownie.ERC1155Supply
 ERC1155URIStorable = brownie.ERC1155URIStorable
 ERC1155Preset = brownie.ERC1155Preset
+ERC1155Holder = brownie.ERC1155Holder
+# ERC1167
+ERC1167 = brownie.ERC1167
+ERC1167Ownable = brownie.ERC1167Ownable
+ERC1167Adaptable = brownie.ERC1167Adaptable
+ERC1167Holdable = brownie.ERC1167Holdable
 # Security
 Pausable = brownie.PausableMock
 # Utils

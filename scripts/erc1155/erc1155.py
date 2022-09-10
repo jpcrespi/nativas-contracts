@@ -1,4 +1,3 @@
-from socket import IPV6_DSTOPTS
 from scripts import ERC1155 as Contract
 from scripts.utils.context import Context
 from scripts.erc165.erc165 import ERC165
@@ -11,26 +10,57 @@ class ERC1155(Context, ERC165, ERC1155Common):
     def __init__(self, sender: any):
         self.__contract = Contract.deploy({"from": sender})
 
-    def contract(self):
+    def contract(self) -> any:
         return self.__contract
 
-    def balanceOf(self, acconut: any, id: int):
+    def balanceOf(self, acconut: any, id: int) -> int:
         return self.contract().balanceOf(acconut, id)
 
-    def balanceOfBatch(self, acconuts: list[any], ids: list[int]):
+    def balanceOfBatch(
+        self,
+        acconuts: list[any],
+        ids: list[int],
+    ) -> list[int]:
         return self.contract().balanceOf(acconuts, ids)
 
-    def setApprovalForAll(self, operator: any, approved: bool, sender: any):
-        return self.contract().setApprovalForAll(operator, approved, {"from": sender})
+    def setApprovalForAll(
+        self,
+        operator: any,
+        approved: bool,
+        sender: any,
+    ):
+        self.contract().setApprovalForAll(
+            operator,
+            approved,
+            {"from": sender},
+        )
 
-    def isApprovedForAll(self, acconut: any, operator: any):
-        return self.contract().isApprovedForAll(acconut, operator)
+    def isApprovedForAll(
+        self,
+        acconut: any,
+        operator: any,
+    ) -> bool:
+        return self.contract().isApprovedForAll(
+            acconut,
+            operator,
+        )
 
     def safeTransferFrom(
-        self, origin: any, to: any, id: int, amount: int, data: any, sender: any
+        self,
+        origin: any,
+        to: any,
+        id: int,
+        amount: int,
+        data: any,
+        sender: any,
     ):
-        return self.contract().safeTransferFrom(
-            origin, to, id, amount, data, {"from": sender}
+        self.contract().safeTransferFrom(
+            origin,
+            to,
+            id,
+            amount,
+            data,
+            {"from": sender},
         )
 
     def safeBatchTransferFrom(
@@ -42,6 +72,11 @@ class ERC1155(Context, ERC165, ERC1155Common):
         data: any,
         sender: any,
     ):
-        return self.contract().safeBatchTransferFrom(
-            origin, to, ids, amounts, data, {"from": sender}
+        self.contract().safeBatchTransferFrom(
+            origin,
+            to,
+            ids,
+            amounts,
+            data,
+            {"from": sender},
         )

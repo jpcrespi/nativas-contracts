@@ -10,17 +10,5 @@ import "@openzeppelin/contracts/security/Pausable.sol";
  *
  */
 contract PausableMock is Pausable {
-    /**
-     *
-     */
-    function pause() external virtual {
-        _pause();
-    }
 
-    /**
-     *
-     */
-    function unpause() external virtual {
-        _unpause();
-    }
 }

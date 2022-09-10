@@ -20,7 +20,7 @@ class ERC1155Preset(
     def __init__(self, sender: any):
         self.__contract = Contract.deploy({"from": sender})
 
-    def contract(self):
+    def contract(self) -> any:
         return self.__contract
 
     def exists(self, id: int) -> bool:

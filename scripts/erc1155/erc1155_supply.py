@@ -8,7 +8,7 @@ class ERC1155Supply(ERC1155Accessible):
     def __init__(self, sender: any):
         self.__contract = Contract.deploy({"from": sender})
 
-    def contract(self):
+    def contract(self) -> any:
         return self.__contract
 
     def totalSupply(self, id: int) -> int:

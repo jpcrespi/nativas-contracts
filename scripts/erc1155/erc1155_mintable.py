@@ -6,10 +6,10 @@ from scripts.access.roles.mint_role import MintRole
 class ERC1155Mintable(ERC1155Accessible, MintRole):
     __contract: Contract
 
-    def __init__(self, sender):
+    def __init__(self, sender: any):
         self.__contract = Contract.deploy({"from": sender})
 
-    def contract(self):
+    def contract(self) -> any:
         return self.__contract
 
     def mint(
@@ -20,7 +20,7 @@ class ERC1155Mintable(ERC1155Accessible, MintRole):
         data: any,
         sender: any,
     ):
-        return self.contract().mint(
+        self.contract().mint(
             account,
             id,
             value,
@@ -36,7 +36,7 @@ class ERC1155Mintable(ERC1155Accessible, MintRole):
         data: any,
         sender: any,
     ):
-        return self.contract().mintBatch(
+        self.contract().mintBatch(
             account,
             ids,
             values,

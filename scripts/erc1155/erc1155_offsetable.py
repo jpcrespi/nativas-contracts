@@ -8,7 +8,7 @@ class ERC1155Offsetable(ERC1155Accessible):
     def __init__(self, sender: any):
         self.__contract = Contract.deploy({"from": sender})
 
-    def contract(self):
+    def contract(self) -> any:
         return self.__contract
 
     def offset(
@@ -19,7 +19,7 @@ class ERC1155Offsetable(ERC1155Accessible):
         data: any,
         sender: any,
     ):
-        return self.contract().offset(
+        self.contract().offset(
             account,
             id,
             value,
@@ -35,7 +35,7 @@ class ERC1155Offsetable(ERC1155Accessible):
         data: any,
         sender: any,
     ):
-        return self.contract().offsetBatch(
+        self.contract().offsetBatch(
             account,
             ids,
             values,

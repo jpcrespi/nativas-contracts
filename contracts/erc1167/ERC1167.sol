@@ -4,12 +4,13 @@
 
 pragma solidity ^0.8.0;
 
+import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/proxy/Clones.sol";
 
 /**
  *
  */
-contract ERC1167 {
+contract ERC1167 is Context {
     /**
      *
      */

@@ -3,6 +3,7 @@
 
 pragma solidity ^0.8.0;
 
+import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 import "../../../interfaces/erc1155/IERC1155.sol";
@@ -11,7 +12,12 @@ import "../../../interfaces/erc1155/IERC1155TokenReceiver.sol";
 /**
  *
  */
-contract ERC1155Holder is ERC165, Initializable, IERC1155TokenReceiver {
+contract ERC1155Holder is
+    Context,
+    ERC165,
+    Initializable,
+    IERC1155TokenReceiver
+{
     //
     uint256 internal _id;
     string internal _name;

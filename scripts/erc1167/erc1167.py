@@ -1,8 +1,8 @@
-from scripts import Pausable as Contract
+from scripts import ERC1167 as Contract
 from scripts.utils.context import Context
 
 
-class Pausable(Context):
+class ERC1167(Context):
     __contract: Contract
 
     def __init__(self, sender: any):
@@ -10,6 +10,3 @@ class Pausable(Context):
 
     def contract(self) -> any:
         return self.__contract
-
-    def paused(self) -> bool:
-        return self.contract().paused()

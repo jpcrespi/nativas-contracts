@@ -9,7 +9,7 @@ class ERC1155Burnable(ERC1155Accessible, BurnRole):
     def __init__(self, sender: any):
         self.__contract = Contract.deploy({"from": sender})
 
-    def contract(self):
+    def contract(self) -> any:
         return self.__contract
 
     def burn(
@@ -20,7 +20,7 @@ class ERC1155Burnable(ERC1155Accessible, BurnRole):
         data: any,
         sender: any,
     ):
-        return self.contract().burn(
+        self.contract().burn(
             account,
             id,
             value,
@@ -36,7 +36,7 @@ class ERC1155Burnable(ERC1155Accessible, BurnRole):
         data: any,
         sender: any,
     ):
-        return self.contract().burnBatch(
+        self.contract().burnBatch(
             account,
             ids,
             values,

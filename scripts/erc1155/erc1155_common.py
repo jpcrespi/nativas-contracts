@@ -7,5 +7,5 @@ class ERC1155Common(object):
     def __init__(self, sender):
         self.__contract = Contract.deploy({"from": sender})
 
-    def contract(self):
+    def contract(self) -> any:
         return self.__contract

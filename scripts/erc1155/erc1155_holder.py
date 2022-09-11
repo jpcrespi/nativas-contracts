@@ -21,7 +21,7 @@ class ERC1155Holder(Context, ERC165):
         name: str,
         sender: any,
     ):
-        self.contract().init(
+        return self.contract().init(
             entity,
             operator,
             id,

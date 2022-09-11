@@ -1,4 +1,3 @@
-from turtle import st
 from scripts import ERC20Adapter as Contract
 from scripts.utils.context import Context
 from scripts.erc165.erc165 import ERC165
@@ -19,7 +18,7 @@ class ERC20Adapter(Context, ERC165):
         decimals: int,
         sender: any,
     ):
-        self.contract().init(
+        return self.contract().init(
             entity,
             id,
             name,

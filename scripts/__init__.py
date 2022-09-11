@@ -1,9 +1,12 @@
 import brownie
 
 # Access
-AccessControlEnumerable = brownie.AccessControlEnumerableMock
-AccessControl = brownie.AccessControlMock
-Ownable = brownie.OwnableMock
+AccessControlEnumerable = brownie.AccessControlEnumerableStub
+AccessControlEnumerableMock = brownie.AccessControlEnumerableMock
+AccessControl = brownie.AccessControlStub
+AccessControlMock = brownie.AccessControlMock
+Ownable = brownie.OwnableStub
+OwnableMock = brownie.OwnableMock
 # Access # Roles
 BurnRole = brownie.BurnRole
 EditRole = brownie.EditRole
@@ -36,6 +39,8 @@ ERC1167Ownable = brownie.ERC1167Ownable
 ERC1167Adaptable = brownie.ERC1167Adaptable
 ERC1167Holdable = brownie.ERC1167Holdable
 # Security
-Pausable = brownie.PausableMock
+Pausable = brownie.PausableStub
+PausableMock = brownie.PausableMock
 # Utils
-Context = brownie.ContextMock
+Context = brownie.ContextStub
+ContextMock = brownie.ContextMock

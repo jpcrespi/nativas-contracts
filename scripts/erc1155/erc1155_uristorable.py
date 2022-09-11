@@ -13,7 +13,7 @@ class ERC1155URIStorable(ERC1155Accessible, EditRole):
         return self.__contract
 
     def setURI(self, id: int, uri: any, sender: any):
-        self.contract().setURI(id, uri, {"from": sender})
+        return self.contract().setURI(id, uri, {"from": sender})
 
     def uri(self, id: int) -> str:
         return self.contract().uri(id)

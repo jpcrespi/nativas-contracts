@@ -1,5 +1,5 @@
 from utils import Utils
-from scripts.access.access_control import AccessControl
+from scripts.access.access_control import AccessControlMock
 from brownie import exceptions
 from pytest import skip, raises
 
@@ -10,7 +10,7 @@ def test_access_control():
     adminRole = Utils.getAccount()
     account1 = Utils.getAccount(index=1)
     account2 = Utils.getAccount(index=2)
-    contract = AccessControl(adminRole)
+    contract = AccessControlMock(adminRole)
     with raises(exceptions.VirtualMachineError):
         contract.senderProtected("TEST_ROLE", account1)
     with raises(exceptions.VirtualMachineError):

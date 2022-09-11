@@ -20,7 +20,7 @@ class ERC1155Mintable(ERC1155Accessible, MintRole):
         data: any,
         sender: any,
     ):
-        self.contract().mint(
+        return self.contract().mint(
             account,
             id,
             value,
@@ -36,7 +36,7 @@ class ERC1155Mintable(ERC1155Accessible, MintRole):
         data: any,
         sender: any,
     ):
-        self.contract().mintBatch(
+        return self.contract().mintBatch(
             account,
             ids,
             values,

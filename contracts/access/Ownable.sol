@@ -9,6 +9,13 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 /**
  *
  */
+contract OwnableStub is Ownable {
+
+}
+
+/**
+ *
+ */
 contract OwnableMock is Ownable {
 
 }

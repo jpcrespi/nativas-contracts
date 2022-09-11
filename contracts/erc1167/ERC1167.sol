@@ -11,6 +11,8 @@ import "@openzeppelin/contracts/proxy/Clones.sol";
  *
  */
 contract ERC1167 is Context {
+    using Clones for address;
+
     /**
      *
      */
@@ -19,6 +21,6 @@ contract ERC1167 is Context {
         virtual
         returns (address instance)
     {
-        return Clones.clone(implementation);
+        return implementation.clone();
     }
 }

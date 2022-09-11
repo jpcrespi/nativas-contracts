@@ -20,7 +20,7 @@ class ERC1155Burnable(ERC1155Accessible, BurnRole):
         data: any,
         sender: any,
     ):
-        self.contract().burn(
+        return self.contract().burn(
             account,
             id,
             value,
@@ -36,7 +36,7 @@ class ERC1155Burnable(ERC1155Accessible, BurnRole):
         data: any,
         sender: any,
     ):
-        self.contract().burnBatch(
+        return self.contract().burnBatch(
             account,
             ids,
             values,

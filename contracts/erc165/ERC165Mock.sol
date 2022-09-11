@@ -20,6 +20,13 @@ import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
  *
  * Alternatively, {ERC165Storage} provides an easier to use but more expensive implementation.
  */
+contract ERC165Stub is ERC165 {
+
+}
+
+/**
+ *
+ */
 contract ERC165Mock is ERC165 {
 
 }

@@ -15,7 +15,7 @@ class Ownable(Context):
         return self.contract().owner()
 
     def renounceOwnership(self, sender: any):
-        self.contract().renounceOwnership({"from": sender})
+        return self.contract().renounceOwnership({"from": sender})
 
     def transferOwnership(self, newOwner: any, sender: any):
-        self.contract().transferOwnership(newOwner, {"from": sender})
+        return self.contract().transferOwnership(newOwner, {"from": sender})

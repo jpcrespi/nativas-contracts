@@ -19,7 +19,7 @@ class ERC1155Offsetable(ERC1155Accessible):
         data: any,
         sender: any,
     ):
-        self.contract().offset(
+        return self.contract().offset(
             account,
             id,
             value,
@@ -35,7 +35,7 @@ class ERC1155Offsetable(ERC1155Accessible):
         data: any,
         sender: any,
     ):
-        self.contract().offsetBatch(
+        return self.contract().offsetBatch(
             account,
             ids,
             values,

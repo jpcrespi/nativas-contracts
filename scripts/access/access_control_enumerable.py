@@ -12,15 +12,15 @@ class AccessControlEnumerable(AccessControl):
     def contract(self) -> any:
         return self.__contract
 
-    def getRoleMember(self, role: str, index: int) -> any:
+    def getRoleMember(self, role: bytes, index: int) -> any:
         return self.contract().getRoleMember(
-            role.encode("utf-8"),
+            role,
             index,
         )
 
-    def getRoleMemberCount(self, role: str) -> int:
+    def getRoleMemberCount(self, role: bytes) -> int:
         return self.contract().getRoleMemberCount(
-            role.encode("utf-8"),
+            role,
         )
 
 
@@ -33,15 +33,15 @@ class AccessControlEnumerableMock(AccessControlEnumerable):
     def contract(self) -> any:
         return self.__contract
 
-    def senderProtected(self, role: str, sender: any):
+    def senderProtected(self, role: bytes, sender: any):
         return self.contract().senderProtected(
-            role.encode("utf-8"),
+            role,
             {"from": sender},
         )
 
-    def setRoleAdmin(self, role: str, adminRole: str, sender: any):
+    def setRoleAdmin(self, role: bytes, adminRole: bytes, sender: any):
         return self.contract().setRoleAdmin(
-            role.encode("utf-8"),
-            adminRole.encode("utf-8"),
+            role,
+            adminRole,
             {"from": sender},
         )

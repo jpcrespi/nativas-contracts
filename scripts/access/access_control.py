@@ -16,34 +16,34 @@ class AccessControl(Context, ERC165):
     def DEFAULT_ADMIN_ROLE(self) -> bytes:
         return self.contract().DEFAULT_ADMIN_ROLE.call()
 
-    def hasRole(self, role: str, account: any) -> bool:
+    def hasRole(self, role: bytes, account: any) -> bool:
         return self.contract().hasRole(
-            role.encode("utf-8"),
+            role,
             account,
         )
 
-    def getRoleAdmin(self, role: str) -> any:
+    def getRoleAdmin(self, role: bytes) -> any:
         return self.contract().getRoleAdmin(
-            role.encode("utf-8"),
+            role,
         )
 
-    def grantRole(self, role: str, account: any, sender: any):
+    def grantRole(self, role: bytes, account: any, sender: any):
         return self.contract().grantRole(
-            role.encode("utf-8"),
+            role,
             account,
             {"from": sender},
         )
 
-    def revokeRole(self, role: str, account: any, sender: any):
+    def revokeRole(self, role: bytes, account: any, sender: any):
         return self.contract().revokeRole(
-            role.encode("utf-8"),
+            role,
             account,
             {"from": sender},
         )
 
-    def renounceRole(self, role: str, account: any, sender: any):
+    def renounceRole(self, role: bytes, account: any, sender: any):
         return self.contract().renounceRole(
-            role.encode("utf-8"),
+            role,
             account,
             {"from": sender},
         )
@@ -58,15 +58,15 @@ class AccessControlMock(AccessControl):
     def contract(self) -> any:
         return self.__contract
 
-    def senderProtected(self, role: str, sender: any):
+    def senderProtected(self, role: bytes, sender: any):
         return self.contract().senderProtected(
-            role.encode("utf-8"),
+            role,
             {"from": sender},
         )
 
-    def setRoleAdmin(self, role: str, adminRole: str, sender: any):
+    def setRoleAdmin(self, role: bytes, adminRole: bytes, sender: any):
         return self.contract().setRoleAdmin(
-            role.encode("utf-8"),
-            adminRole.encode("utf-8"),
+            role,
+            adminRole,
             {"from": sender},
         )

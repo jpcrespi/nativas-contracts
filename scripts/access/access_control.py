@@ -13,6 +13,9 @@ class AccessControl(Context, ERC165):
     def contract(self):
         return self.__contract
 
+    def DEFAULT_ADMIN_ROLE(self) -> bytes:
+        return self.contract().DEFAULT_ADMIN_ROLE.call()
+
     def hasRole(self, role: str, account: any) -> bool:
         return self.contract().hasRole(
             role.encode("utf-8"),

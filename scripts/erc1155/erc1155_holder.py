@@ -1,4 +1,3 @@
-from turtle import st
 from scripts import ERC1155Holder as Contract
 from scripts.utils.context import Context
 from scripts.erc165.erc165 import ERC165

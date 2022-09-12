@@ -1,4 +1,5 @@
 from brownie import network, config, accounts, ZERO_ADDRESS
+from sha3 import keccak_256
 
 
 class Utils(object):
@@ -27,3 +28,9 @@ class Utils(object):
     @classmethod
     def getAccountZero(cls):
         return accounts.at(ZERO_ADDRESS, force=True)
+
+    @classmethod
+    def getRole(cls, role: str) -> bytes:
+        k = keccak_256()
+        k.update(role.encode("utf-8"))
+        return "0x%s" % k.hexdigest()

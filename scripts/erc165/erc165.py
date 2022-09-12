@@ -11,4 +11,6 @@ class ERC165(object):
         return self.__contract
 
     def supportsInterface(self, interfaceId: str) -> bool:
-        return self.contract().supportsInterface(interfaceId.encode("utf-8"))
+        return self.contract().supportsInterface(
+            interfaceId.encode("utf-8"),
+        )

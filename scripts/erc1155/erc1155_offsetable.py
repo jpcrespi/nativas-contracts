@@ -42,3 +42,21 @@ class ERC1155Offsetable(ERC1155Accessible):
             data,
             {"from": sender},
         )
+
+    def getOffsetValue(
+        self,
+        account: any,
+        index: int,
+    ) -> any:
+        return self.contract().getOffsetValue(
+            account,
+            index,
+        )
+
+    def getOffsetCount(
+        self,
+        account: any,
+    ) -> int:
+        return self.contract().getOffsetCount(
+            account,
+        )

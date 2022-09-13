@@ -24,4 +24,7 @@ class ERC1155Preset(
         return self.__contract
 
     def exists(self, id: int) -> bool:
-        return super(ERC1155URIStorable, self).exists(id)
+        return self.contract().exists(id)
+
+    def setMetadata(self, id: int, adapter: any, uri: str) -> any:
+        return self.contract().setMetadata(id, adapter, uri)

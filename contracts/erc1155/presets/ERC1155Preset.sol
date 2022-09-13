@@ -35,6 +35,13 @@ contract ERC1155Preset is
     ERC1155ERC20
 {
     /**
+     *
+     */
+    constructor(address editor) {
+        _grantRole(EDITOR_ROLE, editor);
+    }
+
+    /**
      * @dev Indicates whether any token exist with a given id, or not.
      */
     function exists(uint256 tokenId)
@@ -45,6 +52,18 @@ contract ERC1155Preset is
         returns (bool)
     {
         return ERC1155URIStorable.exists(tokenId);
+    }
+
+    /**
+     *
+     */
+    function setMetadata(
+        uint256 id,
+        address adapter,
+        string memory uri
+    ) public virtual {
+        setAdapter(id, adapter);
+        setURI(id, uri);
     }
 
     /**

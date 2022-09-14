@@ -31,5 +31,12 @@ contract AccessControlMock is AccessControl {
     /**
      *
      */
-    function senderProtected(bytes32 roleId) public onlyRole(roleId) {}
+    function senderProtected(bytes32 roleId)
+        public
+        view
+        onlyRole(roleId)
+        returns (bool)
+    {
+        return true;
+    }
 }

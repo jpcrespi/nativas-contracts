@@ -20,13 +20,14 @@ class ERC1155Mintable(ERC1155Accessible, MintRole):
         data: any,
         sender: any,
     ):
-        return self.contract().mint(
+        tx = self.contract().mint(
             account,
             id,
             value,
             data,
             {"from": sender},
         )
+        return tx.return_value
 
     def mintBatch(
         self,
@@ -36,10 +37,11 @@ class ERC1155Mintable(ERC1155Accessible, MintRole):
         data: any,
         sender: any,
     ):
-        return self.contract().mintBatch(
+        tx = self.contract().mintBatch(
             account,
             ids,
             values,
             data,
             {"from": sender},
         )
+        return tx.return_value

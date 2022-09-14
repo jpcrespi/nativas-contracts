@@ -18,7 +18,7 @@ class ERC20Adapter(Context, ERC165):
         decimals: int,
         sender: any,
     ):
-        return self.contract().init(
+        tx = self.contract().init(
             entity,
             id,
             name,
@@ -26,6 +26,7 @@ class ERC20Adapter(Context, ERC165):
             decimals,
             {"from": sender},
         )
+        return tx.return_value
 
     def contract(self) -> any:
         return self.__contract
@@ -57,17 +58,69 @@ class ERC20Adapter(Context, ERC165):
     def allowance(self, owner: any, spender: any) -> int:
         return self.contract().allowance(owner, spender)
 
-    def approve(self, spender: any, amount: int, sender: any) -> bool:
-        return self.contract().approve(spender, amount, {"from": sender})
+    def approve(
+        self,
+        spender: any,
+        amount: int,
+        sender: any,
+    ) -> bool:
+        tx = self.contract().approve(
+            spender,
+            amount,
+            {"from": sender},
+        )
+        return tx.return_value
 
-    def increaseAllowance(self, spender: any, value: int, sender: any) -> bool:
-        return self.contract().increaseAllowance(spender, value, {"from": sender})
+    def increaseAllowance(
+        self,
+        spender: any,
+        value: int,
+        sender: any,
+    ) -> bool:
+        tx = self.contract().increaseAllowance(
+            spender,
+            value,
+            {"from": sender},
+        )
+        return tx.return_value
 
-    def decreaseAllowance(self, spender: any, value: int, sender: any) -> bool:
-        return self.contract().decreaseAllowance(spender, value, {"from": sender})
+    def decreaseAllowance(
+        self,
+        spender: any,
+        value: int,
+        sender: any,
+    ) -> bool:
+        tx = self.contract().decreaseAllowance(
+            spender,
+            value,
+            {"from": sender},
+        )
+        return tx.return_value
 
-    def transfer(self, to: any, amount: int, sender: any) -> bool:
-        return self.contract().transfer(to, amount, {"from": sender})
+    def transfer(
+        self,
+        to: any,
+        amount: int,
+        sender: any,
+    ) -> bool:
+        tx = self.contract().transfer(
+            to,
+            amount,
+            {"from": sender},
+        )
+        return tx.return_value
 
-    def transferFrom(self, origin: any, to: any, amount: int, sender: any) -> int:
-        return self.contract().transferFrom(origin, to, amount, {"from": sender})
+    def transferFrom(
+        self,
+        origin: any,
+        to: any,
+        amount: int,
+        sender: any,
+    ) -> int:
+        tx = self.contract().transferFrom(
+            origin,
+            to,
+            amount,
+            {"from": sender},
+        )
+        return tx.return_value

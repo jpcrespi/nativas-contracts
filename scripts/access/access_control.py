@@ -27,26 +27,44 @@ class AccessControl(Context, ERC165):
             role,
         )
 
-    def grantRole(self, role: bytes, account: any, sender: any):
-        return self.contract().grantRole(
+    def grantRole(
+        self,
+        role: bytes,
+        account: any,
+        sender: any,
+    ) -> any:
+        tx = self.contract().grantRole(
             role,
             account,
             {"from": sender},
         )
+        return tx.return_value
 
-    def revokeRole(self, role: bytes, account: any, sender: any):
-        return self.contract().revokeRole(
+    def revokeRole(
+        self,
+        role: bytes,
+        account: any,
+        sender: any,
+    ) -> any:
+        tx = self.contract().revokeRole(
             role,
             account,
             {"from": sender},
         )
+        return tx.return_value
 
-    def renounceRole(self, role: bytes, account: any, sender: any):
-        return self.contract().renounceRole(
+    def renounceRole(
+        self,
+        role: bytes,
+        account: any,
+        sender: any,
+    ) -> any:
+        tx = self.contract().renounceRole(
             role,
             account,
             {"from": sender},
         )
+        return tx.return_value
 
 
 class AccessControlMock(AccessControl):
@@ -58,15 +76,25 @@ class AccessControlMock(AccessControl):
     def contract(self) -> any:
         return self.__contract
 
-    def senderProtected(self, role: bytes, sender: any):
+    def senderProtected(
+        self,
+        role: bytes,
+        sender: any,
+    ) -> any:
         return self.contract().senderProtected(
             role,
             {"from": sender},
         )
 
-    def setRoleAdmin(self, role: bytes, adminRole: bytes, sender: any):
-        return self.contract().setRoleAdmin(
+    def setRoleAdmin(
+        self,
+        role: bytes,
+        adminRole: bytes,
+        sender: any,
+    ) -> any:
+        tx = self.contract().setRoleAdmin(
             role,
             adminRole,
             {"from": sender},
         )
+        return tx.return_value

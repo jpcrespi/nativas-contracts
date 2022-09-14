@@ -15,11 +15,26 @@ class ERC1155ERC20(ERC1155Supply, EditRole):
     def exists(self, id: int) -> bool:
         return self.contract().exists(id)
 
-    def setAdapter(self, id: int, adapter: any, sender: any):
-        return self.contract().setAdapter(id, adapter, {"from": sender})
+    def setAdapter(
+        self,
+        id: int,
+        adapter: any,
+        sender: any,
+    ) -> any:
+        tx = self.contract().setAdapter(
+            id,
+            adapter,
+            {"from": sender},
+        )
+        return tx.return_value
 
-    def getAdapter(self, id: int) -> any:
-        return self.contract().getAdapter(id)
+    def getAdapter(
+        self,
+        id: int,
+    ) -> any:
+        return self.contract().getAdapter(
+            id,
+        )
 
     def safeAdapterTransferFrom(
         self,
@@ -31,7 +46,7 @@ class ERC1155ERC20(ERC1155Supply, EditRole):
         data: any,
         sender: any,
     ):
-        return self.contract().exists(
+        tx = self.contract().exists(
             operator,
             origin,
             to,
@@ -40,3 +55,4 @@ class ERC1155ERC20(ERC1155Supply, EditRole):
             data,
             {"from": sender},
         )
+        return tx.return_value

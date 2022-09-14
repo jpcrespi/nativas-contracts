@@ -39,9 +39,15 @@ class AccessControlEnumerableMock(AccessControlEnumerable):
             {"from": sender},
         )
 
-    def setRoleAdmin(self, role: bytes, adminRole: bytes, sender: any):
-        return self.contract().setRoleAdmin(
+    def setRoleAdmin(
+        self,
+        role: bytes,
+        adminRole: bytes,
+        sender: any,
+    ):
+        tx = self.contract().setRoleAdmin(
             role,
             adminRole,
             {"from": sender},
         )
+        return tx.return_value

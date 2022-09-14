@@ -16,18 +16,18 @@ def test_access_control():
         contract.senderProtected(TEST_ROLE, account1)
     with raises(exceptions.VirtualMachineError):
         contract.senderProtected(TEST_ROLE, account2)
-    assert contract.grantRole(TEST_ROLE, account1, adminRole)
+    contract.grantRole(TEST_ROLE, account1, adminRole)
     assert contract.senderProtected(TEST_ROLE, account1)
     with raises(exceptions.VirtualMachineError):
         contract.senderProtected(TEST_ROLE, account2)
-    assert contract.grantRole(TEST_ROLE, account2, adminRole)
+    contract.grantRole(TEST_ROLE, account2, adminRole)
     assert contract.senderProtected(TEST_ROLE, account1)
     assert contract.senderProtected(TEST_ROLE, account2)
-    assert contract.revokeRole(TEST_ROLE, account1, adminRole)
+    contract.revokeRole(TEST_ROLE, account1, adminRole)
     with raises(exceptions.VirtualMachineError):
         contract.senderProtected(TEST_ROLE, account1)
     assert contract.senderProtected(TEST_ROLE, account2)
-    assert contract.renounceRole(TEST_ROLE, account2, account2)
+    contract.renounceRole(TEST_ROLE, account2, account2)
     with raises(exceptions.VirtualMachineError):
         contract.senderProtected(TEST_ROLE, account1)
     with raises(exceptions.VirtualMachineError):

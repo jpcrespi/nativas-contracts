@@ -19,13 +19,14 @@ class ERC1155Offsetable(ERC1155Accessible):
         data: any,
         sender: any,
     ):
-        return self.contract().offset(
+        tx = self.contract().offset(
             account,
             id,
             value,
             data,
             {"from": sender},
         )
+        return tx.return_value
 
     def offsetBatch(
         self,
@@ -35,13 +36,14 @@ class ERC1155Offsetable(ERC1155Accessible):
         data: any,
         sender: any,
     ):
-        return self.contract().offsetBatch(
+        tx = self.contract().offsetBatch(
             account,
             ids,
             values,
             data,
             {"from": sender},
         )
+        return tx.return_value
 
     def getOffsetValue(
         self,

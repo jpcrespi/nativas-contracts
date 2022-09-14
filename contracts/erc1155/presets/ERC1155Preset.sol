@@ -35,13 +35,6 @@ contract ERC1155Preset is
     ERC1155ERC20
 {
     /**
-     *
-     */
-    constructor(address editor) {
-        _grantRole(EDITOR_ROLE, editor);
-    }
-
-    /**
      * @dev Indicates whether any token exist with a given id, or not.
      */
     function exists(uint256 tokenId)

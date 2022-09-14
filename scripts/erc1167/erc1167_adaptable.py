@@ -23,7 +23,7 @@ class ERC1167Adaptable(ERC1167Ownable):
         decimals: int,
         sender: any,
     ) -> any:
-        return self.contract().createAdapter(
+        tx = self.contract().createAdapter(
             entity,
             id,
             name,
@@ -31,3 +31,4 @@ class ERC1167Adaptable(ERC1167Ownable):
             decimals,
             {"from": sender},
         )
+        return tx.return_value

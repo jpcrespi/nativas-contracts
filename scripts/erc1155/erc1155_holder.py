@@ -20,13 +20,14 @@ class ERC1155Holder(Context, ERC165):
         name: str,
         sender: any,
     ):
-        return self.contract().init(
+        tx = self.contract().init(
             entity,
             operator,
             id,
             name,
             {"from": sender},
         )
+        return tx.return_value
 
     def id(self) -> int:
         return self.contract().id()

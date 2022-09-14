@@ -22,10 +22,11 @@ class ERC1167Holdable(ERC1167Ownable):
         operator: any,
         sender: any,
     ) -> any:
-        return self.contract().createHolder(
+        tx = self.contract().createHolder(
             entity,
             id,
             name,
             operator,
             {"from": sender},
         )
+        return tx.return_value

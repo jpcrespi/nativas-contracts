@@ -29,11 +29,12 @@ class ERC1155(Context, ERC165, ERC1155Common):
         approved: bool,
         sender: any,
     ):
-        return self.contract().setApprovalForAll(
+        tx = self.contract().setApprovalForAll(
             operator,
             approved,
             {"from": sender},
         )
+        return tx.return_value
 
     def isApprovedForAll(
         self,
@@ -54,7 +55,7 @@ class ERC1155(Context, ERC165, ERC1155Common):
         data: any,
         sender: any,
     ):
-        return self.contract().safeTransferFrom(
+        tx = self.contract().safeTransferFrom(
             origin,
             to,
             id,
@@ -62,6 +63,7 @@ class ERC1155(Context, ERC165, ERC1155Common):
             data,
             {"from": sender},
         )
+        return tx.return_value
 
     def safeBatchTransferFrom(
         self,
@@ -72,7 +74,7 @@ class ERC1155(Context, ERC165, ERC1155Common):
         data: any,
         sender: any,
     ):
-        return self.contract().safeBatchTransferFrom(
+        tx = self.contract().safeBatchTransferFrom(
             origin,
             to,
             ids,
@@ -80,3 +82,4 @@ class ERC1155(Context, ERC165, ERC1155Common):
             data,
             {"from": sender},
         )
+        return tx.return_value

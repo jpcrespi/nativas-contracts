@@ -4,7 +4,7 @@
 
 pragma solidity ^0.8.0;
 
-import "../../erc20/ERC20Adapter.sol";
+import "../../erc20Adapter/extensions/ERC20AdapterFactory.sol";
 import "./ERC1167Ownable.sol";
 
 /**
@@ -25,7 +25,7 @@ contract ERC1167Adaptable is ERC1167Ownable {
      *
      */
     constructor() {
-        _adapterTemplate = address(new ERC20Adapter());
+        _adapterTemplate = address(new ERC20AdapterFactory());
     }
 
     /**
@@ -59,7 +59,7 @@ contract ERC1167Adaptable is ERC1167Ownable {
         uint8 decimals
     ) internal virtual returns (address) {
         address adapter = deploy(_adapterTemplate);
-        ERC20Adapter(adapter).init(entity, id, name, symbol, decimals);
+        ERC20AdapterFactory(adapter).init(entity, id, name, symbol, decimals);
         _adapters[id] = adapter;
         emit AdapterCreated(id, adapter);
         return adapter;

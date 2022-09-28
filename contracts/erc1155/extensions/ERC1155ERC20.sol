@@ -6,7 +6,6 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/proxy/Clones.sol";
 import "../../../interfaces/erc1155/IERC1155ERC20.sol";
 import "../../access/roles/EditRole.sol";
-import "../../erc20/ERC20Adapter.sol";
 import "./ERC1155Supply.sol";
 
 /**

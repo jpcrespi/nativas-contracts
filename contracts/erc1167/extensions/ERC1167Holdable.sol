@@ -4,7 +4,7 @@
 
 pragma solidity ^0.8.0;
 
-import "../../erc1155/holder/ERC1155Holder.sol";
+import "../../erc1155Receiver/extensions/ERC1155HolderFactory.sol";
 import "./ERC1167Ownable.sol";
 
 /**
@@ -25,7 +25,7 @@ contract ERC1167Holdable is ERC1167Ownable {
      *
      */
     constructor() {
-        _holderTemplate = address(new ERC1155Holder());
+        _holderTemplate = address(new ERC1155HolderFactory());
     }
 
     /**
@@ -57,7 +57,7 @@ contract ERC1167Holdable is ERC1167Ownable {
         address operator
     ) internal virtual returns (address) {
         address holder = deploy(_holderTemplate);
-        ERC1155Holder(holder).init(entity, operator, id, name);
+        ERC1155HolderFactory(holder).init(entity, operator, id, name);
         _holders[id] = holder;
         emit HolderCreated(id, holder);
         return holder;

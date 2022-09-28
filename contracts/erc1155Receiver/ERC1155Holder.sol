@@ -11,7 +11,7 @@ import "../../interfaces/erc1155/IERC1155TokenReceiver.sol";
 /**
  *
  */
-contract ERC1155Holder is Context, ERC165, IERC1155TokenReceiver {
+abstract contract ERC1155Holder is Context, ERC165, IERC1155TokenReceiver {
     //
     uint256 internal _id;
     string internal _name;

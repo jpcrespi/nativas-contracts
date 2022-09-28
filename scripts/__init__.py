@@ -13,7 +13,8 @@ EditRole = brownie.EditRole
 MintRole = brownie.MintRole
 PauseRole = brownie.PauseRole
 # ERC20 # Adapter
-ERC20Adapter = brownie.ERC20Adapter
+ERC20AdapterPreset = brownie.ERC20AdapterPreset
+ERC20AdapterFactory = brownie.ERC20AdapterFactory
 # ERC165
 ERC165 = brownie.ERC165Mock
 # ERC1155
@@ -31,7 +32,8 @@ ERC1155URIStorable = brownie.ERC1155URIStorable
 # ERC1155 # Preset
 ERC1155Preset = brownie.ERC1155Preset
 # ERC1155 # Holder
-ERC1155Holder = brownie.ERC1155Holder
+ERC1155HolderPreset = brownie.ERC1155HolderPreset
+ERC1155HolderFactory = brownie.ERC1155HolderFactory
 # ERC1167
 ERC1167 = brownie.ERC1167
 # ERC1167 # extensions

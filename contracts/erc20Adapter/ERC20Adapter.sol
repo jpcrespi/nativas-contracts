@@ -14,7 +14,7 @@ import "../../interfaces/erc20/IERC20Approve.sol";
 /**
  *
  */
-contract ERC20Adapter is
+abstract contract ERC20Adapter is
     Context,
     ERC165,
     IERC20,

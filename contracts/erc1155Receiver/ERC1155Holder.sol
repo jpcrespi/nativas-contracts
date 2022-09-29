@@ -5,13 +5,19 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
+import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 import "../../interfaces/erc1155/IERC1155.sol";
 import "../../interfaces/erc1155/IERC1155TokenReceiver.sol";
 
 /**
  *
  */
-abstract contract ERC1155Holder is Context, ERC165, IERC1155TokenReceiver {
+contract ERC1155Holder is
+    Context,
+    ERC165,
+    Initializable,
+    IERC1155TokenReceiver
+{
     //
     uint256 internal _id;
     string internal _name;
@@ -19,12 +25,26 @@ abstract contract ERC1155Holder is Context, ERC165, IERC1155TokenReceiver {
     /**
      *
      */
+    function init(
+        address entity_,
+        address operator_,
+        uint256 id_,
+        string memory name_
+    ) public initializer {
+        _id = id_;
+        _name = name_;
+        IERC1155(entity_).setApprovalForAll(operator_, true);
+    }
+
+    /**
+     * @return id of the holder
+     */
     function id() public view virtual returns (uint256) {
         return _id;
     }
 
     /**
-     * @dev See {IERC20-name}.
+     * @return name of the holder
      */
     function name() public view virtual returns (string memory) {
         return _name;

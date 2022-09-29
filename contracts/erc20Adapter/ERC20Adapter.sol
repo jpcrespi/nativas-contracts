@@ -5,31 +5,48 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
+import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 import "../../interfaces/erc1155/IERC1155ERC20.sol";
 import "../../interfaces/erc20/IERC20.sol";
-import "../../interfaces/bep20/IBEP20.sol";
 import "../../interfaces/erc20/IERC20Metadata.sol";
 import "../../interfaces/erc20/IERC20Approve.sol";
 
 /**
  *
  */
-abstract contract ERC20Adapter is
+contract ERC20Adapter is
     Context,
+    Initializable,
     ERC165,
     IERC20,
-    IBEP20,
     IERC20Metadata,
     IERC20Approve
 {
-    //
+    // IERC1155ERC20
     address internal _entity;
+    // IERC20Metadata
     uint256 internal _id;
     string internal _name;
     string internal _symbol;
     uint8 internal _decimals;
-    //
+    // IERC20Approve
     mapping(address => mapping(address => uint256)) internal _allowances;
+
+    /**
+     *
+     */
+    function init(
+        uint256 id_,
+        string memory name_,
+        string memory symbol_,
+        uint8 decimals_
+    ) public initializer {
+        _entity = _msgSender();
+        _id = id_;
+        _name = name_;
+        _symbol = symbol_;
+        _decimals = decimals_;
+    }
 
     /**
      * @dev See {IERC165-supportsInterface}.
@@ -83,13 +100,6 @@ abstract contract ERC20Adapter is
     }
 
     /**
-     * @dev See {IBEP20-getOwner}.
-     */
-    function getOwner() public view override returns (address) {
-        return _entity;
-    }
-
-    /**
      * @dev See {IERC20-totalSupply}.
      */
     function totalSupply() public view virtual override returns (uint256) {
@@ -124,13 +134,6 @@ abstract contract ERC20Adapter is
 
     /**
      * @dev See {IERC20-approve}.
-     *
-     * Note: If `amount` is the maximum `uint256`, the allowance is not updated on
-     * `transferFrom`. This is semantically equivalent to an infinite approval.
-     *
-     * Requirements:
-     *
-     * - `spender` cannot be the zero address.
      */
     function approve(address spender, uint256 amount)
         public
@@ -144,16 +147,7 @@ abstract contract ERC20Adapter is
     }
 
     /**
-     * @dev Atomically increases the allowance granted to `spender` by the caller.
-     *
-     * This is an alternative to {approve} that can be used as a mitigation for
-     * problems described in {IERC20-approve}.
-     *
-     * Emits an {Approval} event indicating the updated allowance.
-     *
-     * Requirements:
-     *
-     * - `spender` cannot be the zero address.
+     * @dev See {IERC20Approve-increaseAllowance}.
      */
     function increaseAllowance(address spender, uint256 addedValue)
         public
@@ -167,18 +161,7 @@ abstract contract ERC20Adapter is
     }
 
     /**
-     * @dev Atomically decreases the allowance granted to `spender` by the caller.
-     *
-     * This is an alternative to {approve} that can be used as a mitigation for
-     * problems described in {IERC20-approve}.
-     *
-     * Emits an {Approval} event indicating the updated allowance.
-     *
-     * Requirements:
-     *
-     * - `spender` cannot be the zero address.
-     * - `spender` must have allowance for the caller of at least
-     * `subtractedValue`.
+     * @dev See {IERC20Approve-decreaseAllowance}.
      */
     function decreaseAllowance(address spender, uint256 subtractedValue)
         public
@@ -201,11 +184,6 @@ abstract contract ERC20Adapter is
 
     /**
      * @dev See {IERC20-transfer}.
-     *
-     * Requirements:
-     *
-     * - `to` cannot be the zero address.
-     * - the caller must have a balance of at least `amount`.
      */
     function transfer(address to, uint256 amount)
         public
@@ -220,19 +198,6 @@ abstract contract ERC20Adapter is
 
     /**
      * @dev See {IERC20-transferFrom}.
-     *
-     * Emits an {Approval} event indicating the updated allowance. This is not
-     * required by the EIP. See the note at the beginning of {ERC20}.
-     *
-     * Note: Does not update the allowance if the current allowance
-     * is the maximum `uint256`.
-     *
-     * Requirements:
-     *
-     * - `from` and `to` cannot be the zero address.
-     * - `from` must have a balance of at least `amount`.
-     * - the caller must have allowance for ``from``'s tokens of at least
-     * `amount`.
      */
     function transferFrom(
         address from,
@@ -247,9 +212,6 @@ abstract contract ERC20Adapter is
 
     /**
      * @dev Moves `amount` of tokens from `sender` to `recipient`.
-     *
-     * This internal function is equivalent to {transfer}, and can be used to
-     * e.g. implement automatic token fees, slashing mechanisms, etc.
      *
      * Emits a {Transfer} event.
      *
@@ -279,9 +241,6 @@ abstract contract ERC20Adapter is
     /**
      * @dev Sets `amount` as the allowance of `spender` over the `owner` s tokens.
      *
-     * This internal function is equivalent to `approve`, and can be used to
-     * e.g. set automatic allowances for certain subsystems, etc.
-     *
      * Emits an {Approval} event.
      *
      * Requirements:
@@ -302,12 +261,12 @@ abstract contract ERC20Adapter is
     }
 
     /**
-     * @dev Updates `owner` s allowance for `spender` based on spent `amount`.
+     * @dev Updates `owner`s allowance for `spender` based on spent `amount`.
      *
      * Does not update the allowance amount in case of infinite allowance.
      * Revert if not enough allowance is available.
      *
-     * Might emit an {Approval} event.
+     * Emits an {Approval} event.
      */
     function _spendAllowance(
         address owner,

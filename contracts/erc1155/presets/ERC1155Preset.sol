@@ -52,10 +52,12 @@ contract ERC1155Preset is
      */
     function setMetadata(
         uint256 id,
-        address adapter,
+        string memory name,
+        string memory symbol,
+        uint8 decimals,
         string memory uri
     ) public virtual {
-        setAdapter(id, adapter);
+        createAdapter(id, name, symbol, decimals);
         setURI(id, uri);
     }
 

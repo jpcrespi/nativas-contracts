@@ -7,11 +7,11 @@ import "./IERC1155.sol";
 import "./IERC1155Supply.sol";
 
 /**
- *
+ * @dev Extension of ERC1155 that adds backward compatibility
  */
 interface IERC1155ERC20 is IERC1155, IERC1155Supply {
     /**
-     *
+     * @dev See {IERC1155-safeTransferFrom}.
      */
     function safeAdapterTransferFrom(
         address operator,
@@ -21,9 +21,4 @@ interface IERC1155ERC20 is IERC1155, IERC1155Supply {
         uint256 amount,
         bytes memory data
     ) external;
-
-    /**
-     *
-     */
-    function setAdapter(uint256 id, address adapter) external;
 }

@@ -4,15 +4,19 @@
 
 pragma solidity ^0.8.0;
 
-import "../../erc1155Receiver/extensions/ERC1155HolderFactory.sol";
-import "./ERC1167Ownable.sol";
+import "@openzeppelin/contracts/utils/Context.sol";
+import "@openzeppelin/contracts/proxy/Clones.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "../erc1155Receiver/ERC1155Holder.sol";
 
 /**
  *
  */
-contract ERC1167Holdable is ERC1167Ownable {
+contract ERC1167 is Context, Ownable {
+    using Clones for address;
+
     // ERC1155TokenReceiver template
-    address internal _holderTemplate;
+    address internal _template;
     // Mapping user id to holder address
     mapping(uint256 => address) internal _holders;
 
@@ -25,7 +29,7 @@ contract ERC1167Holdable is ERC1167Ownable {
      *
      */
     constructor() {
-        _holderTemplate = address(new ERC1155HolderFactory());
+        _template = address(new ERC1155Holder());
     }
 
     /**
@@ -56,8 +60,8 @@ contract ERC1167Holdable is ERC1167Ownable {
         string memory name,
         address operator
     ) internal virtual returns (address) {
-        address holder = deploy(_holderTemplate);
-        ERC1155HolderFactory(holder).init(entity, operator, id, name);
+        address holder = _template.clone();
+        ERC1155Holder(holder).init(entity, operator, id, name);
         _holders[id] = holder;
         emit HolderCreated(id, holder);
         return holder;

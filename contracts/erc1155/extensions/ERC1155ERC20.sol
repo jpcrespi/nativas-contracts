@@ -6,36 +6,47 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/proxy/Clones.sol";
 import "../../../interfaces/erc1155/IERC1155ERC20.sol";
 import "../../access/roles/EditRole.sol";
+import "../../erc20Adapter/ERC20Adapter.sol";
 import "./ERC1155Supply.sol";
 
 /**
  *
  */
 contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
+    using Clones for address;
+
+    // ERC20Adapter template
+    address internal _template;
     // Mapping token id to adapter address
     mapping(uint256 => address) internal _adapters;
 
     /**
      *
      */
-    event AdapterSet(uint256 indexed id, address indexed adapter);
+    event AdapterCreated(uint256 indexed id, address indexed adapter);
 
     /**
      * @dev Grants `EDITOR_ROLE` to the account that deploys the contract.
      */
     constructor() {
         _grantRole(EDITOR_ROLE, _msgSender());
+        _template = address(new ERC20Adapter());
     }
 
     /**
      *
      */
-    function setAdapter(uint256 id, address adapter) public virtual override {
+    function createAdapter(
+        uint256 id,
+        string memory name,
+        string memory symbol,
+        uint8 decimals
+    ) public virtual returns (address) {
         require(
             hasRole(EDITOR_ROLE, _msgSender()),
             "ERC1155: caller is not the token adapter"
         );
-        _setAdapter(id, adapter);
+        return _createAdapter(id, name, symbol, decimals);
     }
 
     /**
@@ -79,9 +90,17 @@ contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
     /**
      *
      */
-    function _setAdapter(uint256 id, address adapter) internal virtual {
+    function _createAdapter(
+        uint256 id,
+        string memory name,
+        string memory symbol,
+        uint8 decimals
+    ) internal virtual returns (address) {
+        address adapter = _template.clone();
+        ERC20Adapter(adapter).init(id, name, symbol, decimals);
         _adapters[id] = adapter;
-        emit AdapterSet(id, adapter);
+        emit AdapterCreated(id, adapter);
+        return adapter;
     }
 
     /**

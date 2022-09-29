@@ -19,7 +19,6 @@ contract ERC1155Common {
     {
         uint256[] memory array = new uint256[](1);
         array[0] = element;
-
         return array;
     }
 

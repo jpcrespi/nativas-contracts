@@ -1,13 +1,13 @@
 /// SPDX-License-Identifier: MIT
 /// @author: Juan Pablo Crespi
 /// @dev: https://eips.ethereum.org/EIPS/eip-1155
-/// @title ERC-1155 Multi Token Standard
-/// Note: The ERC-165 identifier for this interface is 0x4e2312e0.
+/// Note: OK
 
 pragma solidity ^0.8.0;
 
 /**
- *
+ * @title ERC1155TokenReceiver interface to accept transfers
+ * Note: The ERC-165 identifier for this interface is 0x4e2312e0.
  */
 interface IERC1155TokenReceiver {
     /**

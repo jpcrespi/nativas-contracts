@@ -57,7 +57,7 @@ contract ERC1155Preset is
         uint8 decimals,
         string memory uri
     ) public virtual {
-        createAdapter(id, name, symbol, decimals);
+        putAdapter(id, name, symbol, decimals);
         setURI(id, uri);
     }
 

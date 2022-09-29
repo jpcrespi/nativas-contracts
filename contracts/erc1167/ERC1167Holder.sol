@@ -12,7 +12,7 @@ import "../erc1155Receiver/ERC1155Holder.sol";
 /**
  *
  */
-contract ERC1167 is Context, Ownable {
+contract ERC1167Holder is Context, Ownable {
     using Clones for address;
 
     // ERC1155TokenReceiver template
@@ -42,19 +42,19 @@ contract ERC1167 is Context, Ownable {
     /**
      *
      */
-    function createHolder(
+    function putHolder(
         address entity,
         uint256 id,
         string memory name,
         address operator
     ) public virtual onlyOwner returns (address) {
-        return _createHolder(entity, id, name, operator);
+        return _putHolder(entity, id, name, operator);
     }
 
     /**
      *
      */
-    function _createHolder(
+    function _putHolder(
         address entity,
         uint256 id,
         string memory name,

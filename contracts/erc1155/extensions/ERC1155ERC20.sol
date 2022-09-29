@@ -36,7 +36,7 @@ contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
     /**
      *
      */
-    function createAdapter(
+    function putAdapter(
         uint256 id,
         string memory name,
         string memory symbol,
@@ -46,7 +46,7 @@ contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
             hasRole(EDITOR_ROLE, _msgSender()),
             "ERC1155: caller is not the token adapter"
         );
-        return _createAdapter(id, name, symbol, decimals);
+        return _putAdapter(id, name, symbol, decimals);
     }
 
     /**
@@ -90,7 +90,7 @@ contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
     /**
      *
      */
-    function _createAdapter(
+    function _putAdapter(
         uint256 id,
         string memory name,
         string memory symbol,

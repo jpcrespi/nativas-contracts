@@ -6,7 +6,7 @@
 pragma solidity ^0.8.0;
 
 /**
- * @dev Interface of the optional ERC1155MetadataExtension interface
+ * @title Interface of the optional ERC1155MetadataExtension interface
  * Note: The ERC-165 identifier for this interface is 0x0e89341c.
  */
 interface IERC1155MetadataURI {

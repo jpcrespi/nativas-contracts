@@ -1,10 +1,12 @@
 /// SPDX-License-Identifier: MIT
 /// @author: Juan Pablo Crespi
 /// @dev https://eips.ethereum.org/EIPS/eip-20
-/// @title ERC-20: Token Standard
 
 pragma solidity ^0.8.0;
 
+/**
+ * @title ERC-20: Token Standard
+ */
 interface IERC20 {
     /**
      * @dev MUST trigger when tokens are transferred, including zero value transfers.

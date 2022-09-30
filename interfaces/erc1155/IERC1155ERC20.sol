@@ -1,5 +1,6 @@
 /// SPDX-License-Identifier: MIT
 /// @author: Juan Pablo Crespi
+/// Note: OK
 
 pragma solidity ^0.8.0;
 
@@ -7,7 +8,7 @@ import "./IERC1155.sol";
 import "./IERC1155Supply.sol";
 
 /**
- * @dev Extension of ERC1155 that adds backward compatibility
+ * @title Extension of ERC1155 that adds backward compatibility
  */
 interface IERC1155ERC20 is IERC1155, IERC1155Supply {
     /**

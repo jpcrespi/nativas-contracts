@@ -1,13 +1,13 @@
 /// SPDX-License-Identifier: MIT
 /// @author: Juan Pablo Crespi
 /// @dev: https://eips.ethereum.org/EIPS/eip-1155
-/// @title ERC-1155 Multi Token Standard
-/// Note: The ERC-165 identifier for this interface is 0xd9b67a26.
+/// Note: OK
 
 pragma solidity ^0.8.0;
 
 /**
- * is IERC165
+ * @title ERC-1155 Multi Token Standard
+ * Note: The ERC-165 identifier for this interface is 0xd9b67a26.
  */
 interface IERC1155 {
     /**
@@ -110,16 +110,16 @@ interface IERC1155 {
      * MUST emit `TransferSingle` or `TransferBatch` event(s) such that all the balance changes are reflected
      * (see "Safe Transfer Rules" section of the standard).
      * Balance changes and events MUST follow the ordering of
-     * the arrays (_ids[0]/_values[0] before _ids[1]/_values[1], etc).
-     * After the above conditions for the transfer(s) in the batch are met, this function MUST check if `_to`
+     * the arrays (ids[0]/values[0] before ids[1]/values[1], etc).
+     * After the above conditions for the transfer(s) in the batch are met, this function MUST check if `to`
      * is a smart contract (e.g. code size > 0). If so, it MUST call the relevant `ERC1155TokenReceiver` hook(s)
-     * on `_to` and act appropriately (see "Safe Transfer Rules" section of the standard).
+     * on `to` and act appropriately (see "Safe Transfer Rules" section of the standard).
      * @param from Source address
      * @param to Target address
-     * @param ids IDs of each token type (order and length must match _values array)
-     * @param values Transfer amounts per token type (order and length must match _ids array)
+     * @param ids IDs of each token type (order and length must match values array)
+     * @param values Transfer amounts per token type (order and length must match ids array)
      * @param data Additional data with no specified format, MUST be sent unaltered in call
-     * to the `ERC1155TokenReceiver` hook(s) on `_to`
+     * to the `ERC1155TokenReceiver` hook(s) on `to`
      */
     function safeBatchTransferFrom(
         address from,

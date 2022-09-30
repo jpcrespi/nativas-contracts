@@ -5,7 +5,7 @@
 pragma solidity ^0.8.0;
 
 /**
- * @dev Extension of ERC1155 that adds tracking of total supply per id.
+ * @title Extension of ERC1155 that adds tracking of total supply per id.
  */
 interface IERC1155Supply {
     /**

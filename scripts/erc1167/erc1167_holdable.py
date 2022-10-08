@@ -1,8 +1,9 @@
-from scripts import ERC1167 as Contract
-from scripts.erc1167.erc1167_ownable import ERC1167Ownable
+from scripts import ERC1167Holder as Contract
+from scripts.utils.context import Context
+from scripts.access.ownable import Ownable
 
 
-class ERC1167Holdable(ERC1167Ownable):
+class ERC1167Holder(Context, Ownable):
     __contract: Contract
 
     def __init__(self, sender: any):
@@ -14,7 +15,7 @@ class ERC1167Holdable(ERC1167Ownable):
     def getHolder(self, id: int) -> any:
         return self.contract().getHolder(id)
 
-    def createHolder(
+    def putHolder(
         self,
         entity: any,
         id: int,

@@ -24,9 +24,8 @@
 ### Permanent Ganache
 
 ```bash
-❯ brownie networks add Ethereum ganache \
-    name="Ganache (Local)" \
-    host=http://127.0.0.1 \
-    port=8545 \
+❯ brownie networks add Ethereum localnet \
+    name="Localnet (Ganache)" \
+    host="http://127.0.0.1:7545" \
     chainid=1337
 ```

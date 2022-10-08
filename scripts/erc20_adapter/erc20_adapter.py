@@ -1,9 +1,9 @@
-from scripts import ERC20AdapterFactory as Contract
+from scripts import ERC20Adapter as Contract
 from scripts.utils.context import Context
 from scripts.erc165.erc165 import ERC165
 
 
-class ERC20AdapterFactory(Context, ERC165):
+class ERC20Adapter(Context, ERC165):
     __contract: Contract
 
     def __init__(self, sender):
@@ -11,7 +11,6 @@ class ERC20AdapterFactory(Context, ERC165):
 
     def init(
         self,
-        entity: any,
         id: int,
         name: str,
         symbol: str,
@@ -19,7 +18,6 @@ class ERC20AdapterFactory(Context, ERC165):
         sender: any,
     ):
         tx = self.contract().init(
-            entity,
             id,
             name,
             symbol,

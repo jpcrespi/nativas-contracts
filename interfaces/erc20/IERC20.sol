@@ -1,6 +1,7 @@
 /// SPDX-License-Identifier: MIT
 /// @author: Juan Pablo Crespi
 /// @dev https://eips.ethereum.org/EIPS/eip-20
+/// Note: OK!
 
 pragma solidity ^0.8.0;
 
@@ -36,7 +37,7 @@ interface IERC20 {
     function balanceOf(address owner) external view returns (uint256 balance);
 
     /**
-     * @return remaining amount which spender is still allowed to withdraw from owner.
+     * @return remaining the amount which spender is still allowed to withdraw from owner.
      */
     function allowance(address owner, address spender)
         external

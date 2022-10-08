@@ -1,21 +1,21 @@
-// SPDX-License-Identifier: MIT
-// Author: Juan Pablo Crespi
-// https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.5.0/contracts/mocks/AccessControlMock.sol
+/// SPDX-License-Identifier: MIT
+/// @author: Juan Pablo Crespi
+/// Note: checked
 
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 /**
- *
+ * @dev Ownable non-abstract implementation.
  */
 contract OwnableStub is Ownable {
 
 }
 
 /**
- *
+ * @dev Ownable test mock implementation.
  */
-contract OwnableMock is Ownable {
+contract OwnableMock is OwnableStub {
 
 }

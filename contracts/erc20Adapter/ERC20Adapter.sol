@@ -1,5 +1,6 @@
 /// SPDX-License-Identifier: MIT
 /// @author: Juan Pablo Crespi
+/// Note: checked
 
 pragma solidity ^0.8.0;
 
@@ -12,7 +13,7 @@ import "../../interfaces/erc20/IERC20Metadata.sol";
 import "../../interfaces/erc20/IERC20Approve.sol";
 
 /**
- *
+ * @dev See {IERC20-supportsInterface}.
  */
 contract ERC20Adapter is
     Context,
@@ -33,7 +34,7 @@ contract ERC20Adapter is
     mapping(address => mapping(address => uint256)) internal _allowances;
 
     /**
-     *
+     * @dev Initialize contract
      */
     function init(
         uint256 id_,

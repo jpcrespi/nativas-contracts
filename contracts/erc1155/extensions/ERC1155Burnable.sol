@@ -20,7 +20,9 @@ contract ERC1155Burnable is BurnRole, ERC1155Accessible {
 
     /**
      * @dev See {ERC1155Accessible-_burn}.
+     *
      * Requirements:
+     *
      * - the caller must have the `BURNER_ROLE`.
      * - the caller must be the owner or approved.
      */
@@ -44,7 +46,9 @@ contract ERC1155Burnable is BurnRole, ERC1155Accessible {
 
     /**
      * @dev See {ERC1155Accessible-_burnBatch}.
+     *
      * Requirements:
+     *
      * - the caller must have the `BURNER_ROLE`.
      * - the caller must be the owner or approved.
      */

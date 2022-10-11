@@ -17,19 +17,84 @@ contract ERC1155URIStorable is
     IERC1155MetadataURI
 {
     using Strings for uint256;
-
+    // Used as the URI for all token types by relying on ID substitution.
+    string internal _uri;
     // Mapping for token URIs
     mapping(uint256 => string) private _tokenURIs;
 
     /**
      * @dev Grants `EDITOR_ROLE` to the account that deploys the contract.
      */
-    constructor() {
+    constructor(string memory uri_) {
+        _setBaseURI(uri_);
         _grantRole(EDITOR_ROLE, _msgSender());
     }
 
     /**
+     * @dev See {IERC165-supportsInterface}.
+     */
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        virtual
+        override
+        returns (bool success)
+    {
+        return
+            interfaceId == type(IERC1155MetadataURI).interfaceId ||
+            super.supportsInterface(interfaceId);
+    }
+
+    /**
+     * @dev See {IERC1155MetadataURI-uri}.
      *
+     * This implementation returns the concatenation of the `_uri`
+     * and the token-specific uri if the latter is set
+     */
+    function uri(uint256 tokenId)
+        public
+        view
+        virtual
+        override
+        returns (string memory)
+    {
+        string memory tokenURI = _tokenURIs[tokenId];
+
+        if (bytes(tokenURI).length > 0) {
+            return string(abi.encodePacked(_uri, tokenURI));
+        } else {
+            return string(abi.encodePacked(_uri, tokenId.toString()));
+        }
+    }
+
+    /**
+     * @dev Indicates whether any token exist with a given id, or not.
+     */
+    function exists(uint256 tokenId) public view virtual returns (bool) {
+        return bytes(_tokenURIs[tokenId]).length > 0;
+    }
+
+    /**
+     * @dev See {ERC1155URIStorable-_setBaseURI}
+     *
+     * Requeriments:
+     *
+     * - the caller must have the `EDITOR_ROLE`.
+     */
+    function setBaseURI(string memory baseURI) public virtual {
+        require(
+            hasRole(EDITOR_ROLE, _msgSender()),
+            "ERC1155: sender does not have role"
+        );
+        _setBaseURI(baseURI);
+    }
+
+    /**
+     * @dev See {ERC1155URIStorable-_setURI}
+     *
+     * Requeriments:
+     *
+     * - the caller must have the `EDITOR_ROLE`.
      */
     function setURI(uint256 tokenId, string memory tokenURI) public virtual {
         require(
@@ -40,38 +105,10 @@ contract ERC1155URIStorable is
     }
 
     /**
-     * @dev See {IERC1155MetadataURI-uri}.
-     *
-     * This implementation returns the concatenation of the `_baseURI`
-     * and the token-specific uri if the latter is set
-     *
-     * This enables the following behaviors:
-     *
-     * - if `_tokenURIs[tokenId]` is set, then the result is the concatenation
-     *   of `_baseURI` and `_tokenURIs[tokenId]` (keep in mind that `_baseURI`
-     *   is empty per default);
-     *
-     * - if `_tokenURIs[tokenId]` is NOT set then we fallback to `super.uri()`
-     *   which in most cases will contain `ERC1155._uri`;
-     *
-     * - if `_tokenURIs[tokenId]` is NOT set, and if the parents do not have a
-     *   uri value set, then the result is empty.
+     * @dev Sets `baseURI` as the `_uri` for all tokens
      */
-    function uri(uint256 tokenId)
-        public
-        view
-        virtual
-        override
-        returns (string memory)
-    {
-        return _tokenURIs[tokenId];
-    }
-
-    /**
-     * @dev Indicates whether any token exist with a given id, or not.
-     */
-    function exists(uint256 tokenId) public view virtual returns (bool) {
-        return bytes(_tokenURIs[tokenId]).length > 0;
+    function _setBaseURI(string memory baseURI) internal virtual {
+        _uri = baseURI;
     }
 
     /**

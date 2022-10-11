@@ -1,5 +1,6 @@
 /// SPDX-License-Identifier: MIT
 /// @author: Juan Pablo Crespi
+/// Note: checked
 
 pragma solidity ^0.8.0;
 
@@ -21,7 +22,7 @@ contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
     mapping(uint256 => address) internal _adapters;
 
     /**
-     *
+     * @dev MUST trigger when a new adapter is created.
      */
     event AdapterCreated(uint256 indexed id, address indexed adapter);
 
@@ -34,7 +35,11 @@ contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
     }
 
     /**
+     * @dev See {ERC1155ERC20-_putAdapter}
      *
+     * Requirements:
+     *
+     * - the caller must have the `EDITOR_ROLE`.
      */
     function putAdapter(
         uint256 id,
@@ -50,14 +55,18 @@ contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
     }
 
     /**
-     *
+     * @dev Get adpter contract address for token id.
      */
     function getAdapter(uint256 id) public view virtual returns (address) {
         return _adapters[id];
     }
 
     /**
+     * @dev Perform tranfer from adapter contract.
      *
+     * Requirements:
+     *
+     * - the caller MUST be the token adapter.
      */
     function safeAdapterTransferFrom(
         address operator,
@@ -88,7 +97,7 @@ contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
     }
 
     /**
-     *
+     * @dev Create new adapter contract por token id
      */
     function _putAdapter(
         uint256 id,
@@ -112,8 +121,8 @@ contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
      *
      * - `to` cannot be the zero address.
      * - `from` must have a balance of tokens of type `id` of at least `amount`.
-     * - If `to` refers to a smart contract, it must implement {IERC1155Receiver-onERC1155Received} and return the
-     * acceptance magic value.
+     * - If `to` refers to a smart contract, it must implement
+     * {IERC1155Receiver-onERC1155Received} and return the acceptance magic value.
      */
     function _safeAdapterTransferFrom(
         address operator,

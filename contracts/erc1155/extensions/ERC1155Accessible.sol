@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
 import "../ERC1155.sol";
 
 /**
- * ERC1155 and AccessControlEnumerable implementation
+ * ERC1155 and AccessControl implementation
  */
 contract ERC1155Accessible is AccessControlEnumerable, ERC1155 {
     /**
@@ -121,8 +121,7 @@ contract ERC1155Accessible is AccessControlEnumerable, ERC1155 {
      *
      * - `to` cannot be the zero address.
      * - If `to` refers to a smart contract, it must implement
-     * {IERC1155Receiver-onERC1155Received} and return the
-     * acceptance magic value.
+     * {IERC1155Receiver-onERC1155Received} and return the acceptance magic value.
      */
     function _mint(
         address to,
@@ -162,8 +161,7 @@ contract ERC1155Accessible is AccessControlEnumerable, ERC1155 {
      *
      * - `ids` and `amounts` must have the same length.
      * - If `to` refers to a smart contract, it must implement
-     * {IERC1155Receiver-onERC1155BatchReceived} and return the
-     * acceptance magic value.
+     * {IERC1155Receiver-onERC1155BatchReceived} and return the acceptance magic value.
      */
     function _mintBatch(
         address to,

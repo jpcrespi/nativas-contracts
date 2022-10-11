@@ -17,8 +17,8 @@ class ERC1155Preset(
 ):
     __contract: Contract
 
-    def __init__(self, sender: any):
-        self.__contract = Contract.deploy({"from": sender})
+    def __init__(self, uri: str, sender: any):
+        self.__contract = Contract.deploy(uri, {"from": sender})
 
     def contract(self) -> any:
         return self.__contract
@@ -32,8 +32,9 @@ class ERC1155Preset(
         adapter: any,
         uri: str,
     ) -> any:
-        return self.contract().setMetadata(
+        tx = self.contract().setMetadata(
             id,
             adapter,
             uri,
         )
+        return tx.return_value

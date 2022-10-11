@@ -3,7 +3,7 @@ from scripts.utils.context import Context
 from scripts.access.ownable import Ownable
 
 
-class ERC1167Holder(Context, Ownable):
+class ERC1167Holder(Ownable):
     __contract: Contract
 
     def __init__(self, sender: any):
@@ -23,7 +23,7 @@ class ERC1167Holder(Context, Ownable):
         operator: any,
         sender: any,
     ) -> any:
-        tx = self.contract().createHolder(
+        tx = self.contract().putHolder(
             entity,
             id,
             name,

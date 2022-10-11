@@ -1,6 +1,5 @@
 /// SPDX-License-Identifier: MIT
 /// @author: Juan Pablo Crespi
-/// Note: checked
 
 pragma solidity ^0.8.0;
 
@@ -20,7 +19,9 @@ contract ERC1155Mintable is MintRole, ERC1155Accessible {
 
     /**
      * @dev See {ERC1155Accessible-_mint}.
+     *
      * Requirements:
+     *
      * - the caller must have the `MINTER_ROLE`.
      */
     function mint(
@@ -38,7 +39,9 @@ contract ERC1155Mintable is MintRole, ERC1155Accessible {
 
     /**
      * @dev See {ERC1155Accessible-_mintBatch}.
+     *
      * Requirements:
+     *
      * - the caller must have the `MINTER_ROLE`.
      */
     function mintBatch(

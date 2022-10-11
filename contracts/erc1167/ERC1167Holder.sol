@@ -1,7 +1,6 @@
 /// SPDX-License-Identifier: MIT
 /// @author: Juan Pablo Crespi
 /// @dev: https://eips.ethereum.org/EIPS/eip-1167
-/// Note: checked
 
 pragma solidity ^0.8.0;
 
@@ -27,21 +26,25 @@ contract ERC1167Holder is Context, Ownable {
     event HolderCreated(uint256 indexed id, address indexed holder);
 
     /**
-     *
+     * @dev Create ERC1155Holder contract template.
      */
     constructor() {
         _template = address(new ERC1155Holder());
     }
 
     /**
-     * get holder contract by id.
+     * @dev get holder contract by id.
      */
     function getHolder(uint256 id) public view virtual returns (address) {
         return _holders[id];
     }
 
     /**
-     * create a new holder contract
+     * @dev See {ERC1167Holder-_putHolder}
+     *
+     * Requirements:
+     *
+     * - the caller must be the contract owener.
      */
     function putHolder(
         address entity,
@@ -53,7 +56,7 @@ contract ERC1167Holder is Context, Ownable {
     }
 
     /**
-     * internal function without retrictions
+     * @dev Create a new holder contract.
      */
     function _putHolder(
         address entity,

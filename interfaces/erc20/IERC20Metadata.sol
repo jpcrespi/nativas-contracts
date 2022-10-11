@@ -1,7 +1,6 @@
 /// SPDX-License-Identifier: MIT
 /// @author: Juan Pablo Crespi
 /// @dev: https://eips.ethereum.org/EIPS/eip-20
-/// Note: checked
 
 pragma solidity ^0.8.0;
 

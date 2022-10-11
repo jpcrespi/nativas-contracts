@@ -1,6 +1,5 @@
 /// SPDX-License-Identifier: MIT
 /// @author: Juan Pablo Crespi
-/// Note: checked
 
 pragma solidity ^0.8.0;
 

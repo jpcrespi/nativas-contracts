@@ -27,14 +27,15 @@ contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
 
     /**
      * @dev Grants `EDITOR_ROLE` to the account that deploys the contract.
+     * Set ERC20Adapter contract template
      */
-    constructor() {
+    constructor(address template_) {
         _grantRole(EDITOR_ROLE, _msgSender());
-        _template = address(new ERC20Adapter());
+        _template = template_;
     }
 
     /**
-     * @dev get ERC20Adapter contract template
+     * @dev Get ERC20Adapter contract template
      */
     function template() public view virtual returns (address) {
         return _template;

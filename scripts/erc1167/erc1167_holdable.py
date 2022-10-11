@@ -11,6 +11,9 @@ class ERC1167Holder(Ownable):
     def contract(self) -> any:
         return self.__contract
 
+    def template(self) -> any:
+        return self.contract().template()
+        
     def getHolder(self, id: int) -> any:
         return self.contract().getHolder(id)
 

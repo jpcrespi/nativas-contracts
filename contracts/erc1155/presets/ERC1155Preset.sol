@@ -21,7 +21,10 @@ contract ERC1155Preset is
     ERC1155URIStorable,
     ERC1155ERC20
 {
-    constructor(string memory uri_) ERC1155URIStorable(uri_) {}
+    constructor(string memory uri_, address template_)
+        ERC1155URIStorable(uri_)
+        ERC1155ERC20(template_)
+    {}
 
     /**
      * @dev See {IERC165-supportsInterface}.

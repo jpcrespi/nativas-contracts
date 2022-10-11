@@ -6,14 +6,20 @@ from scripts.access.roles.edit_role import EditRole
 class ERC1155ERC20(ERC1155Supply, EditRole):
     __contract: Contract
 
-    def __init__(self, sender: any):
-        self.__contract = Contract.deploy({"from": sender})
+    def __init__(self, template: any, sender: any):
+        self.__contract = Contract.deploy(
+            template, 
+            {"from": sender}
+        )
 
     def contract(self) -> any:
         return self.__contract
 
     def exists(self, id: int) -> bool:
         return self.contract().exists(id)
+
+    def template(self) -> any:
+        return self.contract().template()
 
     def setAdapter(
         self,

@@ -8,7 +8,7 @@ def test_erc1155_offsetable():
     if Utils.localNetworks() == False:
         skip("Only local networks")
     owner = Utils.getAccount()
-    contract = ERC1155Preset(owner)
+    contract = ERC1155Preset("", owner)
     contract.mint(owner, 0, 1000, "", owner)
     startDate = datetime.now().timestamp()
     contract.offset(owner, 0, 750, "", owner)

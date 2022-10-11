@@ -1,5 +1,6 @@
-// SPDX-License-Identifier: MIT
+/// SPDX-License-Identifier: MIT
 /// @author: Juan Pablo Crespi
+/// Note: checked
 
 pragma solidity ^0.8.0;
 
@@ -8,14 +9,9 @@ import "./ERC1155Accessible.sol";
 
 /**
  * @dev Extension of ERC1155 that adds tracking of total supply per id.
- *
- * Useful for scenarios where Fungible and Non-fungible tokens have to be
- * clearly identified. Note: While a totalSupply of 1 might mean the
- * corresponding is an NFT, there is no guarantees that no other token with the
- * same id are not going to be minted.
  */
 contract ERC1155Supply is ERC1155Accessible, IERC1155Supply {
-    //
+    // total supply
     mapping(uint256 => uint256) internal _totalSupply;
 
     /**

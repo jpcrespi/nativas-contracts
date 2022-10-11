@@ -1,5 +1,6 @@
 /// SPDX-License-Identifier: MIT
 /// @author: Juan Pablo Crespi
+/// Note: checked
 
 pragma solidity ^0.8.0;
 
@@ -10,7 +11,7 @@ import "../../interfaces/erc1155/IERC1155.sol";
 import "../../interfaces/erc1155/IERC1155TokenReceiver.sol";
 
 /**
- *
+ * @title ERC1155TokenReceiver implmentation
  */
 contract ERC1155Holder is
     Context,
@@ -18,12 +19,12 @@ contract ERC1155Holder is
     Initializable,
     IERC1155TokenReceiver
 {
-    //
+    // Holder metadata
     uint256 internal _id;
     string internal _name;
 
     /**
-     *
+     * @dev Initialize contract
      */
     function init(
         address entity_,
@@ -37,14 +38,14 @@ contract ERC1155Holder is
     }
 
     /**
-     * @return id of the holder
+     * @return id of the holder account
      */
     function id() public view virtual returns (uint256) {
         return _id;
     }
 
     /**
-     * @return name of the holder
+     * @return name of the holder account
      */
     function name() public view virtual returns (string memory) {
         return _name;

@@ -1,5 +1,6 @@
 /// SPDX-License-Identifier: MIT
 /// @author: Juan Pablo Crespi
+/// Note: checked
 
 pragma solidity ^0.8.0;
 
@@ -7,11 +8,7 @@ import "../../access/roles/BurnRole.sol";
 import "./ERC1155Accessible.sol";
 
 /**
- * @dev Implementation of the basic standard multi-token.
- * See https://eips.ethereum.org/EIPS/eip-1155
- * Originally based on code by Enjin: https://github.com/enjin/erc-1155
- *
- * _Available since v3.1._
+ * @dev Burn implementation
  */
 contract ERC1155Burnable is BurnRole, ERC1155Accessible {
     /**
@@ -22,7 +19,10 @@ contract ERC1155Burnable is BurnRole, ERC1155Accessible {
     }
 
     /**
-     *
+     * @dev See {ERC1155Accessible-_burn}.
+     * Requirements:
+     * - the caller must have the `BURNER_ROLE`.
+     * - the caller must be the owner or approved.
      */
     function burn(
         address account,
@@ -43,7 +43,10 @@ contract ERC1155Burnable is BurnRole, ERC1155Accessible {
     }
 
     /**
-     *
+     * @dev See {ERC1155Accessible-_burnBatch}.
+     * Requirements:
+     * - the caller must have the `BURNER_ROLE`.
+     * - the caller must be the owner or approved.
      */
     function burnBatch(
         address account,

@@ -13,7 +13,7 @@ import "../../interfaces/erc20/IERC20Metadata.sol";
 import "../../interfaces/erc20/IERC20Approve.sol";
 
 /**
- * @dev See {IERC20-supportsInterface}.
+ * @title ERC20 inplementation that adds backward compatibility
  */
 contract ERC20Adapter is
     Context,
@@ -25,8 +25,8 @@ contract ERC20Adapter is
 {
     // IERC1155ERC20
     address internal _entity;
-    // IERC20Metadata
     uint256 internal _id;
+    // IERC20Metadata
     string internal _name;
     string internal _symbol;
     uint8 internal _decimals;
@@ -174,7 +174,7 @@ contract ERC20Adapter is
         uint256 currentAllowance = allowance(owner, spender);
         require(
             currentAllowance >= subtractedValue,
-            "ERC20: decreased allowance below zero"
+            "ERC20Adapter: decreased allowance below zero"
         );
         unchecked {
             _approve(owner, spender, currentAllowance - subtractedValue);
@@ -254,8 +254,14 @@ contract ERC20Adapter is
         address spender,
         uint256 amount
     ) internal virtual {
-        require(owner != address(0), "ERC20: approve from the zero address");
-        require(spender != address(0), "ERC20: approve to the zero address");
+        require(
+            owner != address(0),
+            "ERC20Adapter: approve from the zero address"
+        );
+        require(
+            spender != address(0),
+            "ERC20Adapter: approve to the zero address"
+        );
 
         _allowances[owner][spender] = amount;
         emit Approval(owner, spender, amount);
@@ -277,11 +283,11 @@ contract ERC20Adapter is
         uint256 currentAllowance = allowance(owner, spender);
         require(
             currentAllowance != type(uint256).max,
-            "ERC20: invalid allowance"
+            "ERC20Adapter: invalid allowance"
         );
         require(
             currentAllowance >= amount,
-            "ERC20: insufficient allowance available"
+            "ERC20Adapter: insufficient allowance"
         );
         unchecked {
             _approve(owner, spender, currentAllowance - amount);

@@ -1,5 +1,6 @@
 /// SPDX-License-Identifier: MIT
 /// @author: Juan Pablo Crespi
+/// Note: checked
 
 pragma solidity ^0.8.0;
 
@@ -7,11 +8,7 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 import "./ERC1155Accessible.sol";
 
 /**
- * @dev Implementation of the basic standard multi-token.
- * See https://eips.ethereum.org/EIPS/eip-1155
- * Originally based on code by Enjin: https://github.com/enjin/erc-1155
- *
- * _Available since v3.1._
+ * @dev Offset Implementation
  */
 contract ERC1155Offsetable is ERC1155Accessible {
     /**

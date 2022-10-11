@@ -1,7 +1,7 @@
 /// SPDX-License-Identifier: MIT
 /// @author: Juan Pablo Crespi
 /// @dev https://eips.ethereum.org/EIPS/eip-20
-/// Note: OK!
+/// Note: checked
 
 pragma solidity ^0.8.0;
 
@@ -13,7 +13,7 @@ interface IERC20 {
      * @dev MUST trigger when tokens are transferred, including zero value transfers.
      *
      * A token contract which creates new tokens SHOULD trigger a Transfer event
-     * with the _from address set to 0x0 when tokens are created.
+     * with the from address set to 0x0 when tokens are created.
      */
     event Transfer(address indexed from, address indexed to, uint256 value);
 

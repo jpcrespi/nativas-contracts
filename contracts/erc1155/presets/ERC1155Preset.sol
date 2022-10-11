@@ -11,20 +11,7 @@ import "../extensions/ERC1155URIStorable.sol";
 import "../extensions/ERC1155ERC20.sol";
 
 /**
- * @dev {ERC1155} token, including:
- *
- *  - ability for holders to burn (destroy) their tokens
- *  - a minter role that allows for token minting (creation)
- *  - a pauser role that allows to stop all token transfers
- *
- * This contract uses {AccessControl} to lock permissioned functions using the
- * different roles - head to its documentation for details.
- *
- * The account that deploys the contract will be granted the minter and pauser
- * roles, as well as the default admin role, which will let it grant both minter
- * and pauser roles to other accounts.
- *
- * _Deprecated in favor of https://wizard.openzeppelin.com/[Contracts Wizard]._
+ * @dev ERC1155 preset
  */
 contract ERC1155Preset is
     ERC1155Mintable,

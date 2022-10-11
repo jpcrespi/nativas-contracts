@@ -1,5 +1,6 @@
 /// SPDX-License-Identifier: MIT
 /// @author: Juan Pablo Crespi
+/// Note: checked
 
 pragma solidity ^0.8.0;
 
@@ -10,7 +11,7 @@ contract ERC1155Common {
     using Address for address;
 
     /**
-     *
+     * helper function to create an array from an element.
      */
     function _asSingletonArray(uint256 element)
         internal
@@ -23,7 +24,7 @@ contract ERC1155Common {
     }
 
     /**
-     *
+     * transfer acceptance check.
      */
     function _doSafeTransferAcceptanceCheck(
         address operator,
@@ -49,7 +50,7 @@ contract ERC1155Common {
     }
 
     /**
-     *
+     * batch transfer acceptance check.
      */
     function _doSafeBatchTransferAcceptanceCheck(
         address operator,

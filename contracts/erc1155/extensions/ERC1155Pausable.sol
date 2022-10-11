@@ -1,5 +1,6 @@
 /// SPDX-License-Identifier: MIT
 /// @author: Juan Pablo Crespi
+/// Note: checked
 
 pragma solidity ^0.8.0;
 
@@ -8,13 +9,7 @@ import "../../access/roles/PauseRole.sol";
 import "./ERC1155Accessible.sol";
 
 /**
- * @dev ERC1155 token with pausable token transfers, minting and burning.
- *
- * Useful for scenarios such as preventing trades until the end of an evaluation
- * period, or having an emergency switch for freezing all token transfers in the
- * event of a large bug.
- *
- * _Available since v3.1._
+ * @dev ERC1155 pause implementation
  */
 contract ERC1155Pausable is PauseRole, Pausable, ERC1155Accessible {
     /**
@@ -27,7 +22,7 @@ contract ERC1155Pausable is PauseRole, Pausable, ERC1155Accessible {
     /**
      * @dev Pauses all token transfers.
      *
-     * See {ERC1155Pausable} and {Pausable-_pause}.
+     * See {Pausable-_pause}.
      *
      * Requirements:
      *
@@ -44,7 +39,7 @@ contract ERC1155Pausable is PauseRole, Pausable, ERC1155Accessible {
     /**
      * @dev Unpauses all token transfers.
      *
-     * See {ERC1155Pausable} and {Pausable-_unpause}.
+     * See {Pausable-_unpause}.
      *
      * Requirements:
      *

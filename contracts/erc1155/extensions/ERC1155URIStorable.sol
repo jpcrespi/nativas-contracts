@@ -10,9 +10,6 @@ import "./ERC1155Accessible.sol";
 
 /**
  * @dev ERC1155 token with storage based token URI management.
- * Inspired by the ERC721URIStorage extension
- *
- * _Available since v4.6._
  */
 contract ERC1155URIStorable is
     EditRole,

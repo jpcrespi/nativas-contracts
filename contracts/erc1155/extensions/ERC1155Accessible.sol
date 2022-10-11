@@ -1,5 +1,6 @@
 /// SPDX-License-Identifier: MIT
 /// @author: Juan Pablo Crespi
+/// Note: checked
 
 pragma solidity ^0.8.0;
 
@@ -7,7 +8,7 @@ import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
 import "../ERC1155.sol";
 
 /**
- *
+ * ERC1155 and AccessControlEnumerable implementation
  */
 contract ERC1155Accessible is AccessControlEnumerable, ERC1155 {
     /**
@@ -33,6 +34,8 @@ contract ERC1155Accessible is AccessControlEnumerable, ERC1155 {
 
     /**
      * @dev Destroys `amount` tokens of token type `id` from `from`
+     *
+     * Emits a {TransferSingle} event.
      *
      * Requirements:
      *
@@ -65,11 +68,14 @@ contract ERC1155Accessible is AccessControlEnumerable, ERC1155 {
     }
 
     /**
-     * @dev xref:ROOT:erc1155.adoc#batch-operations[Batched] version of {_burn}.
+     * @dev Destroys `amounts` tokens of token type `ids` from `from`
+     *
+     * emits a {TransferBatch} event.
      *
      * Requirements:
      *
      * - `ids` and `amounts` must have the same length.
+     * - `from` must have at least `amounts` tokens of token type `ids`.
      */
     function _burnBatch(
         address from,
@@ -114,7 +120,8 @@ contract ERC1155Accessible is AccessControlEnumerable, ERC1155 {
      * Requirements:
      *
      * - `to` cannot be the zero address.
-     * - If `to` refers to a smart contract, it must implement {IERC1155Receiver-onERC1155Received} and return the
+     * - If `to` refers to a smart contract, it must implement
+     * {IERC1155Receiver-onERC1155Received} and return the
      * acceptance magic value.
      */
     function _mint(
@@ -147,12 +154,15 @@ contract ERC1155Accessible is AccessControlEnumerable, ERC1155 {
     }
 
     /**
-     * @dev xref:ROOT:erc1155.adoc#batch-operations[Batched] version of {_mint}.
+     * @dev Creates `amounts` tokens of token type `ids`, and assigns them to `to`.
+     *
+     * emits a {TransferBatch} event.
      *
      * Requirements:
      *
      * - `ids` and `amounts` must have the same length.
-     * - If `to` refers to a smart contract, it must implement {IERC1155Receiver-onERC1155BatchReceived} and return the
+     * - If `to` refers to a smart contract, it must implement
+     * {IERC1155Receiver-onERC1155BatchReceived} and return the
      * acceptance magic value.
      */
     function _mintBatch(

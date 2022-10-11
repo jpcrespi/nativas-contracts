@@ -1,5 +1,6 @@
 /// SPDX-License-Identifier: MIT
 /// @author: Juan Pablo Crespi
+/// Note: checked
 
 pragma solidity ^0.8.0;
 
@@ -7,11 +8,7 @@ import "../../access/roles/MintRole.sol";
 import "./ERC1155Accessible.sol";
 
 /**
- * @dev Implementation of the basic standard multi-token.
- * See https://eips.ethereum.org/EIPS/eip-1155
- * Originally based on code by Enjin: https://github.com/enjin/erc-1155
- *
- * _Available since v3.1._
+ * @dev Mint implementation
  */
 contract ERC1155Mintable is MintRole, ERC1155Accessible {
     /**
@@ -22,12 +19,8 @@ contract ERC1155Mintable is MintRole, ERC1155Accessible {
     }
 
     /**
-     * @dev Creates `amount` new tokens for `to`, of token type `id`.
-     *
-     * See {ERC1155-_mint}.
-     *
+     * @dev See {ERC1155Accessible-_mint}.
      * Requirements:
-     *
      * - the caller must have the `MINTER_ROLE`.
      */
     function mint(
@@ -44,7 +37,9 @@ contract ERC1155Mintable is MintRole, ERC1155Accessible {
     }
 
     /**
-     * @dev xref:ROOT:erc1155.adoc#batch-operations[Batched] variant of {mint}.
+     * @dev See {ERC1155Accessible-_mintBatch}.
+     * Requirements:
+     * - the caller must have the `MINTER_ROLE`.
      */
     function mintBatch(
         address to,

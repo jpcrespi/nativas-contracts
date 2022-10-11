@@ -28,8 +28,15 @@ contract ERC1167Holder is Context, Ownable {
     /**
      * @dev Create ERC1155Holder contract template.
      */
-    constructor(address template_) {
-        _template = template_;
+    constructor() {
+        _template = address(new ERC1155Holder());
+    }
+
+    /**
+     * @dev get holder contract template
+     */
+    function template() public view virtual returns (address) {
+        return _template;
     }
 
     /**

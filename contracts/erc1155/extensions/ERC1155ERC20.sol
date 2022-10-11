@@ -34,6 +34,13 @@ contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
     }
 
     /**
+     * @dev get ERC20Adapter contract template
+     */
+    function template() public view virtual returns (address) {
+        return _template;
+    }
+
+    /**
      * @dev See {ERC1155ERC20-_putAdapter}
      *
      * Requirements:

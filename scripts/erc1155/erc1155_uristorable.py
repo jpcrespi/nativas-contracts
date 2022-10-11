@@ -25,6 +25,17 @@ class ERC1155URIStorable(ERC1155Accessible, EditRole):
         )
         return tx.return_value
 
+    def setBaseURI(
+        self,
+        uri: any,
+        sender: any,
+    ):
+        tx = self.contract().setBaseURI(
+            uri,
+            {"from": sender},
+        )
+        return tx.return_value
+
     def uri(self, id: int) -> str:
         return self.contract().uri(id)
 

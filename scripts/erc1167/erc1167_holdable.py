@@ -1,13 +1,12 @@
 from scripts import ERC1167Holder as Contract
-from scripts.utils.context import Context
 from scripts.access.ownable import Ownable
 
 
 class ERC1167Holder(Ownable):
     __contract: Contract
 
-    def __init__(self, sender: any):
-        self.__contract = Contract.deploy({"from": sender})
+    def __init__(self, template: any, sender: any):
+        self.__contract = Contract.deploy(template, {"from": sender})
 
     def contract(self) -> any:
         return self.__contract

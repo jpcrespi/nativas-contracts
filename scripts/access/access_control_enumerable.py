@@ -45,9 +45,8 @@ class AccessControlEnumerableMock(AccessControlEnumerable):
         adminRole: bytes,
         sender: any,
     ):
-        tx = self.contract().setRoleAdmin(
+        return self.contract().setRoleAdmin(
             role,
             adminRole,
             {"from": sender},
         )
-        return tx.return_value

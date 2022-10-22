@@ -7,10 +7,7 @@ class ERC1155ERC20(ERC1155Supply, EditRole):
     __contract: Contract
 
     def __init__(self, template: any, sender: any):
-        self.__contract = Contract.deploy(
-            template, 
-            {"from": sender}
-        )
+        self.__contract = Contract.deploy(template, {"from": sender})
 
     def contract(self) -> any:
         return self.__contract
@@ -27,12 +24,11 @@ class ERC1155ERC20(ERC1155Supply, EditRole):
         adapter: any,
         sender: any,
     ) -> any:
-        tx = self.contract().setAdapter(
+        return self.contract().setAdapter(
             id,
             adapter,
             {"from": sender},
         )
-        return tx.return_value
 
     def getAdapter(
         self,
@@ -52,7 +48,7 @@ class ERC1155ERC20(ERC1155Supply, EditRole):
         data: any,
         sender: any,
     ):
-        tx = self.contract().exists(
+        return self.contract().exists(
             operator,
             origin,
             to,
@@ -61,4 +57,3 @@ class ERC1155ERC20(ERC1155Supply, EditRole):
             data,
             {"from": sender},
         )
-        return tx.return_value

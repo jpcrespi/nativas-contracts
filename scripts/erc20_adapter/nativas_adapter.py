@@ -30,14 +30,13 @@ class NativasAdapter(Context, ERC165):
         decimals: int,
         sender: any,
     ):
-        tx = self.contract().init(
+        return self.contract().init(
             id,
             name,
             symbol,
             decimals,
             {"from": sender},
         )
-        return tx.return_value
 
     def contract(self) -> any:
         return self.__contract
@@ -75,12 +74,11 @@ class NativasAdapter(Context, ERC165):
         amount: int,
         sender: any,
     ) -> bool:
-        tx = self.contract().approve(
+        return self.contract().approve(
             spender,
             amount,
             {"from": sender},
         )
-        return tx.return_value
 
     def increaseAllowance(
         self,
@@ -88,12 +86,11 @@ class NativasAdapter(Context, ERC165):
         value: int,
         sender: any,
     ) -> bool:
-        tx = self.contract().increaseAllowance(
+        return self.contract().increaseAllowance(
             spender,
             value,
             {"from": sender},
         )
-        return tx.return_value
 
     def decreaseAllowance(
         self,
@@ -101,12 +98,11 @@ class NativasAdapter(Context, ERC165):
         value: int,
         sender: any,
     ) -> bool:
-        tx = self.contract().decreaseAllowance(
+        return self.contract().decreaseAllowance(
             spender,
             value,
             {"from": sender},
         )
-        return tx.return_value
 
     def transfer(
         self,
@@ -114,12 +110,11 @@ class NativasAdapter(Context, ERC165):
         amount: int,
         sender: any,
     ) -> bool:
-        tx = self.contract().transfer(
+        return self.contract().transfer(
             to,
             amount,
             {"from": sender},
         )
-        return tx.return_value
 
     def transferFrom(
         self,
@@ -128,10 +123,9 @@ class NativasAdapter(Context, ERC165):
         amount: int,
         sender: any,
     ) -> int:
-        tx = self.contract().transferFrom(
+        return self.contract().transferFrom(
             origin,
             to,
             amount,
             {"from": sender},
         )
-        return tx.return_value

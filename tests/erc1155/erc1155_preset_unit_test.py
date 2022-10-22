@@ -1,15 +1,16 @@
 from datetime import datetime
 from utils import Utils
-from scripts.erc1155.erc1155_preset import NativasToken
+from scripts.erc1155.nativas_token import NativasToken
 from pytest import skip
 
 
-def test_erc1155_offsetable():
+def test_erc1155_offsettable():
     if Utils.localNetworks() == False:
         skip("Only local networks")
     owner = Utils.getAccount()
     contract = NativasToken("", Utils.getAccountZero(), owner)
     contract.mint(owner, 0, 1000, "", owner)
+    contract.setOffsettable(0, True, owner)
     startDate = datetime.now().timestamp()
     contract.offset(owner, 0, 750, "", owner)
     endDate = datetime.now().timestamp()

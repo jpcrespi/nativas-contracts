@@ -1,8 +1,8 @@
-from scripts import ERC1155Offsetable as Contract
+from scripts import ERC1155Offsettable as Contract
 from scripts.erc1155.erc1155_accessible import ERC1155Accessible
 
 
-class ERC1155Offsetable(ERC1155Accessible):
+class ERC1155Offsettable(ERC1155Accessible):
     __contract: Contract
 
     def __init__(self, sender: any):
@@ -19,14 +19,13 @@ class ERC1155Offsetable(ERC1155Accessible):
         data: any,
         sender: any,
     ):
-        tx = self.contract().offset(
+        return self.contract().offset(
             account,
             id,
             value,
             data,
             {"from": sender},
         )
-        return tx.return_value
 
     def offsetBatch(
         self,
@@ -36,14 +35,13 @@ class ERC1155Offsetable(ERC1155Accessible):
         data: any,
         sender: any,
     ):
-        tx = self.contract().offsetBatch(
+        return self.contract().offsetBatch(
             account,
             ids,
             values,
             data,
             {"from": sender},
         )
-        return tx.return_value
 
     def getOffsetValue(
         self,
@@ -61,4 +59,24 @@ class ERC1155Offsetable(ERC1155Accessible):
     ) -> int:
         return self.contract().getOffsetCount(
             account,
+        )
+
+    def offsettable(
+        self,
+        id: int,
+    ) -> bool:
+        return self.contract().offsettable(
+            id,
+        )
+
+    def setOffsettable(
+        self,
+        id: int,
+        enabled: bool,
+        sender: any,
+    ) -> bool:
+        return self.contract().setOffsettable(
+            id,
+            enabled,
+            {"from": sender},
         )

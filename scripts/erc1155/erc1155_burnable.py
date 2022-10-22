@@ -20,14 +20,13 @@ class ERC1155Burnable(ERC1155Accessible, BurnRole):
         data: any,
         sender: any,
     ):
-        tx = self.contract().burn(
+        return self.contract().burn(
             account,
             id,
             value,
             data,
             {"from": sender},
         )
-        return tx.return_value
 
     def burnBatch(
         self,
@@ -37,11 +36,10 @@ class ERC1155Burnable(ERC1155Accessible, BurnRole):
         data: any,
         sender: any,
     ):
-        tx = self.contract().burnBatch(
+        return self.contract().burnBatch(
             account,
             ids,
             values,
             data,
             {"from": sender},
         )
-        return tx.return_value

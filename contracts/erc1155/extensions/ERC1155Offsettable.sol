@@ -10,7 +10,7 @@ import "../../access/roles/EditRole.sol";
 /**
  * @dev Offset Implementation
  */
-contract ERC1155Offsetable is EditRole, ERC1155Accessible {
+contract ERC1155Offsettable is EditRole, ERC1155Accessible {
     /**
      * @dev
      */
@@ -23,7 +23,7 @@ contract ERC1155Offsetable is EditRole, ERC1155Accessible {
     //
     mapping(address => Offset[]) private _offsets;
     mapping(address => uint256) private _offsetCount;
-    mapping(uint256 => bool) private _offsetable;
+    mapping(uint256 => bool) private _offsettable;
 
     /**
      * @dev Grants `EDITOR_ROLE` to the account that deploys the contract.
@@ -108,8 +108,8 @@ contract ERC1155Offsetable is EditRole, ERC1155Accessible {
         uint256 value
     ) internal virtual {
         require(
-            _offsetable[tokenId],
-            "ERC1155Offsetable: token is not offsetable"
+            _offsettable[tokenId],
+            "ERC1155Offsettable: token is not offsettable"
         );
         _offsetCount[account]++;
         _offsets[account].push(Offset(tokenId, value, block.timestamp));
@@ -118,8 +118,8 @@ contract ERC1155Offsetable is EditRole, ERC1155Accessible {
     /**
      * @dev
      */
-    function offsetable(uint256 tokenId) public view virtual returns (bool) {
-        return _offsetable[tokenId];
+    function offsettable(uint256 tokenId) public view virtual returns (bool) {
+        return _offsettable[tokenId];
     }
 
     /**
@@ -129,18 +129,18 @@ contract ERC1155Offsetable is EditRole, ERC1155Accessible {
      *
      * - the caller must have the `EDITOR_ROLE`.
      */
-    function setOffsetable(uint256 tokenId, bool enabled) public virtual {
+    function setOffsettable(uint256 tokenId, bool enabled) public virtual {
         require(
             hasRole(EDITOR_ROLE, _msgSender()),
-            "ERC1155Offsetable: sender does not have role"
+            "ERC1155Offsettable: sender does not have role"
         );
-        _setOffsetable(tokenId, enabled);
+        _setOffsettable(tokenId, enabled);
     }
 
     /**
      * @dev
      */
-    function _setOffsetable(uint256 tokenId, bool enabled) public virtual {
-        _offsetable[tokenId] = enabled;
+    function _setOffsettable(uint256 tokenId, bool enabled) public virtual {
+        _offsettable[tokenId] = enabled;
     }
 }

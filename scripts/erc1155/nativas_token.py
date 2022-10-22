@@ -2,7 +2,7 @@ from scripts import NativasToken as Contract
 from scripts.erc1155.erc1155_mintable import ERC1155Mintable
 from scripts.erc1155.erc1155_burnable import ERC1155Burnable
 from scripts.erc1155.erc1155_pausable import ERC1155Pausable
-from scripts.erc1155.erc1155_offsetable import ERC1155Offsetable
+from scripts.erc1155.erc1155_offsettable import ERC1155Offsettable
 from scripts.erc1155.erc1155_uristorable import ERC1155URIStorable
 from scripts.erc1155.erc1155_erc20 import ERC1155ERC20
 
@@ -11,7 +11,7 @@ class NativasToken(
     ERC1155Mintable,
     ERC1155Burnable,
     ERC1155Pausable,
-    ERC1155Offsetable,
+    ERC1155Offsettable,
     ERC1155URIStorable,
     ERC1155ERC20,
 ):
@@ -38,12 +38,19 @@ class NativasToken(
     def setMetadata(
         self,
         id: int,
-        adapter: any,
+        name: str,
+        symbol: str,
+        decimals: int,
         uri: str,
+        offsettable: bool,
+        sender: any,
     ) -> any:
-        tx = self.contract().setMetadata(
+        return self.contract().setMetadata(
             id,
-            adapter,
+            name,
+            symbol,
+            decimals,
             uri,
+            offsettable,
+            {"from": sender},
         )
-        return tx.return_value

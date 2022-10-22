@@ -28,11 +28,10 @@ class NativasFactory(Ownable):
         operator: any,
         sender: any,
     ) -> any:
-        tx = self.contract().putHolder(
+        return self.contract().putHolder(
             entity,
             id,
             name,
             operator,
             {"from": sender},
         )
-        return tx.return_value

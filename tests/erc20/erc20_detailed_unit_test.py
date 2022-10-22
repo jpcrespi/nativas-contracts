@@ -1,5 +1,5 @@
 from utils import Utils
-from scripts.erc20_adapter.erc20_adapter import NativasAdapter
+from scripts.erc20_adapter.nativas_adapter import NativasAdapter
 from pytest import skip
 
 

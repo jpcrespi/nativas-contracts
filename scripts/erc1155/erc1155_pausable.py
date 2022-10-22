@@ -14,13 +14,11 @@ class ERC1155Pausable(ERC1155Accessible, PauseRole, Pausable):
         return self.__contract
 
     def pause(self, sender: any) -> any:
-        tx = self.contract().pause(
+        return self.contract().pause(
             {"from": sender},
         )
-        return tx.return_values
 
     def unpause(self, sender: any) -> any:
-        tx = self.contract().unpause(
+        return self.contract().unpause(
             {"from": sender},
         )
-        return tx.return_value

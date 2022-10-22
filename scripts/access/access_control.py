@@ -33,12 +33,11 @@ class AccessControl(Context, ERC165):
         account: any,
         sender: any,
     ) -> any:
-        tx = self.contract().grantRole(
+        return self.contract().grantRole(
             role,
             account,
             {"from": sender},
         )
-        return tx.return_value
 
     def revokeRole(
         self,
@@ -46,12 +45,11 @@ class AccessControl(Context, ERC165):
         account: any,
         sender: any,
     ) -> any:
-        tx = self.contract().revokeRole(
+        return self.contract().revokeRole(
             role,
             account,
             {"from": sender},
         )
-        return tx.return_value
 
     def renounceRole(
         self,
@@ -59,12 +57,11 @@ class AccessControl(Context, ERC165):
         account: any,
         sender: any,
     ) -> any:
-        tx = self.contract().renounceRole(
+        return self.contract().renounceRole(
             role,
             account,
             {"from": sender},
         )
-        return tx.return_value
 
 
 class AccessControlMock(AccessControl):
@@ -92,9 +89,8 @@ class AccessControlMock(AccessControl):
         adminRole: bytes,
         sender: any,
     ) -> any:
-        tx = self.contract().setRoleAdmin(
+        return self.contract().setRoleAdmin(
             role,
             adminRole,
             {"from": sender},
         )
-        return tx.return_value

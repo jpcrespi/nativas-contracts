@@ -33,14 +33,13 @@ class NativasHolder(Context, ERC165):
         name: str,
         sender: any,
     ):
-        tx = self.contract().init(
+        return self.contract().init(
             entity,
             operator,
             id,
             name,
             {"from": sender},
         )
-        return tx.return_value
 
     def id(self) -> int:
         return self.contract().id()

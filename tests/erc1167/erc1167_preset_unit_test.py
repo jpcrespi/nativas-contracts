@@ -1,7 +1,7 @@
 from utils import Utils
-from scripts.erc1155_holder.erc1155_holder import NativasHolder
-from scripts.erc1155.erc1155_preset import NativasToken
-from scripts.erc1167.erc1167_holdable import NativasFactory
+from scripts.erc1155_holder.nativas_holder import NativasHolder
+from scripts.erc1155.nativas_token import NativasToken
+from scripts.erc1167.nativas_factory import NativasFactory
 from pytest import skip
 
 

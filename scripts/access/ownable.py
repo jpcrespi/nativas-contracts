@@ -18,18 +18,16 @@ class Ownable(Context):
         self,
         sender: any,
     ) -> any:
-        tx = self.contract().renounceOwnership(
+        return self.contract().renounceOwnership(
             {"from": sender},
         )
-        return tx.return_value
 
     def transferOwnership(
         self,
         newOwner: any,
         sender: any,
     ) -> any:
-        tx = self.contract().transferOwnership(
+        return self.contract().transferOwnership(
             newOwner,
             {"from": sender},
         )
-        return tx.return_value

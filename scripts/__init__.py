@@ -13,7 +13,7 @@ EditRole = brownie.EditRole
 MintRole = brownie.MintRole
 PauseRole = brownie.PauseRole
 # ERC20 # Adapter
-ERC20Adapter = brownie.ERC20Adapter
+NativasAdapter = brownie.NativasAdapter
 # ERC165
 ERC165 = brownie.ERC165Mock
 # ERC1155
@@ -29,11 +29,11 @@ ERC1155Pausable = brownie.ERC1155Pausable
 ERC1155Supply = brownie.ERC1155Supply
 ERC1155URIStorable = brownie.ERC1155URIStorable
 # ERC1155 # Preset
-ERC1155Preset = brownie.ERC1155Preset
+NativasToken = brownie.NativasToken
 # ERC1155 # Holder
-ERC1155Holder = brownie.ERC1155Holder
+NativasHolder = brownie.NativasHolder
 # ERC1167 # Holder
-ERC1167Holder = brownie.ERC1167Holder
+NativasFactory = brownie.NativasFactory
 # Security
 Pausable = brownie.PausableStub
 PausableMock = brownie.PausableMock

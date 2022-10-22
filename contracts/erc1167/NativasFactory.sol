@@ -7,15 +7,15 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/proxy/Clones.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "../erc1155Receiver/ERC1155Holder.sol";
+import "../erc1155Receiver/NativasHolder.sol";
 
 /**
  * ERC1167 implementation to create new holders
  */
-contract ERC1167Holder is Context, Ownable {
+contract NativasFactory is Context, Ownable {
     using Clones for address;
 
-    // ERC1155TokenReceiver template
+    // NativasHolder template
     address internal _template;
     // Mapping user id to holder address
     mapping(uint256 => address) internal _holders;
@@ -26,7 +26,7 @@ contract ERC1167Holder is Context, Ownable {
     event HolderCreated(uint256 indexed id, address indexed holder);
 
     /**
-     * @dev Set ERC1155Holder contract template.
+     * @dev Set NativasHolder contract template.
      */
     constructor(address template_) {
         _template = template_;
@@ -47,7 +47,7 @@ contract ERC1167Holder is Context, Ownable {
     }
 
     /**
-     * @dev See {ERC1167Holder-_putHolder}
+     * @dev See {NativasFactory-_putHolder}
      *
      * Requirements:
      *
@@ -72,7 +72,7 @@ contract ERC1167Holder is Context, Ownable {
         address operator
     ) internal virtual returns (address) {
         address holder = _template.clone();
-        ERC1155Holder(holder).init(entity, operator, id, name);
+        NativasHolder(holder).init(entity, operator, id, name);
         _holders[id] = holder;
         emit HolderCreated(id, holder);
         return holder;

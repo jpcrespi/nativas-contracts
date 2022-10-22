@@ -13,7 +13,7 @@ import "../extensions/ERC1155ERC20.sol";
 /**
  * @dev ERC1155 preset
  */
-contract ERC1155Preset is
+contract NativasToken is
     ERC1155Mintable,
     ERC1155Burnable,
     ERC1155Pausable,

@@ -1,13 +1,26 @@
-from scripts import ERC20Adapter as Contract
+from scripts import NativasAdapter as Contract
 from scripts.utils.context import Context
 from scripts.erc165.erc165 import ERC165
 
 
-class ERC20Adapter(Context, ERC165):
+class NativasAdapter(Context, ERC165):
     __contract: Contract
 
-    def __init__(self, sender):
-        self.__contract = Contract.deploy({"from": sender})
+    def __init__(
+        self,
+        id: int,
+        name: str,
+        symbol: str,
+        decimals: int,
+        sender,
+    ):
+        self.__contract = Contract.deploy(
+            id,
+            name,
+            symbol,
+            decimals,
+            {"from": sender},
+        )
 
     def init(
         self,

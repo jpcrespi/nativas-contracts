@@ -1,4 +1,4 @@
-from scripts import ERC1155Preset as Contract
+from scripts import NativasToken as Contract
 from scripts.erc1155.erc1155_mintable import ERC1155Mintable
 from scripts.erc1155.erc1155_burnable import ERC1155Burnable
 from scripts.erc1155.erc1155_pausable import ERC1155Pausable
@@ -7,7 +7,7 @@ from scripts.erc1155.erc1155_uristorable import ERC1155URIStorable
 from scripts.erc1155.erc1155_erc20 import ERC1155ERC20
 
 
-class ERC1155Preset(
+class NativasToken(
     ERC1155Mintable,
     ERC1155Burnable,
     ERC1155Pausable,
@@ -17,8 +17,17 @@ class ERC1155Preset(
 ):
     __contract: Contract
 
-    def __init__(self, uri: str, sender: any):
-        self.__contract = Contract.deploy(uri, {"from": sender})
+    def __init__(
+        self,
+        uri: str,
+        template: any,
+        sender: any,
+    ):
+        self.__contract = Contract.deploy(
+            uri,
+            template,
+            {"from": sender},
+        )
 
     def contract(self) -> any:
         return self.__contract

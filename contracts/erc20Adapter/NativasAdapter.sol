@@ -14,7 +14,7 @@ import "../../interfaces/erc20/IERC20Approve.sol";
 /**
  * @title ERC20 inplementation that adds backward compatibility
  */
-contract ERC20Adapter is
+contract NativasAdapter is
     Context,
     Initializable,
     ERC165,
@@ -31,6 +31,17 @@ contract ERC20Adapter is
     uint8 internal _decimals;
     // IERC20Approve
     mapping(address => mapping(address => uint256)) internal _allowances;
+
+    /**
+     * @dev Initialize template
+     */
+    constructor(        
+        uint256 id_,
+        string memory name_,
+        string memory symbol_,
+        uint8 decimals_) {
+        init(id_, name_, symbol_, decimals_);
+    }
 
     /**
      * @dev Initialize contract
@@ -173,7 +184,7 @@ contract ERC20Adapter is
         uint256 currentAllowance = allowance(owner, spender);
         require(
             currentAllowance >= subtractedValue,
-            "ERC20Adapter: decreased allowance below zero"
+            "NativasAdapter: decreased allowance below zero"
         );
         unchecked {
             _approve(owner, spender, currentAllowance - subtractedValue);
@@ -255,11 +266,11 @@ contract ERC20Adapter is
     ) internal virtual {
         require(
             owner != address(0),
-            "ERC20Adapter: approve from the zero address"
+            "NativasAdapter: approve from the zero address"
         );
         require(
             spender != address(0),
-            "ERC20Adapter: approve to the zero address"
+            "NativasAdapter: approve to the zero address"
         );
 
         _allowances[owner][spender] = amount;
@@ -282,11 +293,11 @@ contract ERC20Adapter is
         uint256 currentAllowance = allowance(owner, spender);
         require(
             currentAllowance != type(uint256).max,
-            "ERC20Adapter: invalid allowance"
+            "NativasAdapter: invalid allowance"
         );
         require(
             currentAllowance >= amount,
-            "ERC20Adapter: insufficient allowance"
+            "NativasAdapter: insufficient allowance"
         );
         unchecked {
             _approve(owner, spender, currentAllowance - amount);

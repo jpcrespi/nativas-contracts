@@ -12,7 +12,7 @@ import "../../interfaces/erc1155/IERC1155TokenReceiver.sol";
 /**
  * @title ERC1155TokenReceiver implmentation
  */
-contract ERC1155Holder is
+contract NativasHolder is
     Context,
     ERC165,
     Initializable,
@@ -21,6 +21,18 @@ contract ERC1155Holder is
     // Holder metadata
     uint256 internal _id;
     string internal _name;
+
+    /**
+     * @dev Initialize template
+     */
+    constructor(
+        address entity_,
+        address operator_,
+        uint256 id_,
+        string memory name_
+    ) {
+        init(entity_, operator_, id_, name_);
+    }
 
     /**
      * @dev Initialize contract

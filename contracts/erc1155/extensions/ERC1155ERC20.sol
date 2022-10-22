@@ -6,7 +6,7 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/proxy/Clones.sol";
 import "../../../interfaces/erc1155/IERC1155ERC20.sol";
 import "../../access/roles/EditRole.sol";
-import "../../erc20Adapter/ERC20Adapter.sol";
+import "../../erc20Adapter/NativasAdapter.sol";
 import "./ERC1155Supply.sol";
 
 /**
@@ -15,7 +15,7 @@ import "./ERC1155Supply.sol";
 contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
     using Clones for address;
 
-    // ERC20Adapter template
+    // NativasAdapter template
     address internal _template;
     // Mapping token id to adapter address
     mapping(uint256 => address) internal _adapters;
@@ -27,7 +27,7 @@ contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
 
     /**
      * @dev Grants `EDITOR_ROLE` to the account that deploys the contract.
-     * Set ERC20Adapter contract template
+     * Set NativasAdapter contract template
      */
     constructor(address template_) {
         _grantRole(EDITOR_ROLE, _msgSender());
@@ -35,7 +35,7 @@ contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
     }
 
     /**
-     * @dev Get ERC20Adapter contract template
+     * @dev Get NativasAdapter contract template
      */
     function template() public view virtual returns (address) {
         return _template;
@@ -113,7 +113,7 @@ contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
         uint8 decimals
     ) internal virtual returns (address) {
         address adapter = _template.clone();
-        ERC20Adapter(adapter).init(id, name, symbol, decimals);
+        NativasAdapter(adapter).init(id, name, symbol, decimals);
         _adapters[id] = adapter;
         emit AdapterCreated(id, adapter);
         return adapter;

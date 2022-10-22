@@ -91,6 +91,9 @@ contract ERC1155Offsetable is ERC1155Accessible {
         return _offsetCount[account];
     }
 
+    /**
+     *
+     */
     function _offset(
         address account,
         uint256 id,

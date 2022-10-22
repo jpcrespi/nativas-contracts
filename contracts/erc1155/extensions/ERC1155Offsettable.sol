@@ -13,7 +13,7 @@ import "../../access/roles/EditRole.sol";
  */
 contract ERC1155Offsettable is EditRole, ERC1155Accessible {
     /**
-     * @dev
+     * @dev Offset model
      */
     struct Offset {
         uint256 tokenId;
@@ -21,7 +21,7 @@ contract ERC1155Offsettable is EditRole, ERC1155Accessible {
         uint256 date;
     }
 
-    //
+    // offset data
     mapping(address => Offset[]) private _offsets;
     mapping(address => uint256) private _offsetCount;
     mapping(uint256 => bool) private _offsettable;
@@ -38,7 +38,7 @@ contract ERC1155Offsettable is EditRole, ERC1155Accessible {
      */
     function offset(
         address account,
-        uint256 id,
+        uint256 tokenId,
         uint256 value,
         bytes memory data
     ) public virtual {
@@ -46,8 +46,8 @@ contract ERC1155Offsettable is EditRole, ERC1155Accessible {
             _isOwnerOrApproved(account),
             "ERC1155: caller is not owner nor approved"
         );
-        _burn(account, id, value, data);
-        _offset(account, id, value);
+        _burn(account, tokenId, value, data);
+        _offset(account, tokenId, value);
     }
 
     /**

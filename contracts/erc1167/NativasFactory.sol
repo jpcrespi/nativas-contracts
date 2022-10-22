@@ -1,5 +1,5 @@
 /// SPDX-License-Identifier: MIT
-/// @company: Nativas BCorp
+/// @by: Nativas BCorp
 /// @author: Juan Pablo Crespi
 /// @dev: https://eips.ethereum.org/EIPS/eip-1167
 

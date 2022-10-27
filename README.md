@@ -21,12 +21,11 @@
 ### Mainnet Fork
 
 ```bash
-❯ brownie networks add Development mainnet-fork-infura \
-    name="Infura (Mainnet Fork)" \
-    host=http://127.0.0.1 \
-    port=8545 \
+❯ brownie networks add Development polygon-main-fork-infura \
+    name="Infura (Polygon-Mainnet Fork)" \
+    host="http://127.0.0.1:7545" \
     cmd=ganache-cli \
-    fork='https://mainnet.infura.io/v3/$WEB3_INFURA_PROJECT_ID' \
+    fork='https://polygon-mainnet.infura.io/v3/$WEB3_INFURA_PROJECT_ID' \
     accounts=10 \
-    mnemonic=brownie 
+    mnemonic=nativas 
 ```

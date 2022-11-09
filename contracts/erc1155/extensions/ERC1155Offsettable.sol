@@ -19,6 +19,7 @@ contract ERC1155Offsettable is EditRole, ERC1155Accessible {
         uint256 tokenId;
         uint256 value;
         uint256 date;
+        string info;
     }
 
     // offset data
@@ -40,6 +41,7 @@ contract ERC1155Offsettable is EditRole, ERC1155Accessible {
         address account,
         uint256 tokenId,
         uint256 value,
+        string memory info,
         bytes memory data
     ) public virtual {
         require(
@@ -47,7 +49,7 @@ contract ERC1155Offsettable is EditRole, ERC1155Accessible {
             "ERC1155: caller is not owner nor approved"
         );
         _burn(account, tokenId, value, data);
-        _offset(account, tokenId, value);
+        _offset(account, tokenId, value, info);
     }
 
     /**
@@ -57,6 +59,7 @@ contract ERC1155Offsettable is EditRole, ERC1155Accessible {
         address account,
         uint256[] memory tokenIds,
         uint256[] memory values,
+        string[] memory infos,
         bytes memory data
     ) public virtual {
         require(
@@ -67,7 +70,7 @@ contract ERC1155Offsettable is EditRole, ERC1155Accessible {
         _burnBatch(account, tokenIds, values, data);
 
         for (uint256 i = 0; i < tokenIds.length; i++) {
-            _offset(account, tokenIds[i], values[i]);
+            _offset(account, tokenIds[i], values[i], infos[i]);
         }
     }
 
@@ -81,11 +84,12 @@ contract ERC1155Offsettable is EditRole, ERC1155Accessible {
         returns (
             uint256 tokenId,
             uint256 value,
-            uint256 date
+            uint256 date,
+            string memory info
         )
     {
         Offset memory data = _offsets[account][index];
-        return (data.tokenId, data.value, data.date);
+        return (data.tokenId, data.value, data.date, data.info);
     }
 
     /**
@@ -106,14 +110,15 @@ contract ERC1155Offsettable is EditRole, ERC1155Accessible {
     function _offset(
         address account,
         uint256 tokenId,
-        uint256 value
+        uint256 value,
+        string memory info
     ) internal virtual {
         require(
             _offsettable[tokenId],
             "ERC1155Offsettable: token is not offsettable"
         );
         _offsetCount[account]++;
-        _offsets[account].push(Offset(tokenId, value, block.timestamp));
+        _offsets[account].push(Offset(tokenId, value, block.timestamp, info));
     }
 
     /**
@@ -143,5 +148,97 @@ contract ERC1155Offsettable is EditRole, ERC1155Accessible {
      */
     function _setOffsettable(uint256 tokenId, bool enabled) public virtual {
         _offsettable[tokenId] = enabled;
+    }
+
+    /**
+     * @dev
+     */
+    function swap(
+        address account,
+        uint256 fromId,
+        uint256 toId,
+        uint256 value,
+        bytes memory data
+    ) public virtual {
+        require(
+            hasRole(EDITOR_ROLE, _msgSender()),
+            "ERC1155: sender does not have role"
+        );
+        require(
+            _isOwnerOrApproved(account),
+            "ERC1155: caller is not owner nor approved"
+        );
+
+        _swap(account, fromId, toId, value, data);
+    }
+
+    /**
+     * @dev
+     */
+    function swapBatch(
+        address account,
+        uint256[] memory fromTokenIds,
+        uint256[] memory toTokenIds,
+        uint256[] memory values,
+        bytes memory data
+    ) public virtual {
+        require(
+            hasRole(EDITOR_ROLE, _msgSender()),
+            "ERC1155: sender does not have role"
+        );
+        require(
+            _isOwnerOrApproved(account),
+            "ERC1155: caller is not owner nor approved"
+        );
+
+        _swapBatch(account, fromTokenIds, toTokenIds, values, data);
+    }
+
+    /**
+     * @dev
+     */
+    function _swap(
+        address account,
+        uint256 fromId,
+        uint256 toId,
+        uint256 value,
+        bytes memory data
+    ) internal virtual {
+        require(
+            _offsettable[fromId] == false,
+            "ERC1155Offsettable: fromTokenId is offsettable"
+        );
+        require(
+            _offsettable[toId] == true,
+            "ERC1155Offsettable: toTokenId is not offsettable"
+        );
+        _burn(account, fromId, value, data);
+        _mint(account, toId, value, data);
+    }
+
+    /**
+     * @dev
+     */
+    function _swapBatch(
+        address account,
+        uint256[] memory fromIds,
+        uint256[] memory toIds,
+        uint256[] memory values,
+        bytes memory data
+    ) internal virtual {
+        for (uint256 i = 0; i < fromIds.length; i++) {
+            require(
+                _offsettable[fromIds[i]] == false,
+                "ERC1155Offsettable: fromTokenId is offsettable"
+            );
+        }
+        for (uint256 i = 0; i < toIds.length; i++) {
+            require(
+                _offsettable[toIds[i]] == true,
+                "ERC1155Offsettable: toTokenId is not offsettable"
+            );
+        }
+        _burnBatch(account, fromIds, values, data);
+        _mintBatch(account, toIds, values, data);
     }
 }

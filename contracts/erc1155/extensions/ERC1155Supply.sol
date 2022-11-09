@@ -57,10 +57,7 @@ contract ERC1155Supply is ERC1155Accessible, IERC1155Supply {
             for (uint256 i = 0; i < ids.length; ++i) {
                 uint256 id = ids[i];
                 uint256 amount = amounts[i];
-                require(
-                    _totalSupply[id] >= amount,
-                    "ERC1155: burn amount exceeds totalSupply"
-                );
+                require(_totalSupply[id] >= amount, "E0701");
                 unchecked {
                     _totalSupply[id] -= amount;
                 }

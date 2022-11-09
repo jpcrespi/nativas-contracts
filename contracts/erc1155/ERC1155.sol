@@ -48,10 +48,7 @@ contract ERC1155 is Context, ERC165, ERC1155Common, IERC1155 {
         override
         returns (uint256)
     {
-        require(
-            account != address(0),
-            "ERC1155: address zero is not a valid owner"
-        );
+        require(account != address(0), "E0001");
         return _balances[id][account];
     }
 
@@ -69,10 +66,7 @@ contract ERC1155 is Context, ERC165, ERC1155Common, IERC1155 {
         override
         returns (uint256[] memory)
     {
-        require(
-            accounts.length == ids.length,
-            "ERC1155: accounts and ids length mismatch"
-        );
+        require(accounts.length == ids.length, "E0002");
 
         uint256[] memory batchBalances = new uint256[](accounts.length);
 
@@ -117,10 +111,7 @@ contract ERC1155 is Context, ERC165, ERC1155Common, IERC1155 {
         uint256 amount,
         bytes memory data
     ) public virtual override {
-        require(
-            _isOwnerOrApproved(from),
-            "ERC1155: caller is not owner nor approved"
-        );
+        require(_isOwnerOrApproved(from),"E0003");
         _safeTransferFrom(from, to, id, amount, data);
     }
 
@@ -134,10 +125,7 @@ contract ERC1155 is Context, ERC165, ERC1155Common, IERC1155 {
         uint256[] memory amounts,
         bytes memory data
     ) public virtual override {
-        require(
-            _isOwnerOrApproved(from),
-            "ERC1155: transfer caller is not owner nor approved"
-        );
+        require(_isOwnerOrApproved(from), "E0004");
         _safeBatchTransferFrom(from, to, ids, amounts, data);
     }
 
@@ -160,7 +148,7 @@ contract ERC1155 is Context, ERC165, ERC1155Common, IERC1155 {
         uint256 amount,
         bytes memory data
     ) internal virtual {
-        require(to != address(0), "ERC1155: transfer to the zero address");
+        require(to != address(0), "E0005");
 
         address operator = _msgSender();
 
@@ -186,11 +174,8 @@ contract ERC1155 is Context, ERC165, ERC1155Common, IERC1155 {
         uint256[] memory amounts,
         bytes memory data
     ) internal virtual {
-        require(
-            ids.length == amounts.length,
-            "ERC1155: ids and amounts length mismatch"
-        );
-        require(to != address(0), "ERC1155: transfer to the zero address");
+        require(ids.length == amounts.length, "E0006");
+        require(to != address(0), "E0007");
 
         address operator = _msgSender();
 
@@ -261,10 +246,7 @@ contract ERC1155 is Context, ERC165, ERC1155Common, IERC1155 {
         uint256 amount
     ) internal virtual {
         uint256 fromBalance = _balances[id][from];
-        require(
-            fromBalance >= amount,
-            "ERC1155: insufficient balance for transfer"
-        );
+        require(fromBalance >= amount, "E0008");
         unchecked {
             _balances[id][from] = fromBalance - amount;
         }
@@ -297,7 +279,7 @@ contract ERC1155 is Context, ERC165, ERC1155Common, IERC1155 {
         address operator,
         bool approved
     ) internal virtual {
-        require(owner != operator, "ERC1155: setting approval status for self");
+        require(owner != operator, "E0009");
         _operatorApprovals[owner][operator] = approved;
         emit ApprovalForAll(owner, operator, approved);
     }

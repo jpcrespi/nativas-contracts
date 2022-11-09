@@ -8,6 +8,7 @@ import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 import "../../interfaces/erc1155/IERC1155.sol";
+import "../../interfaces/erc1155/IERC1155Holder.sol";
 import "../../interfaces/erc1155/IERC1155TokenReceiver.sol";
 
 /**
@@ -17,6 +18,7 @@ contract NativasHolder is
     Context,
     ERC165,
     Initializable,
+    IERC1155Holder,
     IERC1155TokenReceiver
 {
     // Holder metadata
@@ -75,6 +77,7 @@ contract NativasHolder is
     {
         return
             interfaceId == type(IERC1155TokenReceiver).interfaceId ||
+            interfaceId == type(IERC1155Holder).interfaceId ||
             super.supportsInterface(interfaceId);
     }
 

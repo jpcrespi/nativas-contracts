@@ -83,10 +83,7 @@ contract ERC1155URIStorable is
      * - the caller must have the `EDITOR_ROLE`.
      */
     function setBaseURI(string memory baseURI) public virtual {
-        require(
-            hasRole(EDITOR_ROLE, _msgSender()),
-            "ERC1155: sender does not have role"
-        );
+        require(hasRole(EDITOR_ROLE, _msgSender()), "E0801");
         _setBaseURI(baseURI);
     }
 
@@ -98,10 +95,7 @@ contract ERC1155URIStorable is
      * - the caller must have the `EDITOR_ROLE`.
      */
     function setURI(uint256 tokenId, string memory tokenURI) public virtual {
-        require(
-            hasRole(EDITOR_ROLE, _msgSender()),
-            "ERC1155: sender does not have role"
-        );
+        require(hasRole(EDITOR_ROLE, _msgSender()), "E0802");
         _setURI(tokenId, tokenURI);
     }
 

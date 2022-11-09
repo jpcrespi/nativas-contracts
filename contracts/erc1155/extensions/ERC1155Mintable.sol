@@ -31,10 +31,7 @@ contract ERC1155Mintable is MintRole, ERC1155Accessible {
         uint256 amount,
         bytes memory data
     ) public virtual {
-        require(
-            hasRole(MINTER_ROLE, _msgSender()),
-            "ERC1155: sender does not have role"
-        );
+        require(hasRole(MINTER_ROLE, _msgSender()), "E0401");
         _mint(to, id, amount, data);
     }
 
@@ -51,10 +48,7 @@ contract ERC1155Mintable is MintRole, ERC1155Accessible {
         uint256[] memory amounts,
         bytes memory data
     ) public virtual {
-        require(
-            hasRole(MINTER_ROLE, _msgSender()),
-            "ERC1155: sender does not have role"
-        );
+        require(hasRole(MINTER_ROLE, _msgSender()), "E0402");
         _mintBatch(to, ids, amounts, data);
     }
 }

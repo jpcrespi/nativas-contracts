@@ -29,10 +29,7 @@ contract ERC1155Pausable is PauseRole, Pausable, ERC1155Accessible {
      * - the caller must have the `PAUSER_ROLE`.
      */
     function pause() public virtual {
-        require(
-            hasRole(PAUSER_ROLE, _msgSender()),
-            "ERC1155: sender does not have role"
-        );
+        require(hasRole(PAUSER_ROLE, _msgSender()), "E0601");
         _pause();
     }
 
@@ -46,10 +43,7 @@ contract ERC1155Pausable is PauseRole, Pausable, ERC1155Accessible {
      * - the caller must have the `PAUSER_ROLE`.
      */
     function unpause() public virtual {
-        require(
-            hasRole(PAUSER_ROLE, _msgSender()),
-            "ERC1155: sender does not have role"
-        );
+        require(hasRole(PAUSER_ROLE, _msgSender()), "E0602");
         _unpause();
     }
 
@@ -69,9 +63,6 @@ contract ERC1155Pausable is PauseRole, Pausable, ERC1155Accessible {
         bytes memory data
     ) internal virtual override {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
-        require(
-            paused() == false,
-            "ERC1155Pausable: token transfer while paused"
-        );
+        require(paused() == false, "E0603");
     }
 }

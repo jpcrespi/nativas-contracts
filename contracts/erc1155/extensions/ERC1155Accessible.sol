@@ -48,7 +48,7 @@ contract ERC1155Accessible is AccessControlEnumerable, ERC1155 {
         uint256 amount,
         bytes memory data
     ) internal virtual {
-        require(from != address(0), "ERC1155: burn from the zero address");
+        require(from != address(0), "E0101");
 
         address operator = _msgSender();
         uint256[] memory ids = _asSingletonArray(id);
@@ -57,7 +57,7 @@ contract ERC1155Accessible is AccessControlEnumerable, ERC1155 {
         _beforeTokenTransfer(operator, from, address(0), ids, amounts, data);
 
         uint256 fromBalance = _balances[id][from];
-        require(fromBalance >= amount, "ERC1155: burn amount exceeds balance");
+        require(fromBalance >= amount, "E0102");
         unchecked {
             _balances[id][from] = fromBalance - amount;
         }
@@ -83,11 +83,8 @@ contract ERC1155Accessible is AccessControlEnumerable, ERC1155 {
         uint256[] memory amounts,
         bytes memory data
     ) internal virtual {
-        require(from != address(0), "ERC1155: burn from the zero address");
-        require(
-            ids.length == amounts.length,
-            "ERC1155: ids and amounts length mismatch"
-        );
+        require(from != address(0), "E0103");
+        require(ids.length == amounts.length, "E0104");
 
         address operator = _msgSender();
 
@@ -96,12 +93,8 @@ contract ERC1155Accessible is AccessControlEnumerable, ERC1155 {
         for (uint256 i = 0; i < ids.length; i++) {
             uint256 id = ids[i];
             uint256 amount = amounts[i];
-
             uint256 fromBalance = _balances[id][from];
-            require(
-                fromBalance >= amount,
-                "ERC1155: burn amount exceeds balance"
-            );
+            require(fromBalance >= amount, "E0105");
             unchecked {
                 _balances[id][from] = fromBalance - amount;
             }
@@ -129,7 +122,7 @@ contract ERC1155Accessible is AccessControlEnumerable, ERC1155 {
         uint256 amount,
         bytes memory data
     ) internal virtual {
-        require(to != address(0), "ERC1155: mint to the zero address");
+        require(to != address(0), "E0106");
 
         address operator = _msgSender();
         uint256[] memory ids = _asSingletonArray(id);
@@ -169,11 +162,8 @@ contract ERC1155Accessible is AccessControlEnumerable, ERC1155 {
         uint256[] memory amounts,
         bytes memory data
     ) internal virtual {
-        require(to != address(0), "ERC1155: mint to the zero address");
-        require(
-            ids.length == amounts.length,
-            "ERC1155: ids and amounts length mismatch"
-        );
+        require(to != address(0), "E0107");
+        require(ids.length == amounts.length, "E0108");
 
         address operator = _msgSender();
 

@@ -6,8 +6,8 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/proxy/Clones.sol";
 import "../../../interfaces/erc1155/IERC1155ERC20.sol";
+import "../../../interfaces/erc20/IERC20Adapter.sol";
 import "../../access/roles/EditRole.sol";
-import "../../erc20Adapter/NativasAdapter.sol";
 import "./ERC1155Supply.sol";
 
 /**
@@ -55,10 +55,7 @@ contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
         string memory symbol,
         uint8 decimals
     ) public virtual returns (address) {
-        require(
-            hasRole(EDITOR_ROLE, _msgSender()),
-            "ERC1155: caller is not the token adapter"
-        );
+        require(hasRole(EDITOR_ROLE, _msgSender()), "E0301");
         return _putAdapter(id, name, symbol, decimals);
     }
 
@@ -84,10 +81,7 @@ contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
         uint256 amount,
         bytes memory data
     ) public virtual override {
-        require(
-            _msgSender() == _adapters[id],
-            "ERC1155: caller is not the token adapter"
-        );
+        require(_msgSender() == _adapters[id], "E0302");
         _safeAdapterTransferFrom(operator, from, to, id, amount, data);
     }
 
@@ -114,7 +108,7 @@ contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
         uint8 decimals
     ) internal virtual returns (address) {
         address adapter = _template.clone();
-        NativasAdapter(adapter).init(id, name, symbol, decimals);
+        IERC20Adapter(adapter).init(id, name, symbol, decimals);
         _adapters[id] = adapter;
         emit AdapterCreated(id, adapter);
         return adapter;
@@ -140,7 +134,7 @@ contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
         uint256 amount,
         bytes memory data
     ) internal virtual {
-        require(to != address(0), "ERC1155: transfer to the zero address");
+        require(to != address(0), "E0303");
 
         _transferFrom(operator, from, to, id, amount, data);
 

@@ -32,14 +32,8 @@ contract ERC1155Burnable is BurnRole, ERC1155Accessible {
         uint256 value,
         bytes memory data
     ) public virtual {
-        require(
-            hasRole(BURNER_ROLE, _msgSender()),
-            "ERC1155: sender does not have role"
-        );
-        require(
-            _isOwnerOrApproved(account),
-            "ERC1155: caller is not owner nor approved"
-        );
+        require(hasRole(BURNER_ROLE, _msgSender()), "E0201");
+        require(_isOwnerOrApproved(account), "E0202");
 
         _burn(account, id, value, data);
     }
@@ -58,14 +52,8 @@ contract ERC1155Burnable is BurnRole, ERC1155Accessible {
         uint256[] memory values,
         bytes memory data
     ) public virtual {
-        require(
-            hasRole(BURNER_ROLE, _msgSender()),
-            "ERC1155: sender does not have role"
-        );
-        require(
-            _isOwnerOrApproved(account),
-            "ERC1155: caller is not owner nor approved"
-        );
+        require(hasRole(BURNER_ROLE, _msgSender()), "E0203");
+        require(_isOwnerOrApproved(account), "E0204");
 
         _burnBatch(account, ids, values, data);
     }

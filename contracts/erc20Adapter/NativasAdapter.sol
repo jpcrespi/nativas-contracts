@@ -9,6 +9,7 @@ import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 import "../../interfaces/erc1155/IERC1155ERC20.sol";
 import "../../interfaces/erc20/IERC20.sol";
+import "../../interfaces/erc20/IERC20Adapter.sol";
 import "../../interfaces/erc20/IERC20Metadata.sol";
 import "../../interfaces/erc20/IERC20Approve.sol";
 
@@ -20,6 +21,7 @@ contract NativasAdapter is
     Initializable,
     ERC165,
     IERC20,
+    IERC20Adapter,
     IERC20Metadata,
     IERC20Approve
 {
@@ -52,7 +54,7 @@ contract NativasAdapter is
         string memory name_,
         string memory symbol_,
         uint8 decimals_
-    ) public initializer {
+    ) public override initializer {
         _entity = _msgSender();
         _id = id_;
         _name = name_;
@@ -72,6 +74,7 @@ contract NativasAdapter is
     {
         return
             interfaceId == type(IERC20).interfaceId ||
+            interfaceId == type(IERC20Adapter).interfaceId ||
             interfaceId == type(IERC20Metadata).interfaceId ||
             super.supportsInterface(interfaceId);
     }
@@ -183,10 +186,7 @@ contract NativasAdapter is
     {
         address owner = _msgSender();
         uint256 currentAllowance = allowance(owner, spender);
-        require(
-            currentAllowance >= subtractedValue,
-            "NativasAdapter: decreased allowance below zero"
-        );
+        require(currentAllowance >= subtractedValue, "E01");
         unchecked {
             _approve(owner, spender, currentAllowance - subtractedValue);
         }
@@ -265,14 +265,8 @@ contract NativasAdapter is
         address spender,
         uint256 amount
     ) internal virtual {
-        require(
-            owner != address(0),
-            "NativasAdapter: approve from the zero address"
-        );
-        require(
-            spender != address(0),
-            "NativasAdapter: approve to the zero address"
-        );
+        require(owner != address(0), "E02");
+        require(spender != address(0), "E03");
 
         _allowances[owner][spender] = amount;
         emit Approval(owner, spender, amount);
@@ -292,14 +286,9 @@ contract NativasAdapter is
         uint256 amount
     ) internal virtual {
         uint256 currentAllowance = allowance(owner, spender);
-        require(
-            currentAllowance != type(uint256).max,
-            "NativasAdapter: invalid allowance"
-        );
-        require(
-            currentAllowance >= amount,
-            "NativasAdapter: insufficient allowance"
-        );
+        require(currentAllowance != type(uint256).max, "E04");
+        require(currentAllowance >= amount, "E05");
+        
         unchecked {
             _approve(owner, spender, currentAllowance - amount);
         }

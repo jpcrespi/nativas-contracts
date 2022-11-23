@@ -235,6 +235,18 @@ contract NativasToken is
 
     /**
      * @dev
+     *
+     * Requeriments:
+     *
+     * - the caller must have the `OFFSETER_ROLE`.
+     */
+    function setOffsetCatalog(address catalog_) public virtual {
+        require(control().isOffsetter(_msgSender()), "E0504");
+        _setOffsetCatalog(catalog_);
+    }
+
+    /**
+     * @dev
      */
     function swap(
         address account,

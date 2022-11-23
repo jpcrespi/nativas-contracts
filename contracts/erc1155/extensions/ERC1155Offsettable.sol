@@ -5,6 +5,7 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "../../../interfaces/erc1155/IERC1155Offsettable.sol";
 import "./ERC1155Burnable.sol";
 import "./ERC1155Mintable.sol";
 
@@ -15,19 +16,7 @@ contract ERC1155Offsettable is
     ERC1155Burnable, 
     ERC1155Mintable 
 {
-    /**
-     * @dev Offset model
-     */
-    struct Offset {
-        uint256 tokenId;
-        uint256 value;
-        uint256 date;
-        string info;
-    }
-
-    // offset data
-    mapping(address => Offset[]) private _offsets;
-    mapping(address => uint256) private _offsetCount;
+    address internal _catalog;
     mapping(uint256 => bool) private _offsettable;
 
     /**
@@ -65,48 +54,6 @@ contract ERC1155Offsettable is
     /**
      * @dev
      */
-    function getOffsetValue(address account, uint256 index)
-        public
-        view
-        virtual
-        returns (
-            uint256 tokenId,
-            uint256 value,
-            uint256 date,
-            string memory info
-        ) {
-        Offset memory data = _offsets[account][index];
-        return (data.tokenId, data.value, data.date, data.info);
-    }
-
-    /**
-     * @dev
-     */
-    function getOffsetCount(address account)
-        public
-        view
-        virtual
-        returns (uint256) {
-        return _offsetCount[account];
-    }
-
-    /**
-     * @dev
-     */
-    function _offset(
-        address account,
-        uint256 tokenId,
-        uint256 value,
-        string memory info
-    ) internal virtual {
-        require(_offsettable[tokenId], "E0503");
-        _offsetCount[account]++;
-        _offsets[account].push(Offset(tokenId, value, block.timestamp, info));
-    }
-
-    /**
-     * @dev
-     */
     function offsettable(uint256 tokenId) public view virtual returns (bool) {
         return _offsettable[tokenId];
     }
@@ -116,6 +63,13 @@ contract ERC1155Offsettable is
      */
     function _setOffsettable(uint256 tokenId, bool enabled) public virtual {
         _offsettable[tokenId] = enabled;
+    }
+
+    /**
+     * @dev
+     */
+    function _setOffsetCatalog(address catalog_) public virtual {
+        _catalog = catalog_;
     }
 
     /**
@@ -152,5 +106,18 @@ contract ERC1155Offsettable is
         }
         _burnBatch(account, fromIds, values, data);
         _mintBatch(account, toIds, values, data);
+    }
+
+    /**
+     * @dev
+     */
+    function _offset(
+        address account,
+        uint256 tokenId,
+        uint256 value,
+        string memory info
+    ) internal virtual {
+        require(_catalog != address(0), "E0512");
+        IERC1155Offsettable(_catalog).offset(account, tokenId, value, info);
     }
 }

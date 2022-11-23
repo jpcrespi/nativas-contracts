@@ -73,6 +73,18 @@ contract NativasToken is
     }
 
     /**
+     * @dev See {Controllable-_safeTransferControl}.
+     *
+     * Requirements:
+     *
+     * - the caller must have the `DEFAULT_ADMIN_ROLE`.
+     */
+    function transferControl(address newController) public virtual {
+        require(control().isAdmin(_msgSender()), "E0201");
+        _safeTransferControl(newController);
+    }
+
+    /**
      * @dev See {ERC1155Accessible-_burn}.
      *
      * Requirements:

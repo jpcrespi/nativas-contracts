@@ -53,7 +53,7 @@ contract NativasToken is
         override(ERC1155ERC20, ERC1155URIStorable)
         returns (bool)
     {
-        return ERC1155URIStorable.exists(tokenId);
+        return super.exists(tokenId);
     }
 
     /**

@@ -9,11 +9,13 @@ import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/proxy/Clones.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "../../interfaces/erc1155/IERC1155Holder.sol";
+import "../../interfaces/erc1167/IERC1167Control.sol";
+import "../access/Controllable.sol";
 
 /**
  * ERC1167 implementation to create new holders
  */
-contract NativasFactory is Context, Ownable {
+contract NativasFactory is Context, Controllable {
     using Clones for address;
 
     // NativasHolder template
@@ -24,14 +26,27 @@ contract NativasFactory is Context, Ownable {
     /**
      * @dev MUST trigger when a new holder is created.
      */
-    event HolderCreated(uint256 indexed id, address indexed holder);
+    event HolderCreated(
+        uint256 indexed id, 
+        address indexed holder
+    );
 
     /**
      * @dev Set NativasHolder contract template.
      */
-    constructor(address template_) {
+    constructor(
+        address controller_, 
+        address template_) 
+        Controllable(controller_) {
         _template = template_;
     }
+
+    /**
+     * @dev
+     */
+    function control() internal view returns(IERC1167Control) {
+        return IERC1167Control(_controller);
+    } 
 
     /**
      * @dev get holder contract template
@@ -48,6 +63,18 @@ contract NativasFactory is Context, Ownable {
     }
 
     /**
+     * @dev See {Controllable-_safeTransferControl}.
+     *
+     * Requirements:
+     *
+     * - the caller must have the `DEFAULT_ADMIN_ROLE`.
+     */
+    function transferControl(address newController) public virtual {
+        require(control().isAdmin(_msgSender()), "E0201");
+        _safeTransferControl(newController);
+    }
+
+    /**
      * @dev See {NativasFactory-_setHolder}
      *
      * Requirements:
@@ -59,7 +86,8 @@ contract NativasFactory is Context, Ownable {
         uint256 id,
         string memory name,
         address operator
-    ) public virtual onlyOwner {
+    ) public virtual {
+        require(control().isEditor(_msgSender()), "E0201");
         _setHolder(entity, id, name, operator);
     }
 

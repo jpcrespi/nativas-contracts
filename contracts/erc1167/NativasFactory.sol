@@ -48,34 +48,33 @@ contract NativasFactory is Context, Ownable {
     }
 
     /**
-     * @dev See {NativasFactory-_putHolder}
+     * @dev See {NativasFactory-_setHolder}
      *
      * Requirements:
      *
      * - the caller must be the contract owener.
      */
-    function putHolder(
+    function setHolder(
         address entity,
         uint256 id,
         string memory name,
         address operator
-    ) public virtual onlyOwner returns (address) {
-        return _putHolder(entity, id, name, operator);
+    ) public virtual onlyOwner {
+        _setHolder(entity, id, name, operator);
     }
 
     /**
      * @dev Create a new holder contract.
      */
-    function _putHolder(
+    function _setHolder(
         address entity,
         uint256 id,
         string memory name,
         address operator
-    ) internal virtual returns (address) {
+    ) internal virtual {
         address holder = _template.clone();
         IERC1155Holder(holder).init(entity, operator, id, name);
         _holders[id] = holder;
         emit HolderCreated(id, holder);
-        return holder;
     }
 }

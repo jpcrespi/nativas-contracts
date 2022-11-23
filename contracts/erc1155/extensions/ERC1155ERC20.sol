@@ -7,13 +7,13 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/proxy/Clones.sol";
 import "../../../interfaces/erc1155/IERC1155ERC20.sol";
 import "../../../interfaces/erc20/IERC20Adapter.sol";
-import "../../access/roles/EditRole.sol";
+import "../../access/roles/AdaptRole.sol";
 import "./ERC1155Supply.sol";
 
 /**
  *
  */
-contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
+contract ERC1155ERC20 is AdaptRole, ERC1155Supply, IERC1155ERC20 {
     using Clones for address;
 
     // NativasAdapter template
@@ -27,11 +27,11 @@ contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
     event AdapterCreated(uint256 indexed id, address indexed adapter);
 
     /**
-     * @dev Grants `EDITOR_ROLE` to the account that deploys the contract.
+     * @dev Grants `ADAPTER_ROLE` to the account that deploys the contract.
      * Set NativasAdapter contract template
      */
     constructor(address template_) {
-        _grantRole(EDITOR_ROLE, _msgSender());
+        _grantRole(ADAPTER_ROLE, _msgSender());
         _template = template_;
     }
 
@@ -43,20 +43,20 @@ contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
     }
 
     /**
-     * @dev See {ERC1155ERC20-_putAdapter}
+     * @dev See {ERC1155ERC20-_setAdapter}
      *
      * Requirements:
      *
      * - the caller must have the `EDITOR_ROLE`.
      */
-    function putAdapter(
+    function setAdapter(
         uint256 id,
         string memory name,
         string memory symbol,
         uint8 decimals
-    ) public virtual returns (address) {
-        require(hasRole(EDITOR_ROLE, _msgSender()), "E0301");
-        return _putAdapter(id, name, symbol, decimals);
+    ) public virtual {
+        require(hasRole(ADAPTER_ROLE, _msgSender()), "E0301");
+        _setAdapter(id, name, symbol, decimals);
     }
 
     /**
@@ -101,17 +101,16 @@ contract ERC1155ERC20 is EditRole, ERC1155Supply, IERC1155ERC20 {
     /**
      * @dev Create new adapter contract por token id
      */
-    function _putAdapter(
+    function _setAdapter(
         uint256 id,
         string memory name,
         string memory symbol,
         uint8 decimals
-    ) internal virtual returns (address) {
+    ) internal virtual {
         address adapter = _template.clone();
         IERC20Adapter(adapter).init(id, name, symbol, decimals);
         _adapters[id] = adapter;
         emit AdapterCreated(id, adapter);
-        return adapter;
     }
 
     /**

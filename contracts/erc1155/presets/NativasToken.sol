@@ -64,7 +64,7 @@ contract NativasToken is
         string memory uri,
         bool offsettable
     ) public virtual {
-        putAdapter(id, name, symbol, decimals);
+        setAdapter(id, name, symbol, decimals);
         setOffsettable(id, offsettable);
         setURI(id, uri);
     }

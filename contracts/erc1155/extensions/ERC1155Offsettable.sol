@@ -6,12 +6,12 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "./ERC1155Accessible.sol";
-import "../../access/roles/EditRole.sol";
+import "../../access/roles/OffsetRole.sol";
 
 /**
  * @dev Offset Implementation
  */
-contract ERC1155Offsettable is EditRole, ERC1155Accessible {
+contract ERC1155Offsettable is OffsetRole, ERC1155Accessible {
     /**
      * @dev Offset model
      */
@@ -28,10 +28,10 @@ contract ERC1155Offsettable is EditRole, ERC1155Accessible {
     mapping(uint256 => bool) private _offsettable;
 
     /**
-     * @dev Grants `EDITOR_ROLE` to the account that deploys the contract.
+     * @dev Grants `OFFSETER_ROLE` to the account that deploys the contract.
      */
     constructor() {
-        _grantRole(EDITOR_ROLE, _msgSender());
+        _grantRole(OFFSETER_ROLE, _msgSender());
     }
 
     /**
@@ -124,10 +124,10 @@ contract ERC1155Offsettable is EditRole, ERC1155Accessible {
      *
      * Requeriments:
      *
-     * - the caller must have the `EDITOR_ROLE`.
+     * - the caller must have the `OFFSETER_ROLE`.
      */
     function setOffsettable(uint256 tokenId, bool enabled) public virtual {
-        require(hasRole(EDITOR_ROLE, _msgSender()), "E0504");
+        require(hasRole(OFFSETER_ROLE, _msgSender()), "E0504");
         _setOffsettable(tokenId, enabled);
     }
 
@@ -148,9 +148,7 @@ contract ERC1155Offsettable is EditRole, ERC1155Accessible {
         uint256 value,
         bytes memory data
     ) public virtual {
-        require(hasRole(EDITOR_ROLE, _msgSender()), "E0505");
-        require(_isOwnerOrApproved(account), "E0506");
-
+        require(hasRole(OFFSETER_ROLE, _msgSender()), "E0505");
         _swap(account, fromId, toId, value, data);
     }
 
@@ -164,9 +162,7 @@ contract ERC1155Offsettable is EditRole, ERC1155Accessible {
         uint256[] memory values,
         bytes memory data
     ) public virtual {
-        require(hasRole(EDITOR_ROLE, _msgSender()), "E0507");
-        require(_isOwnerOrApproved(account), "E0508");
-
+        require(hasRole(OFFSETER_ROLE, _msgSender()), "E0507");
         _swapBatch(account, fromTokenIds, toTokenIds, values, data);
     }
 

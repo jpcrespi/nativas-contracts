@@ -5,7 +5,6 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "../../access/roles/OffsetRole.sol";
 import "./ERC1155Burnable.sol";
 import "./ERC1155Mintable.sol";
 
@@ -13,7 +12,6 @@ import "./ERC1155Mintable.sol";
  * @dev Offset Implementation
  */
 contract ERC1155Offsettable is 
-    OffsetRole, 
     ERC1155Burnable, 
     ERC1155Mintable 
 {
@@ -31,13 +29,6 @@ contract ERC1155Offsettable is
     mapping(address => Offset[]) private _offsets;
     mapping(address => uint256) private _offsetCount;
     mapping(uint256 => bool) private _offsettable;
-
-    /**
-     * @dev Grants `OFFSETER_ROLE` to the account that deploys the contract.
-     */
-    constructor() {
-        _grantRole(OFFSETER_ROLE, _msgSender());
-    }
 
     /**
      * @dev
@@ -65,9 +56,7 @@ contract ERC1155Offsettable is
         bytes memory data
     ) public virtual {
         require(_isOwnerOrApproved(account), "E0502");
-
         _burnBatch(account, tokenIds, values, data);
-
         for (uint256 i = 0; i < tokenIds.length; i++) {
             _offset(account, tokenIds[i], values[i], infos[i]);
         }
@@ -85,8 +74,7 @@ contract ERC1155Offsettable is
             uint256 value,
             uint256 date,
             string memory info
-        )
-    {
+        ) {
         Offset memory data = _offsets[account][index];
         return (data.tokenId, data.value, data.date, data.info);
     }
@@ -98,8 +86,7 @@ contract ERC1155Offsettable is
         public
         view
         virtual
-        returns (uint256)
-    {
+        returns (uint256) {
         return _offsetCount[account];
     }
 
@@ -126,49 +113,9 @@ contract ERC1155Offsettable is
 
     /**
      * @dev
-     *
-     * Requeriments:
-     *
-     * - the caller must have the `OFFSETER_ROLE`.
-     */
-    function setOffsettable(uint256 tokenId, bool enabled) public virtual {
-        require(hasRole(OFFSETER_ROLE, _msgSender()), "E0504");
-        _setOffsettable(tokenId, enabled);
-    }
-
-    /**
-     * @dev
      */
     function _setOffsettable(uint256 tokenId, bool enabled) public virtual {
         _offsettable[tokenId] = enabled;
-    }
-
-    /**
-     * @dev
-     */
-    function swap(
-        address account,
-        uint256 fromId,
-        uint256 toId,
-        uint256 value,
-        bytes memory data
-    ) public virtual {
-        require(hasRole(OFFSETER_ROLE, _msgSender()), "E0505");
-        _swap(account, fromId, toId, value, data);
-    }
-
-    /**
-     * @dev
-     */
-    function swapBatch(
-        address account,
-        uint256[] memory fromTokenIds,
-        uint256[] memory toTokenIds,
-        uint256[] memory values,
-        bytes memory data
-    ) public virtual {
-        require(hasRole(OFFSETER_ROLE, _msgSender()), "E0507");
-        _swapBatch(account, fromTokenIds, toTokenIds, values, data);
     }
 
     /**

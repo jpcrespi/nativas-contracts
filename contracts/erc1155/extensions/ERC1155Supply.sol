@@ -5,12 +5,12 @@
 pragma solidity ^0.8.0;
 
 import "../../../interfaces/erc1155/IERC1155Supply.sol";
-import "./ERC1155Accessible.sol";
+import "../ERC1155.sol";
 
 /**
  * @dev Extension of ERC1155 that adds tracking of total supply per id.
  */
-contract ERC1155Supply is ERC1155Accessible, IERC1155Supply {
+contract ERC1155Supply is ERC1155, IERC1155Supply {
     // total supply
     mapping(uint256 => uint256) internal _totalSupply;
 

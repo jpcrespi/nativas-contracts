@@ -7,13 +7,12 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/proxy/Clones.sol";
 import "../../../interfaces/erc1155/IERC1155ERC20.sol";
 import "../../../interfaces/erc20/IERC20Adapter.sol";
-import "../../access/roles/AdaptRole.sol";
 import "./ERC1155Supply.sol";
 
 /**
  *
  */
-contract ERC1155ERC20 is AdaptRole, ERC1155Supply, IERC1155ERC20 {
+contract ERC1155ERC20 is ERC1155Supply, IERC1155ERC20 {
     using Clones for address;
 
     // NativasAdapter template
@@ -27,11 +26,9 @@ contract ERC1155ERC20 is AdaptRole, ERC1155Supply, IERC1155ERC20 {
     event AdapterCreated(uint256 indexed id, address indexed adapter);
 
     /**
-     * @dev Grants `ADAPTER_ROLE` to the account that deploys the contract.
-     * Set NativasAdapter contract template
+     * @dev Set NativasAdapter contract template
      */
     constructor(address template_) {
-        _grantRole(ADAPTER_ROLE, _msgSender());
         _template = template_;
     }
 
@@ -40,23 +37,6 @@ contract ERC1155ERC20 is AdaptRole, ERC1155Supply, IERC1155ERC20 {
      */
     function template() public view virtual returns (address) {
         return _template;
-    }
-
-    /**
-     * @dev See {ERC1155ERC20-_setAdapter}
-     *
-     * Requirements:
-     *
-     * - the caller must have the `EDITOR_ROLE`.
-     */
-    function setAdapter(
-        uint256 id,
-        string memory name,
-        string memory symbol,
-        uint8 decimals
-    ) public virtual {
-        require(hasRole(ADAPTER_ROLE, _msgSender()), "E0301");
-        _setAdapter(id, name, symbol, decimals);
     }
 
     /**
@@ -93,8 +73,7 @@ contract ERC1155ERC20 is AdaptRole, ERC1155Supply, IERC1155ERC20 {
         view
         virtual
         override
-        returns (bool)
-    {
+        returns (bool) {
         return _adapters[tokenId] != address(0);
     }
 
@@ -134,9 +113,7 @@ contract ERC1155ERC20 is AdaptRole, ERC1155Supply, IERC1155ERC20 {
         bytes memory data
     ) internal virtual {
         require(to != address(0), "E0303");
-
         _transferFrom(operator, from, to, id, amount, data);
-
         _doSafeTransferAcceptanceCheck(operator, from, to, id, amount, data);
     }
 }

@@ -4,19 +4,12 @@
 
 pragma solidity ^0.8.0;
 
-import "../../access/roles/BurnRole.sol";
-import "./ERC1155Accessible.sol";
+import "../ERC1155.sol";
 
 /**
  * @dev Burn implementation
  */
-contract ERC1155Burnable is BurnRole, ERC1155Accessible {
-    /**
-     * @dev Grants `BURNER_ROLE` to the account that deploys the contract.
-     */
-    constructor() {
-        _grantRole(BURNER_ROLE, _msgSender());
-    }
+contract ERC1155Burnable is ERC1155 {
 
     /**
      * @dev See {ERC1155Accessible-_burn}.
@@ -26,15 +19,13 @@ contract ERC1155Burnable is BurnRole, ERC1155Accessible {
      * - the caller must have the `BURNER_ROLE`.
      * - the caller must be the owner or approved.
      */
-    function burn(
+    function _safeBurn(
         address account,
         uint256 id,
         uint256 value,
         bytes memory data
-    ) public virtual {
-        require(hasRole(BURNER_ROLE, _msgSender()), "E0201");
+    ) internal virtual {
         require(_isOwnerOrApproved(account), "E0202");
-
         _burn(account, id, value, data);
     }
 
@@ -46,15 +37,13 @@ contract ERC1155Burnable is BurnRole, ERC1155Accessible {
      * - the caller must have the `BURNER_ROLE`.
      * - the caller must be the owner or approved.
      */
-    function burnBatch(
+    function _safeBurnBatch(
         address account,
         uint256[] memory ids,
         uint256[] memory values,
         bytes memory data
-    ) public virtual {
-        require(hasRole(BURNER_ROLE, _msgSender()), "E0203");
+    ) internal virtual {
         require(_isOwnerOrApproved(account), "E0204");
-
         _burnBatch(account, ids, values, data);
     }
 

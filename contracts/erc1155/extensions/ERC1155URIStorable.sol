@@ -6,16 +6,12 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "../../../interfaces/erc1155/IERC1155MetadataURI.sol";
-import "../../access/roles/EditRole.sol";
-import "./ERC1155Accessible.sol";
+import "../ERC1155.sol";
 
 /**
  * @dev ERC1155 token with storage based token URI management.
  */
-contract ERC1155URIStorable is
-    EditRole,
-    ERC1155Accessible,
-    IERC1155MetadataURI
+contract ERC1155URIStorable is ERC1155, IERC1155MetadataURI
 {
     using Strings for uint256;
     // Used as the URI for all token types by relying on ID substitution.
@@ -24,11 +20,10 @@ contract ERC1155URIStorable is
     mapping(uint256 => string) private _tokenURIs;
 
     /**
-     * @dev Grants `EDITOR_ROLE` to the account that deploys the contract.
+     * @dev
      */
     constructor(string memory uri_) {
         _setBaseURI(uri_);
-        _grantRole(EDITOR_ROLE, _msgSender());
     }
 
     /**
@@ -73,30 +68,6 @@ contract ERC1155URIStorable is
      */
     function exists(uint256 tokenId) public view virtual returns (bool) {
         return bytes(_tokenURIs[tokenId]).length > 0;
-    }
-
-    /**
-     * @dev See {ERC1155URIStorable-_setBaseURI}
-     *
-     * Requeriments:
-     *
-     * - the caller must have the `EDITOR_ROLE`.
-     */
-    function setBaseURI(string memory baseURI) public virtual {
-        require(hasRole(EDITOR_ROLE, _msgSender()), "E0801");
-        _setBaseURI(baseURI);
-    }
-
-    /**
-     * @dev See {ERC1155URIStorable-_setURI}
-     *
-     * Requeriments:
-     *
-     * - the caller must have the `EDITOR_ROLE`.
-     */
-    function setURI(uint256 tokenId, string memory tokenURI) public virtual {
-        require(hasRole(EDITOR_ROLE, _msgSender()), "E0802");
-        _setURI(tokenId, tokenURI);
     }
 
     /**

@@ -4,8 +4,6 @@
 
 pragma solidity ^0.8.0;
 
-import "../extensions/ERC1155Mintable.sol";
-import "../extensions/ERC1155Burnable.sol";
 import "../extensions/ERC1155Pausable.sol";
 import "../extensions/ERC1155Offsettable.sol";
 import "../extensions/ERC1155URIStorable.sol";
@@ -15,8 +13,6 @@ import "../extensions/ERC1155ERC20.sol";
  * @dev ERC1155 preset
  */
 contract NativasToken is
-    ERC1155Mintable,
-    ERC1155Burnable,
     ERC1155Pausable,
     ERC1155Offsettable,
     ERC1155URIStorable,

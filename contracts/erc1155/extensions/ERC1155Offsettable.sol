@@ -5,13 +5,18 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "./ERC1155Accessible.sol";
 import "../../access/roles/OffsetRole.sol";
+import "./ERC1155Burnable.sol";
+import "./ERC1155Mintable.sol";
 
 /**
  * @dev Offset Implementation
  */
-contract ERC1155Offsettable is OffsetRole, ERC1155Accessible {
+contract ERC1155Offsettable is 
+    OffsetRole, 
+    ERC1155Burnable, 
+    ERC1155Mintable 
+{
     /**
      * @dev Offset model
      */

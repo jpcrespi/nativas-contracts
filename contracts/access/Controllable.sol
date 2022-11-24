@@ -34,16 +34,10 @@ contract Controllable is Context {
 
     /**
      * @dev Transfers control of the contract to a new account (`newController`).
-     * Can only be called by the current accessor.
-     */
-    function _safeTransferControl(address newController) internal virtual {
-        require(newController != address(0), "E0902");
-        _transferControl(newController);
-    }
-
-    /**
-     * @dev Transfers control of the contract to a new account (`newController`).
-     * Internal function without access restriction.
+     * Can only be called by the current controller.
+     *
+     * NOTE: Renouncing control will leave the contract without a controller,
+     * thereby removing any functionality that is only available to the controller.
      */
     function _transferControl(address newController) internal virtual {
         address oldController = _controller;

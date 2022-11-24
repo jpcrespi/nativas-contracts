@@ -4,17 +4,17 @@
 
 pragma solidity ^0.8.0;
 
-import "../extensions/ERC1155Controllable.sol";
+import "../../../interfaces/erc1155/IERC1155Control.sol";
+import "../../access/Controllable.sol";
 import "../extensions/ERC1155Pausable.sol";
 import "../extensions/ERC1155Offsettable.sol";
 import "../extensions/ERC1155URIStorable.sol";
 import "../extensions/ERC1155ERC20.sol";
-
 /**
  * @dev ERC1155 preset
  */
 contract NativasToken is
-    ERC1155Controllable,
+    Controllable,
     ERC1155Pausable,
     ERC1155Offsettable,
     ERC1155URIStorable,
@@ -25,7 +25,7 @@ contract NativasToken is
         string memory uri_, 
         address template_
     )
-        ERC1155Controllable(controller_)
+        Controllable(controller_)
         ERC1155URIStorable(uri_)
         ERC1155ERC20(template_)
     {}
@@ -41,6 +41,13 @@ contract NativasToken is
         returns (bool success)
     {
         return super.supportsInterface(interfaceId);
+    }
+
+    /**
+     * @dev
+     */
+    function control() internal view returns(IERC1155Control) {
+        return IERC1155Control(_controller);
     }
 
     /**
@@ -81,7 +88,7 @@ contract NativasToken is
      */
     function transferControl(address newController) public virtual {
         require(control().isAdmin(_msgSender()), "E0201");
-        _safeTransferControl(newController);
+        _transferControl(newController);
     }
 
     /**
@@ -283,7 +290,11 @@ contract NativasToken is
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory data
-    ) internal virtual override(ERC1155, ERC1155Pausable, ERC1155Supply) {
+    ) internal virtual override(
+        ERC1155, 
+        ERC1155ERC20,
+        ERC1155Pausable,
+        ERC1155URIStorable) {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
     }
 }

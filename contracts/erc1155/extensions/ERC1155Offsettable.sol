@@ -58,6 +58,13 @@ contract ERC1155Offsettable is
         return _offsettable[tokenId];
     }
 
+     /**
+     * @dev
+     */
+    function offsetCatalog() public view virtual returns(address) {
+        return _catalog;
+    }
+
     /**
      * @dev
      */

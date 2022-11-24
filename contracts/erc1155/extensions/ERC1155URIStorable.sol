@@ -15,7 +15,7 @@ contract ERC1155URIStorable is ERC1155, IERC1155MetadataURI
 {
     using Strings for uint256;
     // Used as the URI for all token types by relying on ID substitution.
-    string internal _uri;
+    string internal _baseURI;
     // Mapping for token URIs
     mapping(uint256 => string) private _tokenURIs;
 
@@ -54,13 +54,7 @@ contract ERC1155URIStorable is ERC1155, IERC1155MetadataURI
         override
         returns (string memory)
     {
-        string memory tokenURI = _tokenURIs[tokenId];
-
-        if (bytes(tokenURI).length > 0) {
-            return string(abi.encodePacked(_uri, tokenURI));
-        } else {
-            return string(abi.encodePacked(_uri, tokenId.toString()));
-        }
+        return string(abi.encodePacked(_baseURI, _tokenURIs[tokenId]));
     }
 
     /**
@@ -73,8 +67,8 @@ contract ERC1155URIStorable is ERC1155, IERC1155MetadataURI
     /**
      * @dev Sets `baseURI` as the `_uri` for all tokens
      */
-    function _setBaseURI(string memory baseURI) internal virtual {
-        _uri = baseURI;
+    function _setBaseURI(string memory baseURI_) internal virtual {
+        _baseURI = baseURI_;
     }
 
     /**

@@ -11,7 +11,6 @@ import "../ERC1155.sol";
  * @dev ERC1155 pause implementation
  */
 contract ERC1155Pausable is Pausable, ERC1155 {
-    
     /**
      * @dev See {ERC1155-_beforeTokenTransfer}.
      *

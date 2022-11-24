@@ -56,7 +56,7 @@ contract NativasHolder is
         _id = id_;
         _nin = nin_;
         _setName(name_);
-        _safeTransferControl(controller_);
+        _transferControl(controller_);
         _setApprovalForAll(entity_, operator_, true);
     }
 
@@ -98,11 +98,11 @@ contract NativasHolder is
     }
 
     /**
-     * @dev See {Controllable-_safeTransferControl}.
+     * @dev See {Controllable-_transferControl}.
      */
     function transferControl(address newController) public virtual {
         require(controller() == _msgSender(), "E0201");
-        _safeTransferControl(newController);
+        _transferControl(newController);
     }
 
     /**

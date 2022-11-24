@@ -63,7 +63,7 @@ contract NativasFactory is Context, Controllable {
      */
     function transferControl(address newController) public virtual {
         require(controller() == _msgSender(), "E0201");
-        _safeTransferControl(newController);
+        _transferControl(newController);
     }
 
     /**

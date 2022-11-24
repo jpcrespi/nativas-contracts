@@ -6,15 +6,13 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
 import "../../interfaces/erc1155/IERC1155Control.sol";
-import "../../interfaces/erc1167/IERC1167Control.sol";
 
 /**
  * @dev Contract module which provides a basic access control mechanism.
  */
 contract NativasControl is 
     AccessControlEnumerable,
-    IERC1155Control,
-    IERC1167Control
+    IERC1155Control
 {
     bytes32 public constant ADAPTER_ROLE = keccak256("ADAPTER_ROLE");
     bytes32 public constant BURNER_ROLE = keccak256("BURNER_ROLE");
@@ -38,7 +36,7 @@ contract NativasControl is
 
     function isAdmin(
         address account
-    ) public view virtual override(IERC1155Control, IERC1167Control) returns(bool) {
+    ) public view virtual override returns(bool) {
         return hasRole(DEFAULT_ADMIN_ROLE, account);
     }
 
@@ -74,7 +72,7 @@ contract NativasControl is
 
     function isEditor(
         address account
-    ) public view virtual override(IERC1155Control, IERC1167Control) returns(bool) {
+    ) public view virtual override returns(bool) {
         return hasRole(EDITOR_ROLE, account);
     }
 }

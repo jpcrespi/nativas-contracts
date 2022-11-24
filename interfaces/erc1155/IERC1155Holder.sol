@@ -14,7 +14,9 @@ interface IERC1155Holder {
     function init(
         address entity_,
         address operator_,
+        address controller_,
         uint256 id_,
+        string memory nin_,
         string memory name_
     ) external;
 }

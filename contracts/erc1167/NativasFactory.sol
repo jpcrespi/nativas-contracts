@@ -9,7 +9,6 @@ import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/proxy/Clones.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "../../interfaces/erc1155/IERC1155Holder.sol";
-import "../../interfaces/erc1167/IERC1167Control.sol";
 import "../access/Controllable.sol";
 
 /**
@@ -40,14 +39,7 @@ contract NativasFactory is Context, Controllable {
         Controllable(controller_) {
         _template = template_;
     }
-
-    /**
-     * @dev
-     */
-    function control() internal view returns(IERC1167Control) {
-        return IERC1167Control(_controller);
-    } 
-
+    
     /**
      * @dev get holder contract template
      */
@@ -70,7 +62,7 @@ contract NativasFactory is Context, Controllable {
      * - the caller must have the `DEFAULT_ADMIN_ROLE`.
      */
     function transferControl(address newController) public virtual {
-        require(control().isAdmin(_msgSender()), "E0201");
+        require(controller() == _msgSender(), "E0201");
         _safeTransferControl(newController);
     }
 
@@ -84,11 +76,13 @@ contract NativasFactory is Context, Controllable {
     function setHolder(
         address entity,
         uint256 id,
+        string memory nin,
         string memory name,
+        address controller_,
         address operator
     ) public virtual {
-        require(control().isEditor(_msgSender()), "E0201");
-        _setHolder(entity, id, name, operator);
+        require(controller() == _msgSender(), "E0201");
+        _setHolder(entity, id, nin, name, operator, controller_);
     }
 
     /**
@@ -97,11 +91,13 @@ contract NativasFactory is Context, Controllable {
     function _setHolder(
         address entity,
         uint256 id,
+        string memory nin,
         string memory name,
+        address controller,
         address operator
     ) internal virtual {
         address holder = _template.clone();
-        IERC1155Holder(holder).init(entity, operator, id, name);
+        IERC1155Holder(holder).init(entity, operator, controller, id, nin, name);
         _holders[id] = holder;
         emit HolderCreated(id, holder);
     }

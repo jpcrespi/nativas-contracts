@@ -10,6 +10,7 @@ import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 import "../../interfaces/erc1155/IERC1155.sol";
 import "../../interfaces/erc1155/IERC1155Holder.sol";
 import "../../interfaces/erc1155/IERC1155TokenReceiver.sol";
+import "../access/Controllable.sol";
 
 /**
  * @title ERC1155TokenReceiver implmentation
@@ -17,12 +18,14 @@ import "../../interfaces/erc1155/IERC1155TokenReceiver.sol";
 contract NativasHolder is
     Context,
     ERC165,
+    Controllable,
     Initializable,
     IERC1155Holder,
     IERC1155TokenReceiver
 {
     // Holder metadata
     uint256 internal _id;
+    string internal _nin;
     string internal _name;
 
     /**
@@ -31,10 +34,12 @@ contract NativasHolder is
     constructor(
         address entity_,
         address operator_,
+        address controller_,
         uint256 id_,
+        string memory nin_,
         string memory name_
-    ) {
-        init(entity_, operator_, id_, name_);
+    ) Controllable(controller_) {
+        init(entity_, operator_, controller_, id_, nin_, name_);
     }
 
     /**
@@ -43,12 +48,16 @@ contract NativasHolder is
     function init(
         address entity_,
         address operator_,
+        address controller_,
         uint256 id_,
+        string memory nin_,
         string memory name_
     ) public initializer {
         _id = id_;
-        _name = name_;
-        IERC1155(entity_).setApprovalForAll(operator_, true);
+        _nin = nin_;
+        _setName(name_);
+        _safeTransferControl(controller_);
+        _setApprovalForAll(entity_, operator_, true);
     }
 
     /**
@@ -56,6 +65,13 @@ contract NativasHolder is
      */
     function id() public view virtual returns (uint256) {
         return _id;
+    }
+
+    /**
+     * @return nin national indentifier number
+     */
+    function nin() public view virtual returns (string memory) {
+        return _nin;
     }
 
     /**
@@ -79,6 +95,56 @@ contract NativasHolder is
             interfaceId == type(IERC1155TokenReceiver).interfaceId ||
             interfaceId == type(IERC1155Holder).interfaceId ||
             super.supportsInterface(interfaceId);
+    }
+
+    /**
+     * @dev See {Controllable-_safeTransferControl}.
+     */
+    function transferControl(address newController) public virtual {
+        require(controller() == _msgSender(), "E0201");
+        _safeTransferControl(newController);
+    }
+
+    /**
+     * @dev
+     */
+    function setApprovalForAll(
+        address entity_,
+        address operator_,
+        bool approved_
+    ) public virtual {
+        require(controller() == _msgSender(), "E0201");
+        _setApprovalForAll(entity_, operator_, approved_);
+    }
+
+    /**
+     * @dev
+     */
+    function setName(
+        string memory name_
+    ) public virtual {
+        require(controller() == _msgSender(), "E0201");
+        _setName(name_);
+    }
+
+    /**
+     * @dev
+     */
+    function _setApprovalForAll(
+        address entity_, 
+        address operator_,
+        bool approved_
+    ) internal virtual {
+        IERC1155(entity_).setApprovalForAll(operator_, approved_);
+    }
+
+    /**
+     * @dev
+     */
+    function _setName(
+        string memory name_
+    ) internal virtual {
+        _name = name_;
     }
 
     /**

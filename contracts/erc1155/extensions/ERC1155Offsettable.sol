@@ -16,7 +16,7 @@ contract ERC1155Offsettable is
     ERC1155Burnable, 
     ERC1155Mintable 
 {
-    address internal _catalog;
+    address internal _log;
     mapping(uint256 => bool) private _offsettable;
 
     /**
@@ -61,8 +61,8 @@ contract ERC1155Offsettable is
      /**
      * @dev
      */
-    function offsetCatalog() public view virtual returns(address) {
-        return _catalog;
+    function offsetLog() public view virtual returns(address) {
+        return _log;
     }
 
     /**
@@ -75,8 +75,8 @@ contract ERC1155Offsettable is
     /**
      * @dev
      */
-    function _setOffsetCatalog(address catalog_) public virtual {
-        _catalog = catalog_;
+    function _setOffsetLog(address log_) public virtual {
+        _log = log_;
     }
 
     /**
@@ -124,7 +124,7 @@ contract ERC1155Offsettable is
         uint256 value,
         string memory info
     ) internal virtual {
-        require(_catalog != address(0), "E0512");
-        IERC1155Offsettable(_catalog).offset(account, tokenId, value, info);
+        require(_log != address(0), "E0512");
+        IERC1155Offsettable(_log).offset(account, tokenId, value, info);
     }
 }

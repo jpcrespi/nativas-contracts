@@ -148,7 +148,7 @@ contract NativasHolder is
         address operator_,
         bool approved_
     ) internal virtual {
-        if (IERC165(entity_).supportsInterface(type(IERC1155).interfaceId)) {
+        if (entity_ != address(0) && IERC165(entity_).supportsInterface(type(IERC1155).interfaceId)) {
             IERC1155(entity_).setApprovalForAll(operator_, approved_);
         }
     }

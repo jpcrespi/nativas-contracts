@@ -28,13 +28,12 @@ contract OffsetBook is Context, Controllable {
     mapping(address => uint256) private _offsetCount;
 
     /**
-     * @dev Set NativasHolder contract template.
+     * @dev Set Offset contract controller.
      */
-    constructor() Controllable(_msgSender())  {
-    }
+    constructor() Controllable(_msgSender())  { }
 
     /**
-     * @dev
+     * @dev Get offset data from and account and an index.
      */
     function getOffsetValue(address account, uint256 index)
         public
@@ -51,7 +50,7 @@ contract OffsetBook is Context, Controllable {
     }
 
     /**
-     * @dev
+     * @dev Get the amount of offsets by account
      */
     function getOffsetCount(address account)
         public
@@ -62,11 +61,11 @@ contract OffsetBook is Context, Controllable {
     }
 
     /**
-     * @dev See {NativasFactory-_setHolder}
+     * @dev See {OffsetBook-_offset}
      *
      * Requirements:
      *
-     * - the caller must be the contract owener.
+     * - the caller must be the controller.
      */
     function offset(
         address account,

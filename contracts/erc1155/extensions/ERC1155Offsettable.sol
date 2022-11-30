@@ -19,6 +19,10 @@ contract ERC1155Offsettable is
     address internal _book;
     mapping(uint256 => bool) private _offsettable;
 
+    constructor() {
+        _book = address(new OffsetBook());
+    }
+
     /**
      * @dev
      */

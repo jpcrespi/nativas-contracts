@@ -6,6 +6,7 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
+import "@openzeppelin/contracts/utils/introspection/IERC165.sol";
 import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 import "../../interfaces/erc1155/IERC1155.sol";
 import "../../interfaces/erc1155/IERC1155Holder.sol";
@@ -106,7 +107,11 @@ contract NativasHolder is
     }
 
     /**
-     * @dev
+     * @dev See {NativasHolder-_setApprovalForAll}.
+     *
+     * Requirements:
+     *
+     * - the caller must be the controller.
      */
     function setApprovalForAll(
         address entity_,
@@ -118,7 +123,11 @@ contract NativasHolder is
     }
 
     /**
-     * @dev
+     * @dev See {NativasHolder-_setName}.
+     *
+     * Requirements:
+     *
+     * - the caller must be the controller.
      */
     function setName(
         string memory name_
@@ -128,18 +137,24 @@ contract NativasHolder is
     }
 
     /**
-     * @dev
+     * @dev See {IERC1155-setApprovalForAll}.
+     *
+     * Requirements:
+     *
+     * - the entity must be an ERC1155 contract
      */
     function _setApprovalForAll(
         address entity_, 
         address operator_,
         bool approved_
     ) internal virtual {
-        IERC1155(entity_).setApprovalForAll(operator_, approved_);
+        if (IERC165(entity_).supportsInterface(type(IERC1155).interfaceId)) {
+            IERC1155(entity_).setApprovalForAll(operator_, approved_);
+        }
     }
 
     /**
-     * @dev
+     * @dev Sets `name_` as the holder name.
      */
     function _setName(
         string memory name_

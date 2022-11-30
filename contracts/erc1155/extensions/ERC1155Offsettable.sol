@@ -5,7 +5,7 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "../../offset/OffsetBook.sol";
+import "../../offset/NativasOffset.sol";
 import "./ERC1155Burnable.sol";
 import "./ERC1155Mintable.sol";
 
@@ -20,7 +20,7 @@ contract ERC1155Offsettable is
     mapping(uint256 => bool) private _offsettable;
 
     constructor() {
-        _book = address(new OffsetBook());
+        _book = address(new NativasOffset());
     }
 
     /**
@@ -72,7 +72,7 @@ contract ERC1155Offsettable is
     /**
      * @dev
      */
-    function _setOffsettable(uint256 tokenId, bool enabled) public virtual {
+    function _setOffsettable(uint256 tokenId, bool enabled) internal virtual {
         _offsettable[tokenId] = enabled;
     }
 
@@ -121,6 +121,6 @@ contract ERC1155Offsettable is
         uint256 value,
         string memory info
     ) internal virtual {
-        OffsetBook(_book).offset(account, tokenId, value, info);
+        NativasOffset(_book).offset(account, tokenId, value, info);
     }
 }

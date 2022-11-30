@@ -11,7 +11,7 @@ import "../access/Controllable.sol";
 /**
  * @dev Offset Implementation
  */
-contract OffsetBook is Context, Controllable {
+contract NativasOffset is Context, Controllable {
 
     /**
      * @dev Offset model

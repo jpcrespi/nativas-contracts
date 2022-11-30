@@ -104,7 +104,7 @@ contract NativasToken is
         uint256 id,
         uint256 value,
         bytes memory data
-    ) internal virtual {
+    ) public virtual {
         require(control().isBurner(_msgSender()), "ERC1155NE02");
         _safeBurn(account, id, value, data);
     }
@@ -121,7 +121,7 @@ contract NativasToken is
         uint256[] memory ids,
         uint256[] memory values,
         bytes memory data
-    ) internal virtual {
+    ) public virtual {
         require(control().isBurner(_msgSender()), "ERC1155NE03");
         _safeBurnBatch(account, ids, values, data);
     }

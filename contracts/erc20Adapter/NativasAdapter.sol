@@ -186,7 +186,7 @@ contract NativasAdapter is
     {
         address owner = _msgSender();
         uint256 currentAllowance = allowance(owner, spender);
-        require(currentAllowance >= subtractedValue, "E01");
+        require(currentAllowance >= subtractedValue, "ERC20AE01");
         unchecked {
             _approve(owner, spender, currentAllowance - subtractedValue);
         }
@@ -265,8 +265,8 @@ contract NativasAdapter is
         address spender,
         uint256 amount
     ) internal virtual {
-        require(owner != address(0), "E02");
-        require(spender != address(0), "E03");
+        require(owner != address(0), "ERC20AE02");
+        require(spender != address(0), "ERC20AE03");
 
         _allowances[owner][spender] = amount;
         emit Approval(owner, spender, amount);
@@ -286,8 +286,8 @@ contract NativasAdapter is
         uint256 amount
     ) internal virtual {
         uint256 currentAllowance = allowance(owner, spender);
-        require(currentAllowance != type(uint256).max, "E04");
-        require(currentAllowance >= amount, "E05");
+        require(currentAllowance != type(uint256).max, "ERC20AE05");
+        require(currentAllowance >= amount, "ERC20AE05");
         
         unchecked {
             _approve(owner, spender, currentAllowance - amount);

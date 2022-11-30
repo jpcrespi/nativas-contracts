@@ -52,7 +52,7 @@ contract NativasHolder is
         uint256 id_,
         string memory nin_,
         string memory name_
-    ) public initializer {
+    ) public virtual override initializer {
         _id = id_;
         _nin = nin_;
         _setName(name_);
@@ -101,7 +101,7 @@ contract NativasHolder is
      * @dev See {Controllable-_transferControl}.
      */
     function transferControl(address newController) public virtual {
-        require(controller() == _msgSender(), "E0201");
+        require(controller() == _msgSender(), "ERC1155RE01");
         _transferControl(newController);
     }
 
@@ -113,7 +113,7 @@ contract NativasHolder is
         address operator_,
         bool approved_
     ) public virtual {
-        require(controller() == _msgSender(), "E0201");
+        require(controller() == _msgSender(), "ERC1155RE02");
         _setApprovalForAll(entity_, operator_, approved_);
     }
 
@@ -123,7 +123,7 @@ contract NativasHolder is
     function setName(
         string memory name_
     ) public virtual {
-        require(controller() == _msgSender(), "E0201");
+        require(controller() == _msgSender(), "ERC1155RE03");
         _setName(name_);
     }
 

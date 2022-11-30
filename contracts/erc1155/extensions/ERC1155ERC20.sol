@@ -61,7 +61,7 @@ contract ERC1155ERC20 is ERC1155Supply, IERC1155ERC20 {
         uint256 amount,
         bytes memory data
     ) public virtual override {
-        require(_msgSender() == _adapters[id], "E0302");
+        require(_msgSender() == _adapters[id], "ERC1155AE01");
         _safeAdapterTransferFrom(operator, from, to, id, amount, data);
     }
 
@@ -112,7 +112,7 @@ contract ERC1155ERC20 is ERC1155Supply, IERC1155ERC20 {
         uint256 amount,
         bytes memory data
     ) internal virtual {
-        require(to != address(0), "E0303");
+        require(to != address(0), "ERC1155AE02");
         _transferFrom(operator, from, to, id, amount, data);
         _doSafeTransferAcceptanceCheck(operator, from, to, id, amount, data);
     }
@@ -134,7 +134,7 @@ contract ERC1155ERC20 is ERC1155Supply, IERC1155ERC20 {
     ) internal virtual override {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
         for (uint256 i = 0; i < ids.length; ++i) {
-            require(exists(ids[i]) == true, "E0304");           
+            require(exists(ids[i]) == true, "ERC1155AE03");           
         }
     }
 }

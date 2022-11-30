@@ -6,15 +6,12 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
-import "../../interfaces/erc1155/IERC1155Offsettable.sol";
 import "../access/Controllable.sol";
 
 /**
  * @dev Offset Implementation
  */
-contract NativasOffset is Context, IERC1155Offsettable {
-
-    address internal _entity;
+contract OffsetBook is Context, Controllable {
 
     /**
      * @dev Offset model
@@ -33,15 +30,7 @@ contract NativasOffset is Context, IERC1155Offsettable {
     /**
      * @dev Set NativasHolder contract template.
      */
-    constructor(address entity_) {
-        _entity = entity_;
-    }
-
-    /**
-     * @dev
-     */
-    function entity() public view returns(address) {
-        return _entity;
+    constructor() Controllable(_msgSender())  {
     }
 
     /**
@@ -84,8 +73,8 @@ contract NativasOffset is Context, IERC1155Offsettable {
         uint256 tokenId,
         uint256 value,
         string memory info
-    ) public virtual override {
-        require(_entity == _msgSender(), "E0204");
+    ) public virtual {
+        require(controller() == _msgSender(), "OFFSETE01");
         _offset(account, tokenId, value, info);
     }
 

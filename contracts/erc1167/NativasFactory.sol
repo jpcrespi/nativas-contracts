@@ -62,7 +62,7 @@ contract NativasFactory is Context, Controllable {
      * - the caller must have the `DEFAULT_ADMIN_ROLE`.
      */
     function transferControl(address newController) public virtual {
-        require(controller() == _msgSender(), "E0201");
+        require(controller() == _msgSender(), "ERC1167E01");
         _transferControl(newController);
     }
 
@@ -81,7 +81,7 @@ contract NativasFactory is Context, Controllable {
         address controller_,
         address operator
     ) public virtual {
-        require(controller() == _msgSender(), "E0201");
+        require(controller() == _msgSender(), "ERC1167E02");
         _setHolder(entity, id, nin, name, operator, controller_);
     }
 

@@ -5,7 +5,7 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "../../../interfaces/erc1155/IERC1155Offsettable.sol";
+import "../../offset/OffsetBook.sol";
 import "./ERC1155Burnable.sol";
 import "./ERC1155Mintable.sol";
 
@@ -16,7 +16,7 @@ contract ERC1155Offsettable is
     ERC1155Burnable, 
     ERC1155Mintable 
 {
-    address internal _log;
+    address internal _book;
     mapping(uint256 => bool) private _offsettable;
 
     /**
@@ -29,7 +29,7 @@ contract ERC1155Offsettable is
         string memory info,
         bytes memory data
     ) public virtual {
-        require(_isOwnerOrApproved(account), "E0501");
+        require(_isOwnerOrApproved(account), "ERC1155OE01");
         _burn(account, tokenId, value, data);
         _offset(account, tokenId, value, info);
     }
@@ -44,7 +44,7 @@ contract ERC1155Offsettable is
         string[] memory infos,
         bytes memory data
     ) public virtual {
-        require(_isOwnerOrApproved(account), "E0502");
+        require(_isOwnerOrApproved(account), "ERC1155OE02");
         _burnBatch(account, tokenIds, values, data);
         for (uint256 i = 0; i < tokenIds.length; i++) {
             _offset(account, tokenIds[i], values[i], infos[i]);
@@ -61,8 +61,8 @@ contract ERC1155Offsettable is
      /**
      * @dev
      */
-    function offsetLog() public view virtual returns(address) {
-        return _log;
+    function offsetBook() public view virtual returns(address) {
+        return _book;
     }
 
     /**
@@ -75,13 +75,6 @@ contract ERC1155Offsettable is
     /**
      * @dev
      */
-    function _setOffsetLog(address log_) public virtual {
-        _log = log_;
-    }
-
-    /**
-     * @dev
-     */
     function _swap(
         address account,
         uint256 fromId,
@@ -89,8 +82,8 @@ contract ERC1155Offsettable is
         uint256 value,
         bytes memory data
     ) internal virtual {
-        require(_offsettable[fromId] == false, "E0509");
-        require(_offsettable[toId] == true, "E0510");
+        require(_offsettable[fromId] == false, "ERC1155OE03");
+        require(_offsettable[toId] == true, "ERC1155OE04");
         _burn(account, fromId, value, data);
         _mint(account, toId, value, data);
     }
@@ -106,10 +99,10 @@ contract ERC1155Offsettable is
         bytes memory data
     ) internal virtual {
         for (uint256 i = 0; i < fromIds.length; i++) {
-            require(_offsettable[fromIds[i]] == false, "E0511");
+            require(_offsettable[fromIds[i]] == false, "ERC1155OE05");
         }
         for (uint256 i = 0; i < toIds.length; i++) {
-            require(_offsettable[toIds[i]] == true, "E0512");
+            require(_offsettable[toIds[i]] == true, "ERC1155OE06");
         }
         _burnBatch(account, fromIds, values, data);
         _mintBatch(account, toIds, values, data);
@@ -124,7 +117,6 @@ contract ERC1155Offsettable is
         uint256 value,
         string memory info
     ) internal virtual {
-        require(_log != address(0), "E0512");
-        IERC1155Offsettable(_log).offset(account, tokenId, value, info);
+        OffsetBook(_book).offset(account, tokenId, value, info);
     }
 }

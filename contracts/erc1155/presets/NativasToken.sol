@@ -10,6 +10,7 @@ import "../extensions/ERC1155Pausable.sol";
 import "../extensions/ERC1155Offsettable.sol";
 import "../extensions/ERC1155URIStorable.sol";
 import "../extensions/ERC1155ERC20.sol";
+
 /**
  * @dev ERC1155 preset
  */
@@ -44,7 +45,7 @@ contract NativasToken is
     }
 
     /**
-     * @dev
+     * @dev wrap controller address into IERC1155Control interface.
      */
     function control() internal view returns(IERC1155Control) {
         return IERC1155Control(_controller);
@@ -64,7 +65,7 @@ contract NativasToken is
     }
 
     /**
-     *
+     * @dev Set token metadata
      */
     function setMetadata(
         uint256 id,
@@ -80,23 +81,23 @@ contract NativasToken is
     }
 
     /**
-     * @dev See {Controllable-_safeTransferControl}.
+     * @dev See {Controllable-_transferControl}.
      *
      * Requirements:
      *
-     * - the caller must have the `DEFAULT_ADMIN_ROLE`.
+     * - the caller must be admin
      */
     function transferControl(address newController) public virtual {
-        require(control().isAdmin(_msgSender()), "E0201");
+        require(control().isAdmin(_msgSender()), "ERC1155NE01");
         _transferControl(newController);
     }
 
     /**
-     * @dev See {ERC1155Accessible-_burn}.
+     * @dev See {ERC1155Burnable-_safeBurn}.
      *
      * Requirements:
      *
-     * - the caller must have the `BURNER_ROLE`.
+     * - the caller must be burner.
      */
     function burn(
         address account,
@@ -104,16 +105,16 @@ contract NativasToken is
         uint256 value,
         bytes memory data
     ) internal virtual {
-        require(control().isBurner(_msgSender()), "E0201");
+        require(control().isBurner(_msgSender()), "ERC1155NE02");
         _safeBurn(account, id, value, data);
     }
 
     /**
-     * @dev See {ERC1155Accessible-_burnBatch}.
+     * @dev See {ERC1155Burnable-_safeBurnBatch}.
      *
      * Requirements:
      *
-     * - the caller must have the `BURNER_ROLE`.
+     * - the caller must be burner.
      */
     function burnBatch(
         address account,
@@ -121,16 +122,16 @@ contract NativasToken is
         uint256[] memory values,
         bytes memory data
     ) internal virtual {
-        require(control().isBurner(_msgSender()), "E0203");
+        require(control().isBurner(_msgSender()), "ERC1155NE03");
         _safeBurnBatch(account, ids, values, data);
     }
 
     /**
-     * @dev See {ERC1155Accessible-_mint}.
+     * @dev See {ERC1155Mintable-_mint}.
      *
      * Requirements:
      *
-     * - the caller must have the `MINTER_ROLE`.
+     * - the caller must be minter.
      */
     function mint(
         address to,
@@ -138,16 +139,16 @@ contract NativasToken is
         uint256 amount,
         bytes memory data
     ) public virtual {
-        require(control().isMinter(_msgSender()), "E0401");
+        require(control().isMinter(_msgSender()), "ERC1155NE04");
         _mint(to, id, amount, data);
     }
 
     /**
-     * @dev See {ERC1155Accessible-_mintBatch}.
+     * @dev See {ERC1155Mintable-_mintBatch}.
      *
      * Requirements:
      *
-     * - the caller must have the `MINTER_ROLE`.
+     * - the caller must be minter.
      */
     function mintBatch(
         address to,
@@ -155,7 +156,7 @@ contract NativasToken is
         uint256[] memory amounts,
         bytes memory data
     ) public virtual {
-        require(control().isMinter( _msgSender()), "E0402");
+        require(control().isMinter( _msgSender()), "ERC1155NE05");
         _mintBatch(to, ids, amounts, data);
     }
 
@@ -164,7 +165,7 @@ contract NativasToken is
      *
      * Requirements:
      *
-     * - the caller must have the `EDITOR_ROLE`.
+     * - the caller must be adapter.
      */
     function setAdapter(
         uint256 id,
@@ -172,35 +173,31 @@ contract NativasToken is
         string memory symbol,
         uint8 decimals
     ) public virtual {
-        require(control().isAdapter(_msgSender()), "E0301");
+        require(control().isAdapter(_msgSender()), "ERC1155NE06");
         _setAdapter(id, name, symbol, decimals);
     }
 
     /**
-     * @dev Pauses all token transfers.
-     *
-     * See {Pausable-_pause}.
+     * @dev See {Pausable-_pause}.
      *
      * Requirements:
      *
-     * - the caller must have the `PAUSER_ROLE`.
+     * - the caller must be pauser.
      */
     function pause() public virtual {
-        require(control().isPauser(_msgSender()), "E0601");
+        require(control().isPauser(_msgSender()), "ERC1155NE07");
         _pause();
     }
 
     /**
-     * @dev Unpauses all token transfers.
-     *
-     * See {Pausable-_unpause}.
+     * @dev See {Pausable-_unpause}.
      *
      * Requirements:
      *
-     * - the caller must have the `PAUSER_ROLE`.
+     * - the caller must be pauser.
      */
     function unpause() public virtual {
-        require(control().isPauser(_msgSender()), "E0602");
+        require(control().isPauser(_msgSender()), "ERC1155NE08");
         _unpause();
     }
 
@@ -209,10 +206,10 @@ contract NativasToken is
      *
      * Requeriments:
      *
-     * - the caller must have the `EDITOR_ROLE`.
+     * - the caller must be editor
      */
     function setBaseURI(string memory baseURI) public virtual {
-        require(control().isEditor(_msgSender()), "E0801");
+        require(control().isEditor(_msgSender()), "ERC1155NE09");
         _setBaseURI(baseURI);
     }
 
@@ -221,39 +218,31 @@ contract NativasToken is
      *
      * Requeriments:
      *
-     * - the caller must have the `EDITOR_ROLE`.
+     * - the caller must be editor.
      */
     function setURI(uint256 tokenId, string memory tokenURI) public virtual {
-        require(control().isEditor(_msgSender()), "E0802");
+        require(control().isEditor(_msgSender()), "ERC1155NE10");
         _setURI(tokenId, tokenURI);
     }
 
     /**
-     * @dev
+     * @dev See {ERC1155Offsetter-_setOffsettable}
      *
      * Requeriments:
      *
-     * - the caller must have the `OFFSETER_ROLE`.
+     * - the caller must be offsetter
      */
     function setOffsettable(uint256 tokenId, bool enabled) public virtual {
-        require(control().isOffsetter(_msgSender()), "E0504");
+        require(control().isOffsetter(_msgSender()), "ERC1155NE11");
         _setOffsettable(tokenId, enabled);
     }
 
     /**
-     * @dev
+     * @dev See {ERC1155Offsetter-_swap}
      *
      * Requeriments:
      *
-     * - the caller must have the `OFFSETER_ROLE`.
-     */
-    function setOffsetCatalog(address catalog_) public virtual {
-        require(control().isOffsetter(_msgSender()), "E0504");
-        _setOffsetCatalog(catalog_);
-    }
-
-    /**
-     * @dev
+     * - the caller must be offsetter
      */
     function swap(
         address account,
@@ -262,12 +251,16 @@ contract NativasToken is
         uint256 value,
         bytes memory data
     ) public virtual {
-        require(control().isOffsetter(_msgSender()), "E0505");
+        require(control().isOffsetter(_msgSender()), "ERC1155NE12");
         _swap(account, fromId, toId, value, data);
     }
 
     /**
-     * @dev
+     * @dev See {ERC1155Offsetter-_swapBatch}
+     *
+     * Requeriments:
+     *
+     * - the caller must be offsetter
      */
     function swapBatch(
         address account,
@@ -276,12 +269,12 @@ contract NativasToken is
         uint256[] memory values,
         bytes memory data
     ) public virtual {
-        require(control().isOffsetter(_msgSender()), "E0507");
+        require(control().isOffsetter(_msgSender()), "ERC1155NE13");
         _swapBatch(account, fromTokenIds, toTokenIds, values, data);
     }
 
     /**
-     *
+     * @dev See {ERC1155-_beforeTokenTransfer}
      */
     function _beforeTokenTransfer(
         address operator,

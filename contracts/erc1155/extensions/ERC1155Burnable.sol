@@ -25,7 +25,7 @@ contract ERC1155Burnable is ERC1155 {
         uint256 value,
         bytes memory data
     ) internal virtual {
-        require(_isOwnerOrApproved(account), "E0202");
+        require(_isOwnerOrApproved(account), "ERC1155BE01");
         _burn(account, id, value, data);
     }
 
@@ -43,7 +43,7 @@ contract ERC1155Burnable is ERC1155 {
         uint256[] memory values,
         bytes memory data
     ) internal virtual {
-        require(_isOwnerOrApproved(account), "E0204");
+        require(_isOwnerOrApproved(account), "ERC1155BE02");
         _burnBatch(account, ids, values, data);
     }
 
@@ -63,7 +63,7 @@ contract ERC1155Burnable is ERC1155 {
         uint256 amount,
         bytes memory data
     ) internal virtual {
-        require(from != address(0), "E0101");
+        require(from != address(0), "ERC1155BE03");
 
         address operator = _msgSender();
         uint256[] memory ids = _asSingletonArray(id);
@@ -72,7 +72,7 @@ contract ERC1155Burnable is ERC1155 {
         _beforeTokenTransfer(operator, from, address(0), ids, amounts, data);
 
         uint256 fromBalance = _balances[id][from];
-        require(fromBalance >= amount, "E0102");
+        require(fromBalance >= amount, "ERC1155BE04");
         unchecked {
             _balances[id][from] = fromBalance - amount;
         }
@@ -98,8 +98,8 @@ contract ERC1155Burnable is ERC1155 {
         uint256[] memory amounts,
         bytes memory data
     ) internal virtual {
-        require(from != address(0), "E0103");
-        require(ids.length == amounts.length, "E0104");
+        require(from != address(0), "ERC1155BE05");
+        require(ids.length == amounts.length, "ERC1155BE06");
 
         address operator = _msgSender();
 
@@ -109,7 +109,7 @@ contract ERC1155Burnable is ERC1155 {
             uint256 id = ids[i];
             uint256 amount = amounts[i];
             uint256 fromBalance = _balances[id][from];
-            require(fromBalance >= amount, "E0105");
+            require(fromBalance >= amount, "ERC1155BE07");
             unchecked {
                 _balances[id][from] = fromBalance - amount;
             }

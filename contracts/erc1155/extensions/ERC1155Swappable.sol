@@ -5,7 +5,6 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "../../offset/NativasOffset.sol";
 import "./ERC1155Burnable.sol";
 import "./ERC1155Mintable.sol";
 

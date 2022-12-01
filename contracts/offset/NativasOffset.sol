@@ -34,6 +34,14 @@ contract NativasOffset is Context, Controllable, IERC1155Logger {
     constructor() Controllable(_msgSender())  { }
 
     /**
+     * @dev See {Controllable-_transferControl}.
+     */
+    function transferControl(address newController) public virtual {
+        require(controller() == _msgSender(), "OFFSETE02");
+        _transferControl(newController);
+    }
+
+    /**
      * @dev Get offset data from and account and an index.
      */
     function getOffsetValue(address account, uint256 index)
@@ -74,7 +82,7 @@ contract NativasOffset is Context, Controllable, IERC1155Logger {
         uint256 value,
         string memory info
     ) public virtual override {
-        require(controller() == _msgSender(), "OFFSETE01");
+        require(controller() == _msgSender(), "OFFSETE02");
         _offset(account, tokenId, value, info);
     }
 

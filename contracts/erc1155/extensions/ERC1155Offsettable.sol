@@ -5,7 +5,7 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "../../offset/NativasOffset.sol";
+import "../../../interfaces/erc1155/IERC1155Logger.sol";
 import "./ERC1155Burnable.sol";
 
 /**
@@ -13,13 +13,13 @@ import "./ERC1155Burnable.sol";
  */
 contract ERC1155Offsettable is ERC1155Burnable
 {
-    NativasOffset internal _logger;
+    IERC1155Logger internal _logger;
 
-    constructor() {
-        _logger = new NativasOffset();
+    constructor(address logger_) {
+        _logger = IERC1155Logger(logger_);
     }
 
-    function offsetLog() public view virtual returns(address) {
+    function logger() public view virtual returns(address) {
         return address(_logger);
     }
 

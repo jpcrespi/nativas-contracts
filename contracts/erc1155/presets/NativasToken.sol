@@ -28,11 +28,13 @@ contract NativasToken is
     constructor(
         address controller_,
         string memory uri_,
-        address template_
+        address template_,
+        address logger_
     )
         Controllable(controller_)
         ERC1155URIStorable(uri_)
         ERC1155ERC20(template_)
+        ERC1155Offsettable(logger_)
     {
         _control = IERC1155Control(controller_);
     }

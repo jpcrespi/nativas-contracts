@@ -25,15 +25,15 @@ interface IERC1155Control {
         address account
     ) external returns(bool);
 
-    function isOffsetter(
-        address account
-    ) external returns(bool);
-
     function isPauser(
         address account
     ) external returns(bool);
 
     function isEditor(
+        address account
+    ) external returns(bool);
+
+    function isSwapper(
         address account
     ) external returns(bool);
 }

@@ -18,7 +18,7 @@ contract NativasControl is
     bytes32 public constant BURNER_ROLE = keccak256("BURNER_ROLE");
     bytes32 public constant EDITOR_ROLE = keccak256("EDITOR_ROLE");
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
-    bytes32 public constant OFFSETER_ROLE = keccak256("OFFSETER_ROLE");
+    bytes32 public constant SWAPPER_ROLE = keccak256("SWAPPER_ROLE");
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
 
     /**
@@ -29,9 +29,9 @@ contract NativasControl is
         _grantRole(BURNER_ROLE, _msgSender());
         _grantRole(ADAPTER_ROLE, _msgSender());
         _grantRole(MINTER_ROLE, _msgSender());
-        _grantRole(OFFSETER_ROLE, _msgSender());
         _grantRole(PAUSER_ROLE, _msgSender());
         _grantRole(EDITOR_ROLE, _msgSender());
+        _grantRole(SWAPPER_ROLE, _msgSender());
     }
 
     function isAdmin(
@@ -58,12 +58,6 @@ contract NativasControl is
         return hasRole(MINTER_ROLE, account);   
     }
 
-    function isOffsetter(
-        address account
-    ) public view virtual override returns(bool) {
-        return hasRole(OFFSETER_ROLE, account);
-    }
-
     function isPauser(
         address account
     ) public view virtual override returns(bool) {
@@ -74,5 +68,11 @@ contract NativasControl is
         address account
     ) public view virtual override returns(bool) {
         return hasRole(EDITOR_ROLE, account);
+    }
+
+    function isSwapper(
+        address account
+    ) public view virtual override returns(bool) {
+        return hasRole(SWAPPER_ROLE, account);
     }
 }

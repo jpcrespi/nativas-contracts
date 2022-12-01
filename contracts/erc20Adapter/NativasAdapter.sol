@@ -26,7 +26,8 @@ contract NativasAdapter is
     IERC20Approve
 {
     // IERC1155ERC20
-    address internal _entity;
+    IERC1155ERC20 internal _entity;
+    // Token ID
     uint256 internal _id;
     // IERC20Metadata
     string internal _name;
@@ -55,7 +56,7 @@ contract NativasAdapter is
         string memory symbol_,
         uint8 decimals_
     ) public override initializer {
-        _entity = _msgSender();
+        _entity = IERC1155ERC20(_msgSender());
         _id = id_;
         _name = name_;
         _symbol = symbol_;
@@ -83,7 +84,7 @@ contract NativasAdapter is
      * @dev ERC1155 token address.
      */
     function entity() public view virtual returns (address) {
-        return _entity;
+        return address(_entity);
     }
 
     /**
@@ -118,7 +119,7 @@ contract NativasAdapter is
      * @dev See {IERC20-totalSupply}.
      */
     function totalSupply() public view virtual override returns (uint256) {
-        return IERC1155ERC20(_entity).totalSupply(_id);
+        return _entity.totalSupply(_id);
     }
 
     /**
@@ -131,7 +132,7 @@ contract NativasAdapter is
         override
         returns (uint256)
     {
-        return IERC1155ERC20(_entity).balanceOf(account, _id);
+        return _entity.balanceOf(account, _id);
     }
 
     /**
@@ -239,7 +240,7 @@ contract NativasAdapter is
         address to,
         uint256 amount
     ) internal virtual {
-        IERC1155ERC20(_entity).safeAdapterTransferFrom(
+        _entity.safeAdapterTransferFrom(
             operator,
             from,
             to,

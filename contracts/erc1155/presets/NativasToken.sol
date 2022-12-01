@@ -7,6 +7,7 @@ pragma solidity ^0.8.0;
 import "../../../interfaces/erc1155/IERC1155Control.sol";
 import "../../access/Controllable.sol";
 import "../extensions/ERC1155Pausable.sol";
+import "../extensions/ERC1155Swappable.sol";
 import "../extensions/ERC1155Offsettable.sol";
 import "../extensions/ERC1155URIStorable.sol";
 import "../extensions/ERC1155ERC20.sol";
@@ -17,19 +18,24 @@ import "../extensions/ERC1155ERC20.sol";
 contract NativasToken is
     Controllable,
     ERC1155Pausable,
+    ERC1155Swappable,
     ERC1155Offsettable,
     ERC1155URIStorable,
     ERC1155ERC20
 {
+    IERC1155Control internal _control;
+
     constructor(
-        address controller_, 
-        string memory uri_, 
+        address controller_,
+        string memory uri_,
         address template_
     )
         Controllable(controller_)
         ERC1155URIStorable(uri_)
         ERC1155ERC20(template_)
-    {}
+    {
+        _control = IERC1155Control(controller_);
+    }
 
     /**
      * @dev See {IERC165-supportsInterface}.
@@ -42,13 +48,6 @@ contract NativasToken is
         returns (bool success)
     {
         return super.supportsInterface(interfaceId);
-    }
-
-    /**
-     * @dev wrap controller address into IERC1155Control interface.
-     */
-    function control() internal view returns(IERC1155Control) {
-        return IERC1155Control(_controller);
     }
 
     /**
@@ -88,7 +87,7 @@ contract NativasToken is
      * - the caller must be admin
      */
     function transferControl(address newController) public virtual {
-        require(control().isAdmin(_msgSender()), "ERC1155NE01");
+        require(_control.isAdmin(_msgSender()), "ERC1155NE01");
         _transferControl(newController);
     }
 
@@ -105,7 +104,7 @@ contract NativasToken is
         uint256 value,
         bytes memory data
     ) public virtual {
-        require(control().isBurner(_msgSender()), "ERC1155NE02");
+        require(_control.isBurner(_msgSender()), "ERC1155NE02");
         _safeBurn(account, id, value, data);
     }
 
@@ -122,7 +121,7 @@ contract NativasToken is
         uint256[] memory values,
         bytes memory data
     ) public virtual {
-        require(control().isBurner(_msgSender()), "ERC1155NE03");
+        require(_control.isBurner(_msgSender()), "ERC1155NE03");
         _safeBurnBatch(account, ids, values, data);
     }
 
@@ -139,7 +138,7 @@ contract NativasToken is
         uint256 amount,
         bytes memory data
     ) public virtual {
-        require(control().isMinter(_msgSender()), "ERC1155NE04");
+        require(_control.isMinter(_msgSender()), "ERC1155NE04");
         _mint(to, id, amount, data);
     }
 
@@ -156,7 +155,7 @@ contract NativasToken is
         uint256[] memory amounts,
         bytes memory data
     ) public virtual {
-        require(control().isMinter( _msgSender()), "ERC1155NE05");
+        require(_control.isMinter( _msgSender()), "ERC1155NE05");
         _mintBatch(to, ids, amounts, data);
     }
 
@@ -173,7 +172,7 @@ contract NativasToken is
         string memory symbol,
         uint8 decimals
     ) public virtual {
-        require(control().isAdapter(_msgSender()), "ERC1155NE06");
+        require(_control.isAdapter(_msgSender()), "ERC1155NE06");
         _setAdapter(id, name, symbol, decimals);
     }
 
@@ -185,7 +184,7 @@ contract NativasToken is
      * - the caller must be pauser.
      */
     function pause() public virtual {
-        require(control().isPauser(_msgSender()), "ERC1155NE07");
+        require(_control.isPauser(_msgSender()), "ERC1155NE07");
         _pause();
     }
 
@@ -197,7 +196,7 @@ contract NativasToken is
      * - the caller must be pauser.
      */
     function unpause() public virtual {
-        require(control().isPauser(_msgSender()), "ERC1155NE08");
+        require(_control.isPauser(_msgSender()), "ERC1155NE08");
         _unpause();
     }
 
@@ -209,7 +208,7 @@ contract NativasToken is
      * - the caller must be editor
      */
     function setBaseURI(string memory baseURI) public virtual {
-        require(control().isEditor(_msgSender()), "ERC1155NE09");
+        require(_control.isEditor(_msgSender()), "ERC1155NE09");
         _setBaseURI(baseURI);
     }
 
@@ -221,7 +220,7 @@ contract NativasToken is
      * - the caller must be editor.
      */
     function setURI(uint256 tokenId, string memory tokenURI) public virtual {
-        require(control().isEditor(_msgSender()), "ERC1155NE10");
+        require(_control.isEditor(_msgSender()), "ERC1155NE10");
         _setURI(tokenId, tokenURI);
     }
 
@@ -233,7 +232,7 @@ contract NativasToken is
      * - the caller must be offsetter
      */
     function setOffsettable(uint256 tokenId, bool enabled) public virtual {
-        require(control().isOffsetter(_msgSender()), "ERC1155NE11");
+        require(_control.isSwapper(_msgSender()), "ERC1155NE11");
         _setOffsettable(tokenId, enabled);
     }
 
@@ -251,7 +250,7 @@ contract NativasToken is
         uint256 value,
         bytes memory data
     ) public virtual {
-        require(control().isOffsetter(_msgSender()), "ERC1155NE12");
+        require(_control.isSwapper(_msgSender()), "ERC1155NE12");
         _swap(account, fromId, toId, value, data);
     }
 
@@ -269,7 +268,7 @@ contract NativasToken is
         uint256[] memory values,
         bytes memory data
     ) public virtual {
-        require(control().isOffsetter(_msgSender()), "ERC1155NE13");
+        require(_control.isSwapper(_msgSender()), "ERC1155NE13");
         _swapBatch(account, fromTokenIds, toTokenIds, values, data);
     }
 

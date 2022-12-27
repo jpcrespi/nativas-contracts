@@ -17,15 +17,25 @@ contract NativasOffset is Context, Controllable, IERC1155Logger {
     /**
      * @dev Offset model
      */
-    struct Offset {
+    struct OffsetModel {
         uint256 tokenId;
         uint256 value;
         uint256 date;
         string info;
     }
 
+    event PerformOffset(
+        address indexed account,
+        uint256 indexed tokenId,
+        uint256 value,
+        string info
+    );
+
+    // Mapping from token ID to account balances
+    mapping(uint256 => mapping(address => uint256)) internal _balances;
     // offset data
-    mapping(address => Offset[]) private _offsets;
+    mapping(address => OffsetModel[]) private _offsets;
+    // offset count
     mapping(address => uint256) private _offsetCount;
 
     /**
@@ -42,6 +52,47 @@ contract NativasOffset is Context, Controllable, IERC1155Logger {
     }
 
     /**
+     * @dev See {IERC1155-balanceOf}.
+     *
+     * Requirements:
+     *
+     * - `account` cannot be the zero address.
+     */
+    function balanceOf(address account, uint256 tokenId)
+        public
+        view
+        virtual
+        returns (uint256)
+    {
+        require(account != address(0), "ERC1155E01");
+        return _balances[tokenId][account];
+    }
+
+    /**
+     * @dev See {IERC1155-balanceOfBatch}.
+     *
+     * Requirements:
+     *
+     * - `accounts` and `ids` must have the same length.
+     */
+    function balanceOfBatch(address[] memory accounts, uint256[] memory tokenIds)
+        public
+        view
+        virtual
+        returns (uint256[] memory)
+    {
+        require(accounts.length == tokenIds.length, "ERC1155E02");
+
+        uint256[] memory batchBalances = new uint256[](accounts.length);
+
+        for (uint256 i = 0; i < accounts.length; ++i) {
+            batchBalances[i] = balanceOf(accounts[i], tokenIds[i]);
+        }
+
+        return batchBalances;
+    }
+
+    /**
      * @dev Get offset data from and account and an index.
      */
     function getOffsetValue(address account, uint256 index)
@@ -54,7 +105,7 @@ contract NativasOffset is Context, Controllable, IERC1155Logger {
             uint256 date,
             string memory info
         ) {
-        Offset memory data = _offsets[account][index];
+        OffsetModel memory data = _offsets[account][index];
         return (data.tokenId, data.value, data.date, data.info);
     }
 
@@ -95,7 +146,8 @@ contract NativasOffset is Context, Controllable, IERC1155Logger {
         uint256 value,
         string memory info
     ) internal virtual {
+        _balances[tokenId][account] += value;
         _offsetCount[account]++;
-        _offsets[account].push(Offset(tokenId, value, block.timestamp, info));
+        _offsets[account].push(OffsetModel(tokenId, value, block.timestamp, info));
     }
 }

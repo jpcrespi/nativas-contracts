@@ -11,7 +11,6 @@ import "../../interfaces/erc1155/IERC1155ERC20.sol";
 import "../../interfaces/erc20/IERC20.sol";
 import "../../interfaces/erc20/IERC20Adapter.sol";
 import "../../interfaces/erc20/IERC20Metadata.sol";
-import "../../interfaces/erc20/IERC20Approve.sol";
 
 /**
  * @title ERC20 inplementation that adds backward compatibility
@@ -22,8 +21,7 @@ contract NativasAdapter is
     ERC165,
     IERC20,
     IERC20Adapter,
-    IERC20Metadata,
-    IERC20Approve
+    IERC20Metadata
 {
     // IERC1155ERC20
     IERC1155ERC20 internal _entity;
@@ -33,8 +31,6 @@ contract NativasAdapter is
     string internal _name;
     string internal _symbol;
     uint8 internal _decimals;
-    // IERC20Approve
-    mapping(address => mapping(address => uint256)) internal _allowances;
 
     /**
      * @dev Initialize template
@@ -138,61 +134,27 @@ contract NativasAdapter is
     /**
      * @dev See {IERC20-allowance}.
      */
-    function allowance(address owner, address spender)
+    function allowance(address, address)
         public
         view
         virtual
         override
         returns (uint256)
     {
-        return _allowances[owner][spender];
+        return 0;
     }
 
     /**
      * @dev See {IERC20-approve}.
      */
-    function approve(address spender, uint256 amount)
+    function approve(address, uint256)
         public
         virtual
         override
         returns (bool)
     {
-        address owner = _msgSender();
-        _approve(owner, spender, amount);
-        return true;
-    }
-
-    /**
-     * @dev See {IERC20Approve-increaseAllowance}.
-     */
-    function increaseAllowance(address spender, uint256 addedValue)
-        public
-        virtual
-        override
-        returns (bool)
-    {
-        address owner = _msgSender();
-        _approve(owner, spender, allowance(owner, spender) + addedValue);
-        return true;
-    }
-
-    /**
-     * @dev See {IERC20Approve-decreaseAllowance}.
-     */
-    function decreaseAllowance(address spender, uint256 subtractedValue)
-        public
-        virtual
-        override
-        returns (bool)
-    {
-        address owner = _msgSender();
-        uint256 currentAllowance = allowance(owner, spender);
-        require(currentAllowance >= subtractedValue, "ERC20AE01");
-        unchecked {
-            _approve(owner, spender, currentAllowance - subtractedValue);
-        }
-
-        return true;
+        require(false);
+        return false;
     }
 
     /**
@@ -218,7 +180,6 @@ contract NativasAdapter is
         uint256 amount
     ) public virtual override returns (bool) {
         address spender = _msgSender();
-        _spendAllowance(from, spender, amount);
         _transfer(spender, from, to, amount);
         return true;
     }
@@ -249,49 +210,5 @@ contract NativasAdapter is
             ""
         );
         emit Transfer(from, to, amount);
-    }
-
-    /**
-     * @dev Sets `amount` as the allowance of `spender` over the `owner` s tokens.
-     *
-     * Emits an {Approval} event.
-     *
-     * Requirements:
-     *
-     * - `owner` cannot be the zero address.
-     * - `spender` cannot be the zero address.
-     */
-    function _approve(
-        address owner,
-        address spender,
-        uint256 amount
-    ) internal virtual {
-        require(owner != address(0), "ERC20AE02");
-        require(spender != address(0), "ERC20AE03");
-
-        _allowances[owner][spender] = amount;
-        emit Approval(owner, spender, amount);
-    }
-
-    /**
-     * @dev Updates `owner`s allowance for `spender` based on spent `amount`.
-     *
-     * Does not update the allowance amount in case of infinite allowance.
-     * Revert if not enough allowance is available.
-     *
-     * Emits an {Approval} event.
-     */
-    function _spendAllowance(
-        address owner,
-        address spender,
-        uint256 amount
-    ) internal virtual {
-        uint256 currentAllowance = allowance(owner, spender);
-        require(currentAllowance != type(uint256).max, "ERC20AE05");
-        require(currentAllowance >= amount, "ERC20AE05");
-        
-        unchecked {
-            _approve(owner, spender, currentAllowance - amount);
-        }
     }
 }

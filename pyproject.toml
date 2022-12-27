@@ -5,8 +5,8 @@ description = ""
 authors = ["Juan Pablo Crespi <juanpablocrespi99@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = ">=3.10.6,<3.11"
-eth-brownie = "^1.19.1"
+python = ">=3.10.8,<3.11"
+eth-brownie = "^1.19.2"
 pysha3 = "^1.0.2"
 
 [tool.poetry.dev-dependencies]

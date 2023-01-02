@@ -19,7 +19,7 @@ contract ERC1155URIStorable is ERC1155, IERC1155MetadataURI {
     mapping(uint256 => string) private _tokenURIs;
 
     /**
-     * @dev
+     * @dev set base uri
      */
     constructor(string memory uri_) {
         _setBaseURI(uri_);

@@ -24,7 +24,10 @@ contract NativasFactory is Context, Controllable {
     /**
      * @dev MUST trigger when a new holder is created.
      */
-    event HolderCreated(uint256 indexed id, address indexed holder);
+    event HolderCreated(
+        uint256 indexed holderId,
+        address indexed holderAddress
+    );
 
     /**
      * @dev Set NativasHolder contract template.
@@ -43,10 +46,10 @@ contract NativasFactory is Context, Controllable {
     }
 
     /**
-     * @dev get holder contract by id.
+     * @dev get holder contract by holderId.
      */
-    function getHolder(uint256 id) public view virtual returns (address) {
-        return _holders[id];
+    function getHolder(uint256 holderId) public view virtual returns (address) {
+        return _holders[holderId];
     }
 
     /**
@@ -56,9 +59,9 @@ contract NativasFactory is Context, Controllable {
      *
      * - the caller must have the contract controller.
      */
-    function transferControl(address newController) public virtual {
+    function transferControl(address controller_) public virtual {
         require(controller() == _msgSender(), "ERC1167E01");
-        _transferControl(newController);
+        _transferControl(controller_);
     }
 
     /**
@@ -69,15 +72,15 @@ contract NativasFactory is Context, Controllable {
      * - the caller must be the contract owener.
      */
     function setHolder(
-        address entity,
-        uint256 id,
-        string memory nin,
-        string memory name,
+        address entity_,
+        uint256 holderId_,
+        string memory nin_,
+        string memory name_,
         address controller_,
-        address operator
+        address operator_
     ) public virtual {
         require(controller() == _msgSender(), "ERC1167E02");
-        _setHolder(entity, id, nin, name, operator, controller_);
+        _setHolder(entity_, holderId_, nin_, name_, operator_, controller_);
     }
 
     /**
@@ -85,22 +88,22 @@ contract NativasFactory is Context, Controllable {
      */
     function _setHolder(
         address entity,
-        uint256 id,
+        uint256 holderId,
         string memory nin,
         string memory name,
         address controller,
         address operator
     ) internal virtual {
-        address holder = _template.clone();
-        IERC1155Holder(holder).init(
+        address holderAddress = _template.clone();
+        IERC1155Holder(holderAddress).init(
             entity,
             operator,
             controller,
-            id,
+            holderId,
             nin,
             name
         );
-        _holders[id] = holder;
-        emit HolderCreated(id, holder);
+        _holders[holderId] = holderAddress;
+        emit HolderCreated(holderId, holderAddress);
     }
 }

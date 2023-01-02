@@ -32,25 +32,25 @@ contract ERC1155Offsettable is ERC1155Burnable {
         address account,
         uint256 tokenId,
         uint256 value,
-        string memory info,
+        string memory reason,
         bytes memory data
     ) public virtual {
         require(_isOwnerOrApproved(account), "ERC1155OE01");
         _burn(account, tokenId, value, data);
-        _offset(account, tokenId, value, info);
+        _offset(account, tokenId, value, reason);
     }
 
     function offsetBatch(
         address account,
         uint256[] memory tokenIds,
         uint256[] memory values,
-        string[] memory infos,
+        string[] memory reasons,
         bytes memory data
     ) public virtual {
         require(_isOwnerOrApproved(account), "ERC1155OE03");
         _burnBatch(account, tokenIds, values, data);
         for (uint256 i = 0; i < tokenIds.length; i++) {
-            _offset(account, tokenIds[i], values[i], infos[i]);
+            _offset(account, tokenIds[i], values[i], reasons[i]);
         }
     }
 
@@ -62,9 +62,9 @@ contract ERC1155Offsettable is ERC1155Burnable {
         address account,
         uint256 tokenId,
         uint256 value,
-        string memory info
+        string memory reason
     ) internal virtual {
         require(_offsettable[tokenId], "ERC1155OE02");
-        _logger.offset(account, tokenId, value, info);
+        _logger.offset(account, tokenId, value, reason);
     }
 }

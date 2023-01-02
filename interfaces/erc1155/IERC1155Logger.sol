@@ -12,6 +12,6 @@ interface IERC1155Logger {
         address account,
         uint256 tokenId,
         uint256 value,
-        string memory info
+        string memory reason
     ) external;
 }

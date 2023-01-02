@@ -19,14 +19,14 @@ contract NativasOffset is Context, Controllable, IERC1155Logger {
         uint256 tokenId;
         uint256 value;
         uint256 date;
-        string info;
+        string reason;
     }
 
     event PerformOffset(
         address indexed account,
         uint256 indexed tokenId,
         uint256 value,
-        string info
+        string reason
     );
 
     // Mapping from token identifier to account balances
@@ -111,11 +111,11 @@ contract NativasOffset is Context, Controllable, IERC1155Logger {
             uint256 tokenId,
             uint256 value,
             uint256 date,
-            string memory info
+            string memory reason
         )
     {
-        OffsetModel memory data = _offsets[account][index];
-        return (data.tokenId, data.value, data.date, data.info);
+        OffsetModel memory model = _offsets[account][index];
+        return (model.tokenId, model.value, model.date, model.reason);
     }
 
     /**
@@ -129,10 +129,10 @@ contract NativasOffset is Context, Controllable, IERC1155Logger {
         address account,
         uint256 tokenId,
         uint256 value,
-        string memory info
+        string memory reason
     ) public virtual override {
         require(controller() == _msgSender(), "OFFSETE02");
-        _offset(account, tokenId, value, info);
+        _offset(account, tokenId, value, reason);
     }
 
     /**
@@ -142,12 +142,12 @@ contract NativasOffset is Context, Controllable, IERC1155Logger {
         address account,
         uint256 tokenId,
         uint256 value,
-        string memory info
+        string memory reason
     ) internal virtual {
         _balances[tokenId][account] += value;
         _offsetCount[account]++;
         _offsets[account].push(
-            OffsetModel(tokenId, value, block.timestamp, info)
+            OffsetModel(tokenId, value, block.timestamp, reason)
         );
     }
 }

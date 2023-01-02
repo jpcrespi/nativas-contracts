@@ -7,7 +7,6 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/proxy/Clones.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
 import "../../interfaces/erc1155/IERC1155Holder.sol";
 import "../access/Controllable.sol";
 
@@ -25,21 +24,17 @@ contract NativasFactory is Context, Controllable {
     /**
      * @dev MUST trigger when a new holder is created.
      */
-    event HolderCreated(
-        uint256 indexed id, 
-        address indexed holder
-    );
+    event HolderCreated(uint256 indexed id, address indexed holder);
 
     /**
      * @dev Set NativasHolder contract template.
      */
-    constructor(
-        address controller_, 
-        address template_) 
-        Controllable(controller_) {
+    constructor(address controller_, address template_)
+        Controllable(controller_)
+    {
         _template = template_;
     }
-    
+
     /**
      * @dev get holder contract template
      */
@@ -59,7 +54,7 @@ contract NativasFactory is Context, Controllable {
      *
      * Requirements:
      *
-     * - the caller must have the `DEFAULT_ADMIN_ROLE`.
+     * - the caller must have the contract controller.
      */
     function transferControl(address newController) public virtual {
         require(controller() == _msgSender(), "ERC1167E01");
@@ -97,7 +92,14 @@ contract NativasFactory is Context, Controllable {
         address operator
     ) internal virtual {
         address holder = _template.clone();
-        IERC1155Holder(holder).init(entity, operator, controller, id, nin, name);
+        IERC1155Holder(holder).init(
+            entity,
+            operator,
+            controller,
+            id,
+            nin,
+            name
+        );
         _holders[id] = holder;
         emit HolderCreated(id, holder);
     }

@@ -19,7 +19,6 @@ contract NativasToken is
     Controllable,
     ERC1155Pausable,
     ERC1155Swappable,
-    ERC1155Offsettable,
     ERC1155URIStorable,
     ERC1155ERC20
 {
@@ -34,7 +33,7 @@ contract NativasToken is
         Controllable(controller_)
         ERC1155URIStorable(uri_)
         ERC1155ERC20(template_)
-        ERC1155Offsettable(logger_)
+        ERC1155Swappable(logger_)
     {
         _control = IERC1155Control(controller_);
     }
@@ -157,7 +156,7 @@ contract NativasToken is
         uint256[] memory amounts,
         bytes memory data
     ) public virtual {
-        require(_control.isMinter( _msgSender()), "ERC1155NE05");
+        require(_control.isMinter(_msgSender()), "ERC1155NE05");
         _mintBatch(to, ids, amounts, data);
     }
 
@@ -284,11 +283,11 @@ contract NativasToken is
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory data
-    ) internal virtual override(
-        ERC1155, 
-        ERC1155ERC20,
-        ERC1155Pausable,
-        ERC1155URIStorable) {
+    )
+        internal
+        virtual
+        override(ERC1155, ERC1155ERC20, ERC1155Pausable, ERC1155URIStorable)
+    {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
     }
 }

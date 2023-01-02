@@ -129,9 +129,7 @@ contract NativasHolder is
      *
      * - the caller must be the controller.
      */
-    function setName(
-        string memory name_
-    ) public virtual {
+    function setName(string memory name_) public virtual {
         require(controller() == _msgSender(), "ERC1155RE03");
         _setName(name_);
     }
@@ -144,7 +142,7 @@ contract NativasHolder is
      * - the entity must be an ERC1155 contract
      */
     function _setApprovalForAll(
-        address entity_, 
+        address entity_,
         address operator_,
         bool approved_
     ) internal virtual {
@@ -157,9 +155,7 @@ contract NativasHolder is
     /**
      * @dev Sets `name_` as the holder name.
      */
-    function _setName(
-        string memory name_
-    ) internal virtual {
+    function _setName(string memory name_) internal virtual {
         _name = name_;
     }
 

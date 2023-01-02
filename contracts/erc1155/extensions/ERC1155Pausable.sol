@@ -51,6 +51,7 @@ contract ERC1155Pausable is ERC1155 {
         _paused = false;
         emit Unpaused(_msgSender());
     }
+
     /**
      * @dev See {ERC1155-_beforeTokenTransfer}.
      *

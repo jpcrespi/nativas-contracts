@@ -11,16 +11,21 @@ import "./ERC1155Burnable.sol";
 /**
  * @dev Offset Implementation
  */
-contract ERC1155Offsettable is ERC1155Burnable
-{
+contract ERC1155Offsettable is ERC1155Burnable {
     IERC1155Logger internal _logger;
+
+    mapping(uint256 => bool) internal _offsettable;
 
     constructor(address logger_) {
         _logger = IERC1155Logger(logger_);
     }
 
-    function logger() public view virtual returns(address) {
+    function logger() public view virtual returns (address) {
         return address(_logger);
+    }
+
+    function offsettable(uint256 tokenId) public view virtual returns (bool) {
+        return _offsettable[tokenId];
     }
 
     function offset(
@@ -32,7 +37,7 @@ contract ERC1155Offsettable is ERC1155Burnable
     ) public virtual {
         require(_isOwnerOrApproved(account), "ERC1155OE01");
         _burn(account, tokenId, value, data);
-        _logger.offset(account, tokenId, value, info);
+        _offset(account, tokenId, value, info);
     }
 
     function offsetBatch(
@@ -42,10 +47,24 @@ contract ERC1155Offsettable is ERC1155Burnable
         string[] memory infos,
         bytes memory data
     ) public virtual {
-        require(_isOwnerOrApproved(account), "ERC1155OE02");
+        require(_isOwnerOrApproved(account), "ERC1155OE03");
         _burnBatch(account, tokenIds, values, data);
         for (uint256 i = 0; i < tokenIds.length; i++) {
-            _logger.offset(account, tokenIds[i], values[i], infos[i]);
+            _offset(account, tokenIds[i], values[i], infos[i]);
         }
+    }
+
+    function _setOffsettable(uint256 tokenId, bool enabled) internal virtual {
+        _offsettable[tokenId] = enabled;
+    }
+
+    function _offset(
+        address account,
+        uint256 tokenId,
+        uint256 value,
+        string memory info
+    ) internal virtual {
+        require(_offsettable[tokenId], "ERC1155OE02");
+        _logger.offset(account, tokenId, value, info);
     }
 }

@@ -11,8 +11,7 @@ import "../ERC1155.sol";
 /**
  * @dev ERC1155 token with storage based token URI management.
  */
-contract ERC1155URIStorable is ERC1155, IERC1155MetadataURI
-{
+contract ERC1155URIStorable is ERC1155, IERC1155MetadataURI {
     using Strings for uint256;
     // Used as the URI for all token types by relying on ID substitution.
     string internal _baseURI;
@@ -96,7 +95,7 @@ contract ERC1155URIStorable is ERC1155, IERC1155MetadataURI
     ) internal virtual override {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
         for (uint256 i = 0; i < ids.length; ++i) {
-            require(exists(ids[i]) == true, "ERC1155UE01");           
+            require(exists(ids[i]) == true, "ERC1155UE01");
         }
     }
 }

@@ -10,7 +10,6 @@ import "../ERC1155.sol";
  * @dev Mint implementation
  */
 contract ERC1155Mintable is ERC1155 {
-    
     /**
      * @dev Creates `amount` tokens of token type `id`, and assigns them to `to`.
      *

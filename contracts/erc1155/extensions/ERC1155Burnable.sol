@@ -10,7 +10,6 @@ import "../ERC1155.sol";
  * @dev Burn implementation
  */
 contract ERC1155Burnable is ERC1155 {
-
     /**
      * @dev See {ERC1155Accessible-_burn}.
      *

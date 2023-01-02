@@ -10,11 +10,10 @@ import "@openzeppelin/contracts/utils/Context.sol";
  * @dev Contract module which provides a basic access control mechanism.
  */
 contract Controllable is Context {
-    
-    address internal _controller;
-    
+    address private _controller;
+
     event ControlTransferred(
-        address indexed oldController, 
+        address indexed oldController,
         address indexed newControllerr
     );
 
@@ -33,15 +32,15 @@ contract Controllable is Context {
     }
 
     /**
-     * @dev Transfers control of the contract to a new account (`newController`).
+     * @dev Transfers control of the contract to a new account (`controller_`).
      * Can only be called by the current controller.
      *
      * NOTE: Renouncing control will leave the contract without a controller,
      * thereby removing any functionality that is only available to the controller.
      */
-    function _transferControl(address newController) internal virtual {
+    function _transferControl(address controller_) internal virtual {
         address oldController = _controller;
-        _controller = newController;
-        emit ControlTransferred(oldController, newController);
+        _controller = controller_;
+        emit ControlTransferred(oldController, controller_);
     }
 }

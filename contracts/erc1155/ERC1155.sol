@@ -111,7 +111,7 @@ contract ERC1155 is Context, ERC165, ERC1155Common, IERC1155 {
         uint256 amount,
         bytes memory data
     ) public virtual override {
-        require(_isOwnerOrApproved(from),"ERC1155E03");
+        require(_isOwnerOrApproved(from), "ERC1155E03");
         _safeTransferFrom(from, to, id, amount, data);
     }
 

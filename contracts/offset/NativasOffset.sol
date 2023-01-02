@@ -4,7 +4,6 @@
 
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
 import "../../interfaces/erc1155/IERC1155Logger.sol";
 import "../access/Controllable.sol";
@@ -13,7 +12,6 @@ import "../access/Controllable.sol";
  * @dev Offset Implementation
  */
 contract NativasOffset is Context, Controllable, IERC1155Logger {
-
     /**
      * @dev Offset model
      */
@@ -31,7 +29,7 @@ contract NativasOffset is Context, Controllable, IERC1155Logger {
         string info
     );
 
-    // Mapping from token ID to account balances
+    // Mapping from token identifier to account balances
     mapping(uint256 => mapping(address => uint256)) internal _balances;
     // offset data
     mapping(address => OffsetModel[]) private _offsets;
@@ -41,14 +39,14 @@ contract NativasOffset is Context, Controllable, IERC1155Logger {
     /**
      * @dev Set Offset contract controller.
      */
-    constructor() Controllable(_msgSender())  { }
+    constructor() Controllable(_msgSender()) {}
 
     /**
      * @dev See {Controllable-_transferControl}.
      */
-    function transferControl(address newController) public virtual {
+    function transferControl(address controller_) public virtual {
         require(controller() == _msgSender(), "OFFSETE02");
-        _transferControl(newController);
+        _transferControl(controller_);
     }
 
     /**
@@ -75,12 +73,10 @@ contract NativasOffset is Context, Controllable, IERC1155Logger {
      *
      * - `accounts` and `ids` must have the same length.
      */
-    function balanceOfBatch(address[] memory accounts, uint256[] memory tokenIds)
-        public
-        view
-        virtual
-        returns (uint256[] memory)
-    {
+    function balanceOfBatch(
+        address[] memory accounts,
+        uint256[] memory tokenIds
+    ) public view virtual returns (uint256[] memory) {
         require(accounts.length == tokenIds.length, "ERC1155E02");
 
         uint256[] memory batchBalances = new uint256[](accounts.length);
@@ -90,6 +86,18 @@ contract NativasOffset is Context, Controllable, IERC1155Logger {
         }
 
         return batchBalances;
+    }
+
+    /**
+     * @dev Get the amount of offsets by account
+     */
+    function getOffsetCount(address account)
+        public
+        view
+        virtual
+        returns (uint256)
+    {
+        return _offsetCount[account];
     }
 
     /**
@@ -104,24 +112,14 @@ contract NativasOffset is Context, Controllable, IERC1155Logger {
             uint256 value,
             uint256 date,
             string memory info
-        ) {
+        )
+    {
         OffsetModel memory data = _offsets[account][index];
         return (data.tokenId, data.value, data.date, data.info);
     }
 
     /**
-     * @dev Get the amount of offsets by account
-     */
-    function getOffsetCount(address account)
-        public
-        view
-        virtual
-        returns (uint256) {
-        return _offsetCount[account];
-    }
-
-    /**
-     * @dev See {OffsetBook-_offset}
+     * @dev See {IERC1155Logger-offset}
      *
      * Requirements:
      *
@@ -138,7 +136,7 @@ contract NativasOffset is Context, Controllable, IERC1155Logger {
     }
 
     /**
-     * @dev
+     * @dev internal implementantion
      */
     function _offset(
         address account,
@@ -148,6 +146,8 @@ contract NativasOffset is Context, Controllable, IERC1155Logger {
     ) internal virtual {
         _balances[tokenId][account] += value;
         _offsetCount[account]++;
-        _offsets[account].push(OffsetModel(tokenId, value, block.timestamp, info));
+        _offsets[account].push(
+            OffsetModel(tokenId, value, block.timestamp, info)
+        );
     }
 }

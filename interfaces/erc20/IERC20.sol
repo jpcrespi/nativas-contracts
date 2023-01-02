@@ -15,7 +15,7 @@ interface IERC20 {
      * A token contract which creates new tokens SHOULD trigger a Transfer event
      * with the from address set to 0x0 when tokens are created.
      */
-    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Transfer(address indexed from, address indexed to, uint256 amount);
 
     /**
      * @dev MUST trigger on any successful call to approve(address _spender, uint256 _value).
@@ -52,7 +52,7 @@ interface IERC20 {
      * Note Transfers of 0 values MUST be treated as normal transfers and fire
      * the Transfer event.
      */
-    function transfer(address to, uint256 value)
+    function transfer(address to, uint256 amount)
         external
         returns (bool success);
 
@@ -72,7 +72,7 @@ interface IERC20 {
     function transferFrom(
         address from,
         address to,
-        uint256 value
+        uint256 amount
     ) external returns (bool success);
 
     /**
@@ -85,7 +85,7 @@ interface IERC20 {
      * THOUGH The contract itself shouldn’t enforce it, to allow backwards compatibility with
      * contracts deployed before
      */
-    function approve(address spender, uint256 value)
+    function approve(address spender, uint256 amount)
         external
         returns (bool success);
 }

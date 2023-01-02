@@ -11,7 +11,7 @@ interface IERC1155Logger {
     function offset(
         address account,
         uint256 tokenId,
-        uint256 value,
+        uint256 amount,
         string memory reason
     ) external;
 }

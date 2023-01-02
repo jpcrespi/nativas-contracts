@@ -41,7 +41,7 @@ contract ERC1155 is Context, ERC165, ERC1155Common, IERC1155 {
      *
      * - `account` cannot be the zero address.
      */
-    function balanceOf(address account, uint256 id)
+    function balanceOf(address account, uint256 tokenId)
         public
         view
         virtual
@@ -49,7 +49,7 @@ contract ERC1155 is Context, ERC165, ERC1155Common, IERC1155 {
         returns (uint256)
     {
         require(account != address(0), "ERC1155E01");
-        return _balances[id][account];
+        return _balances[tokenId][account];
     }
 
     /**
@@ -59,19 +59,16 @@ contract ERC1155 is Context, ERC165, ERC1155Common, IERC1155 {
      *
      * - `accounts` and `ids` must have the same length.
      */
-    function balanceOfBatch(address[] memory accounts, uint256[] memory ids)
-        public
-        view
-        virtual
-        override
-        returns (uint256[] memory)
-    {
-        require(accounts.length == ids.length, "ERC1155E02");
+    function balanceOfBatch(
+        address[] memory accounts,
+        uint256[] memory tokenIds
+    ) public view virtual override returns (uint256[] memory) {
+        require(accounts.length == tokenIds.length, "ERC1155E02");
 
         uint256[] memory batchBalances = new uint256[](accounts.length);
 
         for (uint256 i = 0; i < accounts.length; ++i) {
-            batchBalances[i] = balanceOf(accounts[i], ids[i]);
+            batchBalances[i] = balanceOf(accounts[i], tokenIds[i]);
         }
 
         return batchBalances;
@@ -107,12 +104,12 @@ contract ERC1155 is Context, ERC165, ERC1155Common, IERC1155 {
     function safeTransferFrom(
         address from,
         address to,
-        uint256 id,
+        uint256 tokenId,
         uint256 amount,
         bytes memory data
     ) public virtual override {
         require(_isOwnerOrApproved(from), "ERC1155E03");
-        _safeTransferFrom(from, to, id, amount, data);
+        _safeTransferFrom(from, to, tokenId, amount, data);
     }
 
     /**
@@ -121,12 +118,12 @@ contract ERC1155 is Context, ERC165, ERC1155Common, IERC1155 {
     function safeBatchTransferFrom(
         address from,
         address to,
-        uint256[] memory ids,
+        uint256[] memory tokenIds,
         uint256[] memory amounts,
         bytes memory data
     ) public virtual override {
         require(_isOwnerOrApproved(from), "ERC1155E04");
-        _safeBatchTransferFrom(from, to, ids, amounts, data);
+        _safeBatchTransferFrom(from, to, tokenIds, amounts, data);
     }
 
     /**
@@ -144,7 +141,7 @@ contract ERC1155 is Context, ERC165, ERC1155Common, IERC1155 {
     function _safeTransferFrom(
         address from,
         address to,
-        uint256 id,
+        uint256 tokenId,
         uint256 amount,
         bytes memory data
     ) internal virtual {
@@ -152,9 +149,16 @@ contract ERC1155 is Context, ERC165, ERC1155Common, IERC1155 {
 
         address operator = _msgSender();
 
-        _transferFrom(operator, from, to, id, amount, data);
+        _transferFrom(operator, from, to, tokenId, amount, data);
 
-        _doSafeTransferAcceptanceCheck(operator, from, to, id, amount, data);
+        _doSafeTransferAcceptanceCheck(
+            operator,
+            from,
+            to,
+            tokenId,
+            amount,
+            data
+        );
     }
 
     /**
@@ -170,22 +174,22 @@ contract ERC1155 is Context, ERC165, ERC1155Common, IERC1155 {
     function _safeBatchTransferFrom(
         address from,
         address to,
-        uint256[] memory ids,
+        uint256[] memory tokenIds,
         uint256[] memory amounts,
         bytes memory data
     ) internal virtual {
-        require(ids.length == amounts.length, "ERC1155E06");
+        require(tokenIds.length == amounts.length, "ERC1155E06");
         require(to != address(0), "ERC1155E07");
 
         address operator = _msgSender();
 
-        _batchTransferFrom(operator, from, to, ids, amounts, data);
+        _batchTransferFrom(operator, from, to, tokenIds, amounts, data);
 
         _doSafeBatchTransferAcceptanceCheck(
             operator,
             from,
             to,
-            ids,
+            tokenIds,
             amounts,
             data
         );
@@ -198,20 +202,20 @@ contract ERC1155 is Context, ERC165, ERC1155Common, IERC1155 {
         address operator,
         address from,
         address to,
-        uint256 id,
+        uint256 tokenId,
         uint256 amount,
         bytes memory data
     ) internal virtual {
-        uint256[] memory ids = _asSingletonArray(id);
+        uint256[] memory tokenIds = _asSingletonArray(tokenId);
         uint256[] memory amounts = _asSingletonArray(amount);
 
-        _beforeTokenTransfer(operator, from, to, ids, amounts, data);
+        _beforeTokenTransfer(operator, from, to, tokenIds, amounts, data);
 
-        _transfer(from, to, id, amount);
+        _transfer(from, to, tokenId, amount);
 
-        emit TransferSingle(operator, from, to, id, amount);
+        emit TransferSingle(operator, from, to, tokenId, amount);
 
-        _afterTokenTransfer(operator, from, to, ids, amounts, data);
+        _afterTokenTransfer(operator, from, to, tokenIds, amounts, data);
     }
 
     /**
@@ -221,19 +225,19 @@ contract ERC1155 is Context, ERC165, ERC1155Common, IERC1155 {
         address operator,
         address from,
         address to,
-        uint256[] memory ids,
+        uint256[] memory tokenIds,
         uint256[] memory amounts,
         bytes memory data
     ) internal virtual {
-        _beforeTokenTransfer(operator, from, to, ids, amounts, data);
+        _beforeTokenTransfer(operator, from, to, tokenIds, amounts, data);
 
-        for (uint256 i = 0; i < ids.length; ++i) {
-            _transfer(from, to, ids[i], amounts[i]);
+        for (uint256 i = 0; i < tokenIds.length; ++i) {
+            _transfer(from, to, tokenIds[i], amounts[i]);
         }
 
-        emit TransferBatch(operator, from, to, ids, amounts);
+        emit TransferBatch(operator, from, to, tokenIds, amounts);
 
-        _afterTokenTransfer(operator, from, to, ids, amounts, data);
+        _afterTokenTransfer(operator, from, to, tokenIds, amounts, data);
     }
 
     /**
@@ -242,15 +246,15 @@ contract ERC1155 is Context, ERC165, ERC1155Common, IERC1155 {
     function _transfer(
         address from,
         address to,
-        uint256 id,
+        uint256 tokenId,
         uint256 amount
     ) internal virtual {
-        uint256 fromBalance = _balances[id][from];
+        uint256 fromBalance = _balances[tokenId][from];
         require(fromBalance >= amount, "ERC1155E08");
         unchecked {
-            _balances[id][from] = fromBalance - amount;
+            _balances[tokenId][from] = fromBalance - amount;
         }
-        _balances[id][to] += amount;
+        _balances[tokenId][to] += amount;
     }
 
     /**
@@ -308,7 +312,7 @@ contract ERC1155 is Context, ERC165, ERC1155Common, IERC1155 {
         address operator,
         address from,
         address to,
-        uint256[] memory ids,
+        uint256[] memory tokenIds,
         uint256[] memory amounts,
         bytes memory data
     ) internal virtual {}
@@ -337,7 +341,7 @@ contract ERC1155 is Context, ERC165, ERC1155Common, IERC1155 {
         address operator,
         address from,
         address to,
-        uint256[] memory ids,
+        uint256[] memory tokenIds,
         uint256[] memory amounts,
         bytes memory data
     ) internal virtual {}

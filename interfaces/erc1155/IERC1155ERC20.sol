@@ -18,7 +18,7 @@ interface IERC1155ERC20 is IERC1155, IERC1155Supply {
         address operator,
         address from,
         address to,
-        uint256 id,
+        uint256 tokenId,
         uint256 amount,
         bytes memory data
     ) external;

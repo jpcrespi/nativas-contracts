@@ -17,21 +17,21 @@ contract ERC1155Supply is ERC1155, IERC1155Supply {
     /**
      * @dev Total amount of tokens in with a given id.
      */
-    function totalSupply(uint256 id)
+    function totalSupply(uint256 tokenId)
         public
         view
         virtual
         override
         returns (uint256 supply)
     {
-        return _totalSupply[id];
+        return _totalSupply[tokenId];
     }
 
     /**
      * @dev Indicates whether any token exist with a given id, or not.
      */
-    function exists(uint256 id) public view virtual returns (bool) {
-        return totalSupply(id) > 0;
+    function exists(uint256 tokenId) public view virtual returns (bool) {
+        return totalSupply(tokenId) > 0;
     }
 
     /**
@@ -41,21 +41,21 @@ contract ERC1155Supply is ERC1155, IERC1155Supply {
         address operator,
         address from,
         address to,
-        uint256[] memory ids,
+        uint256[] memory tokenIds,
         uint256[] memory amounts,
         bytes memory data
     ) internal virtual override {
-        super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
+        super._beforeTokenTransfer(operator, from, to, tokenIds, amounts, data);
         //Mint
         if (from == address(0)) {
-            for (uint256 i = 0; i < ids.length; ++i) {
-                _totalSupply[ids[i]] += amounts[i];
+            for (uint256 i = 0; i < tokenIds.length; ++i) {
+                _totalSupply[tokenIds[i]] += amounts[i];
             }
         }
         // Burn
         if (to == address(0)) {
-            for (uint256 i = 0; i < ids.length; ++i) {
-                uint256 id = ids[i];
+            for (uint256 i = 0; i < tokenIds.length; ++i) {
+                uint256 id = tokenIds[i];
                 uint256 amount = amounts[i];
                 require(_totalSupply[id] >= amount, "ERC1155SE01");
                 unchecked {

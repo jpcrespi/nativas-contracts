@@ -26,7 +26,7 @@ contract NativasAdapter is
     // IERC1155ERC20
     IERC1155ERC20 internal _entity;
     // Token indentifier
-    uint256 internal _id;
+    uint256 internal _tokenId;
     // Token name
     string internal _name;
     // Token symbol
@@ -38,25 +38,25 @@ contract NativasAdapter is
      * @dev Initialize template
      */
     constructor(
-        uint256 id_,
+        uint256 tokenId_,
         string memory name_,
         string memory symbol_,
         uint8 decimals_
     ) {
-        init(id_, name_, symbol_, decimals_);
+        init(tokenId_, name_, symbol_, decimals_);
     }
 
     /**
      * @dev Initialize contract
      */
     function init(
-        uint256 id_,
+        uint256 tokenId_,
         string memory name_,
         string memory symbol_,
         uint8 decimals_
     ) public override initializer {
         _entity = IERC1155ERC20(_msgSender());
-        _id = id_;
+        _tokenId = tokenId_;
         _name = name_;
         _symbol = symbol_;
         _decimals = decimals_;
@@ -90,7 +90,7 @@ contract NativasAdapter is
      * @dev ERC1155 token id.
      */
     function id() public view virtual returns (uint256) {
-        return _id;
+        return _tokenId;
     }
 
     /**
@@ -118,7 +118,7 @@ contract NativasAdapter is
      * @dev See {IERC20-totalSupply}.
      */
     function totalSupply() public view virtual override returns (uint256) {
-        return _entity.totalSupply(_id);
+        return _entity.totalSupply(_tokenId);
     }
 
     /**
@@ -131,7 +131,7 @@ contract NativasAdapter is
         override
         returns (uint256)
     {
-        return _entity.balanceOf(account, _id);
+        return _entity.balanceOf(account, _tokenId);
     }
 
     /**
@@ -199,7 +199,14 @@ contract NativasAdapter is
         address to,
         uint256 amount
     ) internal virtual {
-        _entity.safeAdapterTransferFrom(operator, from, to, _id, amount, "");
+        _entity.safeAdapterTransferFrom(
+            operator,
+            from,
+            to,
+            _tokenId,
+            amount,
+            ""
+        );
         emit Transfer(from, to, amount);
     }
 }

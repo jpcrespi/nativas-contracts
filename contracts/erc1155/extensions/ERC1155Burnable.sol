@@ -20,12 +20,12 @@ contract ERC1155Burnable is ERC1155 {
      */
     function _safeBurn(
         address account,
-        uint256 id,
-        uint256 value,
+        uint256 tokenId,
+        uint256 amount,
         bytes memory data
     ) internal virtual {
         require(_isOwnerOrApproved(account), "ERC1155BE01");
-        _burn(account, id, value, data);
+        _burn(account, tokenId, amount, data);
     }
 
     /**
@@ -38,74 +38,95 @@ contract ERC1155Burnable is ERC1155 {
      */
     function _safeBurnBatch(
         address account,
-        uint256[] memory ids,
-        uint256[] memory values,
+        uint256[] memory tokenIds,
+        uint256[] memory amounts,
         bytes memory data
     ) internal virtual {
         require(_isOwnerOrApproved(account), "ERC1155BE02");
-        _burnBatch(account, ids, values, data);
+        _burnBatch(account, tokenIds, amounts, data);
     }
 
     /**
-     * @dev Destroys `amount` tokens of token type `id` from `from`
+     * @dev Destroys `amount` tokens of token type `tokenId` from `from`
      *
      * Emits a {TransferSingle} event.
      *
      * Requirements:
      *
      * - `from` cannot be the zero address.
-     * - `from` must have at least `amount` tokens of token type `id`.
+     * - `from` must have at least `amount` tokens of token type `tokenId`.
      */
     function _burn(
         address from,
-        uint256 id,
+        uint256 tokenId,
         uint256 amount,
         bytes memory data
     ) internal virtual {
         require(from != address(0), "ERC1155BE03");
 
         address operator = _msgSender();
-        uint256[] memory ids = _asSingletonArray(id);
+        uint256[] memory tokenIds = _asSingletonArray(tokenId);
         uint256[] memory amounts = _asSingletonArray(amount);
 
-        _beforeTokenTransfer(operator, from, address(0), ids, amounts, data);
+        _beforeTokenTransfer(
+            operator,
+            from,
+            address(0),
+            tokenIds,
+            amounts,
+            data
+        );
 
-        uint256 fromBalance = _balances[id][from];
+        uint256 fromBalance = _balances[tokenId][from];
         require(fromBalance >= amount, "ERC1155BE04");
         unchecked {
-            _balances[id][from] = fromBalance - amount;
+            _balances[tokenId][from] = fromBalance - amount;
         }
 
-        emit TransferSingle(operator, from, address(0), id, amount);
+        emit TransferSingle(operator, from, address(0), tokenId, amount);
 
-        _afterTokenTransfer(operator, from, address(0), ids, amounts, data);
+        _afterTokenTransfer(
+            operator,
+            from,
+            address(0),
+            tokenIds,
+            amounts,
+            data
+        );
     }
 
     /**
-     * @dev Destroys `amounts` tokens of token type `ids` from `from`
+     * @dev Destroys `amounts` tokens of token type `tokenIds` from `from`
      *
      * emits a {TransferBatch} event.
      *
      * Requirements:
      *
      * - `ids` and `amounts` must have the same length.
-     * - `from` must have at least `amounts` tokens of token type `ids`.
+     * - `from` must have at least `amounts` tokens of token type `tokenIds`.
      */
     function _burnBatch(
         address from,
-        uint256[] memory ids,
+        uint256[] memory tokenIds,
         uint256[] memory amounts,
         bytes memory data
     ) internal virtual {
         require(from != address(0), "ERC1155BE05");
-        require(ids.length == amounts.length, "ERC1155BE06");
+        require(tokenIds.length == amounts.length, "ERC1155BE06");
 
         address operator = _msgSender();
 
-        _beforeTokenTransfer(operator, from, address(0), ids, amounts, data);
+        _beforeTokenTransfer(
+            operator,
+            from,
+            address(0),
+            tokenIds,
+            amounts,
+            data
+        );
 
-        for (uint256 i = 0; i < ids.length; i++) {
-            uint256 id = ids[i];
+        for (uint256 i = 0; i < tokenIds.length; i++) {
+            uint256 id = tokenIds[i];
             uint256 amount = amounts[i];
             uint256 fromBalance = _balances[id][from];
             require(fromBalance >= amount, "ERC1155BE07");
@@ -114,8 +135,15 @@ contract ERC1155Burnable is ERC1155 {
             }
         }
 
-        emit TransferBatch(operator, from, address(0), ids, amounts);
+        emit TransferBatch(operator, from, address(0), tokenIds, amounts);
 
-        _afterTokenTransfer(operator, from, address(0), ids, amounts, data);
+        _afterTokenTransfer(
+            operator,
+            from,
+            address(0),
+            tokenIds,
+            amounts,
+            data
+        );
     }
 }

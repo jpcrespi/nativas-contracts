@@ -33,7 +33,7 @@ contract ERC1155Common {
         address operator,
         address from,
         address to,
-        uint256 id,
+        uint256 tokenId,
         uint256 amount,
         bytes memory data
     ) internal {
@@ -41,7 +41,7 @@ contract ERC1155Common {
             bytes4 response = IERC1155TokenReceiver(to).onERC1155Received(
                 operator,
                 from,
-                id,
+                tokenId,
                 amount,
                 data
             );
@@ -59,7 +59,7 @@ contract ERC1155Common {
         address operator,
         address from,
         address to,
-        uint256[] memory ids,
+        uint256[] memory tokenIds,
         uint256[] memory amounts,
         bytes memory data
     ) internal {
@@ -67,7 +67,7 @@ contract ERC1155Common {
             bytes4 response = IERC1155TokenReceiver(to).onERC1155BatchReceived(
                 operator,
                 from,
-                ids,
+                tokenIds,
                 amounts,
                 data
             );

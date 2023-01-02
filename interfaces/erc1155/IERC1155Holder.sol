@@ -15,7 +15,7 @@ interface IERC1155Holder {
         address entity_,
         address operator_,
         address controller_,
-        uint256 id_,
+        uint256 holderId_,
         string memory nin_,
         string memory name_
     ) external;

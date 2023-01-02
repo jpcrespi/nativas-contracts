@@ -17,8 +17,8 @@ interface IERC1155 {
      * (SHOULD be msg.sender).
      * The @param from argument MUST be the address of the holder whose balance is decreased.
      * The @param to argument MUST be the address of the recipient whose balance is increased.
-     * The @param id argument MUST be the token type being transferred.
-     * The @param value argument MUST be the number of tokens the holder balance is decreased by and match what the
+     * The @param tokenId argument MUST be the token type being transferred.
+     * The @param amount argument MUST be the number of tokens the holder balance is decreased by and match what the
      * recipient balance is increased by.
      * When minting/creating tokens, the `from` argument MUST be set to `0x0` (i.e. zero address).
      * When burning/destroying tokens, the `to` argument MUST be set to `0x0` (i.e. zero address).
@@ -27,8 +27,8 @@ interface IERC1155 {
         address indexed operator,
         address indexed from,
         address indexed to,
-        uint256 id,
-        uint256 value
+        uint256 tokenId,
+        uint256 amount
     );
 
     /**
@@ -38,8 +38,8 @@ interface IERC1155 {
      * (SHOULD be msg.sender).
      * The @param from argument MUST be the address of the holder whose balance is decreased.
      * The @param to argument MUST be the address of the recipient whose balance is increased.
-     * The @param ids argument MUST be the list of tokens being transferred.
-     * The @param values argument MUST be the list of number of tokens (matching the list and order of tokens
+     * The @param tokenIds argument MUST be the list of tokens being transferred.
+     * The @param amounts argument MUST be the list of number of tokens (matching the list and order of tokens
      * specified in _ids) the holder balance is decreased by and match what the recipient balance is increased by.
      * When minting/creating tokens, the `from` argument MUST be set to `0x0` (i.e. zero address).
      * When burning/destroying tokens, the `to` argument MUST be set to `0x0` (i.e. zero address).
@@ -48,8 +48,8 @@ interface IERC1155 {
         address indexed operator,
         address indexed from,
         address indexed to,
-        uint256[] ids,
-        uint256[] values
+        uint256[] tokenIds,
+        uint256[] amounts
     );
 
     /**
@@ -67,7 +67,7 @@ interface IERC1155 {
      * URIs are defined in RFC 3986.
      * The URI MUST point to a JSON file that conforms to the "ERC-1155 Metadata URI JSON Schema".
      */
-    event URI(string value, uint256 indexed id);
+    event URI(string value, uint256 indexed tokenId);
 
     /**
      * @notice Transfers `value` amount of an `id` from the `from` address to the `to` address specified
@@ -84,16 +84,16 @@ interface IERC1155 {
      * the standard).
      * @param from Source address
      * @param to Target address
-     * @param id ID of the token type
-     * @param value Transfer amount
+     * @param tokenId ID of the token type
+     * @param amount Transfer amount
      * @param data Additional data with no specified format, MUST be sent unaltered in call
      * to `onERC1155Received` on `to`
      */
     function safeTransferFrom(
         address from,
         address to,
-        uint256 id,
-        uint256 value,
+        uint256 tokenId,
+        uint256 amount,
         bytes calldata data
     ) external;
 
@@ -116,26 +116,26 @@ interface IERC1155 {
      * on `to` and act appropriately (see "Safe Transfer Rules" section of the standard).
      * @param from Source address
      * @param to Target address
-     * @param ids IDs of each token type (order and length must match values array)
-     * @param values Transfer amounts per token type (order and length must match ids array)
+     * @param tokenIds IDs of each token type (order and length must match values array)
+     * @param amounts Transfer amounts per token type (order and length must match ids array)
      * @param data Additional data with no specified format, MUST be sent unaltered in call
      * to the `ERC1155TokenReceiver` hook(s) on `to`
      */
     function safeBatchTransferFrom(
         address from,
         address to,
-        uint256[] calldata ids,
-        uint256[] calldata values,
+        uint256[] calldata tokenIds,
+        uint256[] calldata amounts,
         bytes calldata data
     ) external;
 
     /**
      * @notice Get the balance of an account's tokens.
      * @param owner The address of the token holder
-     * @param id ID of the token
+     * @param tokenId ID of the token
      * @return balance owner's balance of the token type requested
      */
-    function balanceOf(address owner, uint256 id)
+    function balanceOf(address owner, uint256 tokenId)
         external
         view
         returns (uint256 balance);
@@ -143,13 +143,13 @@ interface IERC1155 {
     /**
      * @notice Get the balance of multiple account/token pairs
      * @param owners The addresses of the token holders
-     * @param ids ID of the tokens
+     * @param tokenIds ID of the tokens
      * @return balances owner's balance of the token types requested (i.e. balance for each (owner, id) pair)
      */
-    function balanceOfBatch(address[] calldata owners, uint256[] calldata ids)
-        external
-        view
-        returns (uint256[] memory balances);
+    function balanceOfBatch(
+        address[] calldata owners,
+        uint256[] calldata tokenIds
+    ) external view returns (uint256[] memory balances);
 
     /**
      * @notice Enable or disable approval for a third party ("operator") to manage all of the caller's tokens.

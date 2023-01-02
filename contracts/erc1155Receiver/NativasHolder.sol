@@ -25,7 +25,7 @@ contract NativasHolder is
     IERC1155TokenReceiver
 {
     // Holder metadata
-    uint256 internal _id;
+    uint256 internal _holderId;
     string internal _nin;
     string internal _name;
 
@@ -36,11 +36,11 @@ contract NativasHolder is
         address entity_,
         address operator_,
         address controller_,
-        uint256 id_,
+        uint256 holderId_,
         string memory nin_,
         string memory name_
     ) Controllable(controller_) {
-        init(entity_, operator_, controller_, id_, nin_, name_);
+        init(entity_, operator_, controller_, holderId_, nin_, name_);
     }
 
     /**
@@ -50,11 +50,11 @@ contract NativasHolder is
         address entity_,
         address operator_,
         address controller_,
-        uint256 id_,
+        uint256 holderId_,
         string memory nin_,
         string memory name_
     ) public virtual override initializer {
-        _id = id_;
+        _holderId = holderId_;
         _nin = nin_;
         _setName(name_);
         _transferControl(controller_);
@@ -65,7 +65,7 @@ contract NativasHolder is
      * @return id of the holder account
      */
     function id() public view virtual returns (uint256) {
-        return _id;
+        return _holderId;
     }
 
     /**
@@ -101,9 +101,9 @@ contract NativasHolder is
     /**
      * @dev See {Controllable-_transferControl}.
      */
-    function transferControl(address newController) public virtual {
+    function transferControl(address controller_) public virtual {
         require(controller() == _msgSender(), "ERC1155RE01");
-        _transferControl(newController);
+        _transferControl(controller_);
     }
 
     /**

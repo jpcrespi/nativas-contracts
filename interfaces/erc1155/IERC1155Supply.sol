@@ -14,7 +14,7 @@ interface IERC1155Supply {
      * corresponding is an NFT, there is no guarantees that no other token with the
      * same id are not going to be minted.
      */
-    function totalSupply(uint256 id)
+    function totalSupply(uint256 tokenId)
         external
         view
         returns (uint256 totalSupply);

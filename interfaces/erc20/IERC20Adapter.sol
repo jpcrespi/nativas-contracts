@@ -12,7 +12,7 @@ interface IERC20Adapter {
      * @dev Initialize ERC20 contract
      */
     function init(
-        uint256 id_,
+        uint256 tokenId_,
         string memory name_,
         string memory symbol_,
         uint8 decimals_

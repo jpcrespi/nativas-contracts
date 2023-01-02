@@ -68,16 +68,16 @@ contract NativasToken is
      * @dev Set token metadata
      */
     function setMetadata(
-        uint256 id,
+        uint256 tokenId,
         string memory name,
         string memory symbol,
         uint8 decimals,
         string memory uri,
         bool offsettable
     ) public virtual {
-        setAdapter(id, name, symbol, decimals);
-        setOffsettable(id, offsettable);
-        setURI(id, uri);
+        setAdapter(tokenId, name, symbol, decimals);
+        setOffsettable(tokenId, offsettable);
+        setURI(tokenId, uri);
     }
 
     /**
@@ -101,12 +101,12 @@ contract NativasToken is
      */
     function burn(
         address account,
-        uint256 id,
-        uint256 value,
+        uint256 tokenId,
+        uint256 amount,
         bytes memory data
     ) public virtual {
         require(_control.isBurner(_msgSender()), "ERC1155NE02");
-        _safeBurn(account, id, value, data);
+        _safeBurn(account, tokenId, amount, data);
     }
 
     /**
@@ -118,12 +118,12 @@ contract NativasToken is
      */
     function burnBatch(
         address account,
-        uint256[] memory ids,
-        uint256[] memory values,
+        uint256[] memory tokenIds,
+        uint256[] memory amounts,
         bytes memory data
     ) public virtual {
         require(_control.isBurner(_msgSender()), "ERC1155NE03");
-        _safeBurnBatch(account, ids, values, data);
+        _safeBurnBatch(account, tokenIds, amounts, data);
     }
 
     /**
@@ -135,12 +135,12 @@ contract NativasToken is
      */
     function mint(
         address to,
-        uint256 id,
+        uint256 tokenId,
         uint256 amount,
         bytes memory data
     ) public virtual {
         require(_control.isMinter(_msgSender()), "ERC1155NE04");
-        _mint(to, id, amount, data);
+        _mint(to, tokenId, amount, data);
     }
 
     /**
@@ -152,12 +152,12 @@ contract NativasToken is
      */
     function mintBatch(
         address to,
-        uint256[] memory ids,
+        uint256[] memory tokenIds,
         uint256[] memory amounts,
         bytes memory data
     ) public virtual {
         require(_control.isMinter(_msgSender()), "ERC1155NE05");
-        _mintBatch(to, ids, amounts, data);
+        _mintBatch(to, tokenIds, amounts, data);
     }
 
     /**
@@ -168,13 +168,13 @@ contract NativasToken is
      * - the caller must be adapter.
      */
     function setAdapter(
-        uint256 id,
+        uint256 tokenId,
         string memory name,
         string memory symbol,
         uint8 decimals
     ) public virtual {
         require(_control.isAdapter(_msgSender()), "ERC1155NE06");
-        _setAdapter(id, name, symbol, decimals);
+        _setAdapter(tokenId, name, symbol, decimals);
     }
 
     /**
@@ -246,13 +246,13 @@ contract NativasToken is
      */
     function swap(
         address account,
-        uint256 fromId,
-        uint256 toId,
-        uint256 value,
+        uint256 fromTokenId,
+        uint256 toTokenId,
+        uint256 amount,
         bytes memory data
     ) public virtual {
         require(_control.isSwapper(_msgSender()), "ERC1155NE12");
-        _swap(account, fromId, toId, value, data);
+        _swap(account, fromTokenId, toTokenId, amount, data);
     }
 
     /**
@@ -266,11 +266,11 @@ contract NativasToken is
         address account,
         uint256[] memory fromTokenIds,
         uint256[] memory toTokenIds,
-        uint256[] memory values,
+        uint256[] memory amounts,
         bytes memory data
     ) public virtual {
         require(_control.isSwapper(_msgSender()), "ERC1155NE13");
-        _swapBatch(account, fromTokenIds, toTokenIds, values, data);
+        _swapBatch(account, fromTokenIds, toTokenIds, amounts, data);
     }
 
     /**
@@ -280,7 +280,7 @@ contract NativasToken is
         address operator,
         address from,
         address to,
-        uint256[] memory ids,
+        uint256[] memory tokenIds,
         uint256[] memory amounts,
         bytes memory data
     )
@@ -288,6 +288,6 @@ contract NativasToken is
         virtual
         override(ERC1155, ERC1155ERC20, ERC1155Pausable, ERC1155URIStorable)
     {
-        super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
+        super._beforeTokenTransfer(operator, from, to, tokenIds, amounts, data);
     }
 }

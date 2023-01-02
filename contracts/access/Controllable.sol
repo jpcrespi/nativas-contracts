@@ -39,8 +39,8 @@ contract Controllable is Context {
      * thereby removing any functionality that is only available to the controller.
      */
     function _transferControl(address controller_) internal virtual {
-        address oldController = _controller;
+        address current = _controller;
         _controller = controller_;
-        emit ControlTransferred(oldController, controller_);
+        emit ControlTransferred(current, controller_);
     }
 }

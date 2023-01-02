@@ -23,7 +23,7 @@ contract ERC1155ERC20 is ERC1155Supply, IERC1155ERC20 {
     /**
      * @dev MUST trigger when a new adapter is created.
      */
-    event AdapterCreated(uint256 indexed id, address indexed adapter);
+    event AdapterCreated(uint256 indexed tokenId, address indexed adapter);
 
     /**
      * @dev Set NativasAdapter contract template
@@ -42,8 +42,8 @@ contract ERC1155ERC20 is ERC1155Supply, IERC1155ERC20 {
     /**
      * @dev Get adpter contract address for token id.
      */
-    function getAdapter(uint256 id) public view virtual returns (address) {
-        return _adapters[id];
+    function getAdapter(uint256 tokenId) public view virtual returns (address) {
+        return _adapters[tokenId];
     }
 
     /**
@@ -57,12 +57,12 @@ contract ERC1155ERC20 is ERC1155Supply, IERC1155ERC20 {
         address operator,
         address from,
         address to,
-        uint256 id,
+        uint256 tokenId,
         uint256 amount,
         bytes memory data
     ) public virtual override {
-        require(_msgSender() == _adapters[id], "ERC1155AE01");
-        _safeAdapterTransferFrom(operator, from, to, id, amount, data);
+        require(_msgSender() == _adapters[tokenId], "ERC1155AE01");
+        _safeAdapterTransferFrom(operator, from, to, tokenId, amount, data);
     }
 
     /**
@@ -82,26 +82,26 @@ contract ERC1155ERC20 is ERC1155Supply, IERC1155ERC20 {
      * @dev Create new adapter contract por token id
      */
     function _setAdapter(
-        uint256 id,
+        uint256 tokenId,
         string memory name,
         string memory symbol,
         uint8 decimals
     ) internal virtual {
         address adapter = _template.clone();
-        IERC20Adapter(adapter).init(id, name, symbol, decimals);
-        _adapters[id] = adapter;
-        emit AdapterCreated(id, adapter);
+        IERC20Adapter(adapter).init(tokenId, name, symbol, decimals);
+        _adapters[tokenId] = adapter;
+        emit AdapterCreated(tokenId, adapter);
     }
 
     /**
-     * @dev Transfers `amount` tokens of token type `id` from `from` to `to`.
+     * @dev Transfers `amount` tokens of token type `tokenId` from `from` to `to`.
      *
      * Emits a {TransferSingle} event.
      *
      * Requirements:
      *
      * - `to` cannot be the zero address.
-     * - `from` must have a balance of tokens of type `id` of at least `amount`.
+     * - `from` must have a balance of tokens of type `tokenId` of at least `amount`.
      * - If `to` refers to a smart contract, it must implement
      * {IERC1155Receiver-onERC1155Received} and return the acceptance magic value.
      */
@@ -109,13 +109,20 @@ contract ERC1155ERC20 is ERC1155Supply, IERC1155ERC20 {
         address operator,
         address from,
         address to,
-        uint256 id,
+        uint256 tokenId,
         uint256 amount,
         bytes memory data
     ) internal virtual {
         require(to != address(0), "ERC1155AE02");
-        _transferFrom(operator, from, to, id, amount, data);
-        _doSafeTransferAcceptanceCheck(operator, from, to, id, amount, data);
+        _transferFrom(operator, from, to, tokenId, amount, data);
+        _doSafeTransferAcceptanceCheck(
+            operator,
+            from,
+            to,
+            tokenId,
+            amount,
+            data
+        );
     }
 
     /**
@@ -129,13 +136,13 @@ contract ERC1155ERC20 is ERC1155Supply, IERC1155ERC20 {
         address operator,
         address from,
         address to,
-        uint256[] memory ids,
+        uint256[] memory tokenIds,
         uint256[] memory amounts,
         bytes memory data
     ) internal virtual override {
-        super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
-        for (uint256 i = 0; i < ids.length; ++i) {
-            require(exists(ids[i]) == true, "ERC1155AE03");
+        super._beforeTokenTransfer(operator, from, to, tokenIds, amounts, data);
+        for (uint256 i = 0; i < tokenIds.length; ++i) {
+            require(exists(tokenIds[i]) == true, "ERC1155AE03");
         }
     }
 }

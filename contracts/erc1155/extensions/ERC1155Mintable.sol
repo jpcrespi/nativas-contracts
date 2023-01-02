@@ -23,28 +23,28 @@ contract ERC1155Mintable is ERC1155 {
      */
     function _mint(
         address to,
-        uint256 id,
+        uint256 tokenId,
         uint256 amount,
         bytes memory data
     ) internal virtual {
         require(to != address(0), "ERC1155ME01");
 
         address operator = _msgSender();
-        uint256[] memory ids = _asSingletonArray(id);
+        uint256[] memory tokenIds = _asSingletonArray(tokenId);
         uint256[] memory amounts = _asSingletonArray(amount);
 
-        _beforeTokenTransfer(operator, address(0), to, ids, amounts, data);
+        _beforeTokenTransfer(operator, address(0), to, tokenIds, amounts, data);
 
-        _balances[id][to] += amount;
-        emit TransferSingle(operator, address(0), to, id, amount);
+        _balances[tokenId][to] += amount;
+        emit TransferSingle(operator, address(0), to, tokenId, amount);
 
-        _afterTokenTransfer(operator, address(0), to, ids, amounts, data);
+        _afterTokenTransfer(operator, address(0), to, tokenIds, amounts, data);
 
         _doSafeTransferAcceptanceCheck(
             operator,
             address(0),
             to,
-            id,
+            tokenId,
             amount,
             data
         );
@@ -63,30 +63,30 @@ contract ERC1155Mintable is ERC1155 {
      */
     function _mintBatch(
         address to,
-        uint256[] memory ids,
+        uint256[] memory tokenIds,
         uint256[] memory amounts,
         bytes memory data
     ) internal virtual {
         require(to != address(0), "ERC1155ME02");
-        require(ids.length == amounts.length, "ERC1155ME03");
+        require(tokenIds.length == amounts.length, "ERC1155ME03");
 
         address operator = _msgSender();
 
-        _beforeTokenTransfer(operator, address(0), to, ids, amounts, data);
+        _beforeTokenTransfer(operator, address(0), to, tokenIds, amounts, data);
 
-        for (uint256 i = 0; i < ids.length; i++) {
-            _balances[ids[i]][to] += amounts[i];
+        for (uint256 i = 0; i < tokenIds.length; i++) {
+            _balances[tokenIds[i]][to] += amounts[i];
         }
 
-        emit TransferBatch(operator, address(0), to, ids, amounts);
+        emit TransferBatch(operator, address(0), to, tokenIds, amounts);
 
-        _afterTokenTransfer(operator, address(0), to, ids, amounts, data);
+        _afterTokenTransfer(operator, address(0), to, tokenIds, amounts, data);
 
         _doSafeBatchTransferAcceptanceCheck(
             operator,
             address(0),
             to,
-            ids,
+            tokenIds,
             amounts,
             data
         );

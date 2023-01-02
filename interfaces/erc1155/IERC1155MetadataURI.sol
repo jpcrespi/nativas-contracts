@@ -16,5 +16,5 @@ interface IERC1155MetadataURI {
      * The URI MUST point to a JSON file that conforms to the "ERC-1155 Metadata URI JSON Schema".
      * @return uri string
      */
-    function uri(uint256 id) external view returns (string memory uri);
+    function uri(uint256 tokenId) external view returns (string memory uri);
 }

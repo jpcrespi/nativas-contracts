@@ -21,16 +21,16 @@ interface IERC1155TokenReceiver {
      * reverted by the caller.
      * @param operator The address which initiated the transfer (i.e. msg.sender)
      * @param from The address which previously owned the token
-     * @param id The ID of the token being transferred
-     * @param value The amount of tokens being transferred
+     * @param tokenId The ID of the token being transferred
+     * @param amount The amount of tokens being transferred
      * @param data Additional data with no specified format
      * @return result `bytes4(keccak256("onERC1155Received(address,address,uint256,uint256,bytes)"))`
      */
     function onERC1155Received(
         address operator,
         address from,
-        uint256 id,
-        uint256 value,
+        uint256 tokenId,
+        uint256 amount,
         bytes calldata data
     ) external returns (bytes4 result);
 
@@ -45,16 +45,16 @@ interface IERC1155TokenReceiver {
      * reverted by the caller.
      * @param operator The address which initiated the batch transfer (i.e. msg.sender)
      * @param from The address which previously owned the token
-     * @param ids An array containing ids of each token being transferred (order and length must match _values array)
-     * @param values An array containing amounts of each token being transferred (order and length must match _ids array)
+     * @param tokenIds An array containing ids of each token being transferred (order and length must match _values array)
+     * @param amounts An array containing amounts of each token being transferred (order and length must match _ids array)
      * @param data Additional data with no specified format
      * @return result `bytes4(keccak256("onERC1155BatchReceived(address,address,uint256[],uint256[],bytes)"))`
      */
     function onERC1155BatchReceived(
         address operator,
         address from,
-        uint256[] calldata ids,
-        uint256[] calldata values,
+        uint256[] calldata tokenIds,
+        uint256[] calldata amounts,
         bytes calldata data
     ) external returns (bytes4 result);
 }

@@ -17,7 +17,7 @@ contract NativasOffset is Context, Controllable, IERC1155Logger {
      */
     struct OffsetModel {
         uint256 tokenId;
-        uint256 value;
+        uint256 amount;
         uint256 date;
         string reason;
     }
@@ -25,7 +25,7 @@ contract NativasOffset is Context, Controllable, IERC1155Logger {
     event PerformOffset(
         address indexed account,
         uint256 indexed tokenId,
-        uint256 value,
+        uint256 amount,
         string reason
     );
 
@@ -109,13 +109,13 @@ contract NativasOffset is Context, Controllable, IERC1155Logger {
         virtual
         returns (
             uint256 tokenId,
-            uint256 value,
+            uint256 amount,
             uint256 date,
             string memory reason
         )
     {
         OffsetModel memory model = _offsets[account][index];
-        return (model.tokenId, model.value, model.date, model.reason);
+        return (model.tokenId, model.amount, model.date, model.reason);
     }
 
     /**
@@ -128,11 +128,11 @@ contract NativasOffset is Context, Controllable, IERC1155Logger {
     function offset(
         address account,
         uint256 tokenId,
-        uint256 value,
+        uint256 amount,
         string memory reason
     ) public virtual override {
         require(controller() == _msgSender(), "OFFSETE02");
-        _offset(account, tokenId, value, reason);
+        _offset(account, tokenId, amount, reason);
     }
 
     /**
@@ -141,13 +141,13 @@ contract NativasOffset is Context, Controllable, IERC1155Logger {
     function _offset(
         address account,
         uint256 tokenId,
-        uint256 value,
+        uint256 amount,
         string memory reason
     ) internal virtual {
-        _balances[tokenId][account] += value;
+        _balances[tokenId][account] += amount;
         _offsetCount[account]++;
         _offsets[account].push(
-            OffsetModel(tokenId, value, block.timestamp, reason)
+            OffsetModel(tokenId, amount, block.timestamp, reason)
         );
     }
 }

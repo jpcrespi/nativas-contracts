@@ -87,9 +87,9 @@ contract NativasToken is
      *
      * - the caller must be admin
      */
-    function transferControl(address newController) public virtual {
+    function transferControl(address controller_) public virtual {
         require(_control.isAdmin(_msgSender()), "ERC1155NE01");
-        _transferControl(newController);
+        _transferControl(controller_);
     }
 
     /**

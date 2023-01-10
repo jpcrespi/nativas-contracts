@@ -1,5 +1,5 @@
 /// SPDX-License-Identifier: MIT
-/// @by: Nativas BCorp
+/// @by: Nativas ClimaTech
 /// @author: Juan Pablo Crespi
 
 pragma solidity ^0.8.0;
@@ -35,7 +35,7 @@ contract NativasAdapter is
     uint8 internal _decimals;
 
     /**
-     * @dev Initialize template
+     * @dev See {NativasAdapter-init}
      */
     constructor(
         uint256 tokenId_,
@@ -87,7 +87,7 @@ contract NativasAdapter is
     }
 
     /**
-     * @dev ERC1155 token id.
+     * @dev ERC1155 token indentifier.
      */
     function id() public view virtual returns (uint256) {
         return _tokenId;
@@ -183,7 +183,7 @@ contract NativasAdapter is
     }
 
     /**
-     * @dev Moves `amount` of tokens from `sender` to `recipient`.
+     * @dev Moves `amount` of tokens from `from` to `to`.
      *
      * Emits a {Transfer} event.
      *

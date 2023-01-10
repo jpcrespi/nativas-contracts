@@ -1,5 +1,5 @@
 /// SPDX-License-Identifier: MIT
-/// @by: Nativas BCorp
+/// @by: Nativas ClimaTech
 /// @author: Juan Pablo Crespi
 /// @dev https://eips.ethereum.org/EIPS/eip-20
 

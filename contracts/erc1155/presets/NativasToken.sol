@@ -1,5 +1,5 @@
 /// SPDX-License-Identifier: MIT
-/// @by: Nativas BCorp
+/// @by: Nativas ClimaTech
 /// @author: Juan Pablo Crespi
 
 pragma solidity ^0.8.0;
@@ -22,6 +22,7 @@ contract NativasToken is
     ERC1155URIStorable,
     ERC1155ERC20
 {
+    // IERC1155Control implementation
     IERC1155Control internal _control;
 
     constructor(

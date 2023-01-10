@@ -1,5 +1,5 @@
 /// SPDX-License-Identifier: MIT
-/// @by: Nativas BCorp
+/// @by: Nativas ClimaTech
 /// @author: Juan Pablo Crespi
 /// @dev: https://eips.ethereum.org/EIPS/eip-1167
 
@@ -69,7 +69,7 @@ contract NativasFactory is Context, Controllable {
      *
      * Requirements:
      *
-     * - the caller must be the contract owener.
+     * - the caller must be the contract controller.
      */
     function setHolder(
         address entity_,

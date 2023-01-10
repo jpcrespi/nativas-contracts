@@ -1,5 +1,5 @@
 /// SPDX-License-Identifier: MIT
-/// @by: Nativas BCorp
+/// @by: Nativas ClimaTech
 /// @author: Juan Pablo Crespi
 
 pragma solidity ^0.8.0;
@@ -12,6 +12,9 @@ import "./ERC1155Mintable.sol";
  * @dev Offset Implementation
  */
 contract ERC1155Swappable is ERC1155Offsettable, ERC1155Mintable {
+    /**
+     * @dev See {ERC1155Offsettable-constructor}
+     */
     constructor(address logger_) ERC1155Offsettable(logger_) {}
 
     function _swap(
@@ -23,7 +26,7 @@ contract ERC1155Swappable is ERC1155Offsettable, ERC1155Mintable {
     ) internal virtual {
         require(_offsettable[fromTokenId] == false, "ERC1155WE01");
         require(_offsettable[toTokenId] == true, "ERC1155WE02");
-        _burn(account, fromTokenId, amount, data);
+        _safeBurn(account, fromTokenId, amount, data);
         _mint(account, toTokenId, amount, data);
     }
 
@@ -40,7 +43,7 @@ contract ERC1155Swappable is ERC1155Offsettable, ERC1155Mintable {
         for (uint256 i = 0; i < toTokenIds.length; i++) {
             require(_offsettable[toTokenIds[i]] == true, "ERC1155WE04");
         }
-        _burnBatch(account, fromTokenIds, amounts, data);
+        _safeBurnBatch(account, fromTokenIds, amounts, data);
         _mintBatch(account, toTokenIds, amounts, data);
     }
 }

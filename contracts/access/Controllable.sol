@@ -1,5 +1,5 @@
 /// SPDX-License-Identifier: MIT
-/// @by: Nativas BCorp
+/// @by: Nativas ClimaTech
 /// @author: Juan Pablo Crespi
 
 pragma solidity ^0.8.0;
@@ -18,14 +18,14 @@ contract Controllable is Context {
     );
 
     /**
-     * @dev Initializes the contract setting the deployer as the initial owner.
+     * @dev Initializes the contract setting the deployer as the initial controller.
      */
     constructor(address controller_) {
         _transferControl(controller_);
     }
 
     /**
-     * @dev Returns the address of the current accessor.
+     * @dev Returns the address of the current controller.
      */
     function controller() public view virtual returns (address) {
         return _controller;

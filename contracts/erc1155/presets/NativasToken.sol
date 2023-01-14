@@ -166,7 +166,7 @@ contract NativasToken is
      *
      * Requirements:
      *
-     * - the caller must be adapter.
+     * - the caller must be editor.
      */
     function setAdapter(
         uint256 tokenId,
@@ -174,7 +174,7 @@ contract NativasToken is
         string memory symbol,
         uint8 decimals
     ) public virtual {
-        require(_control.isAdapter(_msgSender()), "ERC1155NE06");
+        require(_control.isEditor(_msgSender()), "ERC1155NE06");
         _setAdapter(tokenId, name, symbol, decimals);
     }
 
@@ -231,10 +231,10 @@ contract NativasToken is
      *
      * Requeriments:
      *
-     * - the caller must be offsetter
+     * - the caller must be editor
      */
     function setOffsettable(uint256 tokenId, bool enabled) public virtual {
-        require(_control.isSwapper(_msgSender()), "ERC1155NE11");
+        require(_control.isEditor(_msgSender()), "ERC1155NE11");
         _setOffsettable(tokenId, enabled);
     }
 

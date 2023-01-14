@@ -11,7 +11,6 @@ import "../../interfaces/erc1155/IERC1155Control.sol";
  * @dev Contract module which provides a basic access control mechanism.
  */
 contract NativasControl is AccessControlEnumerable, IERC1155Control {
-    bytes32 public constant ADAPTER_ROLE = keccak256("ADAPTER_ROLE");
     bytes32 public constant BURNER_ROLE = keccak256("BURNER_ROLE");
     bytes32 public constant EDITOR_ROLE = keccak256("EDITOR_ROLE");
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
@@ -24,7 +23,6 @@ contract NativasControl is AccessControlEnumerable, IERC1155Control {
     constructor() {
         _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
         _grantRole(BURNER_ROLE, _msgSender());
-        _grantRole(ADAPTER_ROLE, _msgSender());
         _grantRole(MINTER_ROLE, _msgSender());
         _grantRole(PAUSER_ROLE, _msgSender());
         _grantRole(EDITOR_ROLE, _msgSender());
@@ -55,19 +53,6 @@ contract NativasControl is AccessControlEnumerable, IERC1155Control {
         returns (bool)
     {
         return hasRole(BURNER_ROLE, account);
-    }
-
-    /**
-     * @dev Returns `true` if `account` has been granted `ADAPTER_ROLE`.
-     */
-    function isAdapter(address account)
-        public
-        view
-        virtual
-        override
-        returns (bool)
-    {
-        return hasRole(ADAPTER_ROLE, account);
     }
 
     /**

@@ -19,11 +19,6 @@ interface IERC1155Control {
     function isBurner(address account) external returns (bool);
 
     /**
-     * @dev Returns `true` if `account` has been granted `adapter` role.
-     */
-    function isAdapter(address account) external returns (bool);
-
-    /**
      * @dev Returns `true` if `account` has been granted `minter` role.
      */
     function isMinter(address account) external returns (bool);

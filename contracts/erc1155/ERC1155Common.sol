@@ -72,7 +72,8 @@ contract ERC1155Common {
                 data
             );
             require(
-                response == IERC1155TokenReceiver.onERC1155Received.selector,
+                response ==
+                    IERC1155TokenReceiver.onERC1155BatchReceived.selector,
                 "ERC1155E11"
             );
         }

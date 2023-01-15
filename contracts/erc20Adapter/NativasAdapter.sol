@@ -183,15 +183,7 @@ contract NativasAdapter is
     }
 
     /**
-     * @dev Moves `amount` of tokens from `from` to `to`.
-     *
-     * Emits a {Transfer} event.
-     *
-     * Requirements:
-     *
-     * - `from` cannot be the zero address.
-     * - `to` cannot be the zero address.
-     * - `from` must have a balance of at least `amount`.
+     * @dev See {IERC1155ERC20-safeAdapterTransferFrom}
      */
     function _transfer(
         address operator,
@@ -207,6 +199,5 @@ contract NativasAdapter is
             amount,
             ""
         );
-        emit Transfer(from, to, amount);
     }
 }

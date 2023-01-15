@@ -23,9 +23,6 @@ contract NativasToken is
     ERC1155URIStorable,
     ERC1155ERC20
 {
-    // IERC1155Control implementation
-    IAccessControl internal _control;
-
     constructor(
         address controller_,
         string memory uri_,
@@ -36,9 +33,7 @@ contract NativasToken is
         ERC1155URIStorable(uri_)
         ERC1155ERC20(template_)
         ERC1155Swappable(logger_)
-    {
-        _control = IAccessControl(controller_);
-    }
+    {}
 
     /**
      * @dev See {IERC165-supportsInterface}.
@@ -88,9 +83,16 @@ contract NativasToken is
      * Requirements:
      *
      * - the caller must be admin
+     * - new controller must implement IAccessControl interface
      */
     function transferControl(address controller_) public virtual {
         require(_hasRole(Roles.ADMIN_ROLE), "ERC1155NE01");
+        require(
+            IERC165(controller_).supportsInterface(
+                type(IAccessControl).interfaceId
+            ),
+            "ERC1155NE14"
+        );
         _transferControl(controller_);
     }
 
@@ -297,6 +299,6 @@ contract NativasToken is
      * @dev See {IAccessControl-hasRole}
      */
     function _hasRole(bytes32 role) internal virtual returns (bool) {
-        return _control.hasRole(role, _msgSender());
+        return IAccessControl(controller()).hasRole(role, _msgSender());
     }
 }

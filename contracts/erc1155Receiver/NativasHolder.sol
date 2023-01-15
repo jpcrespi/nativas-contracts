@@ -25,7 +25,7 @@ contract NativasHolder is
     IERC1155TokenReceiver
 {
     // Holder metadata
-    uint256 internal _holderId;
+    uint256 internal _id;
     string internal _nin;
     string internal _name;
 
@@ -50,11 +50,11 @@ contract NativasHolder is
         address entity_,
         address operator_,
         address controller_,
-        uint256 holderId_,
+        uint256 id_,
         string memory nin_,
         string memory name_
     ) public virtual override initializer {
-        _holderId = holderId_;
+        _id = id_;
         _nin = nin_;
         _setName(name_);
         _transferControl(controller_);
@@ -65,7 +65,7 @@ contract NativasHolder is
      * @return id of the holder account
      */
     function id() public view virtual returns (uint256) {
-        return _holderId;
+        return _id;
     }
 
     /**
@@ -149,6 +149,10 @@ contract NativasHolder is
         if (entity_ == address(0)) {
             return;
         }
+        require(
+            IERC165(entity_).supportsInterface(type(IERC1155).interfaceId),
+            "ERC1155RE04"
+        );
         IERC1155(entity_).setApprovalForAll(operator_, approved_);
     }
 

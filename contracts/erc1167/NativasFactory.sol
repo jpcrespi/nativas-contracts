@@ -5,10 +5,13 @@
 
 pragma solidity ^0.8.0;
 
+import "@openzeppelin/contracts/access/IAccessControl.sol";
+import "@openzeppelin/contracts/utils/introspection/IERC165.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/proxy/Clones.sol";
 import "../../interfaces/erc1155/IERC1155Holder.sol";
 import "../access/Controllable.sol";
+import "../access/NativasRoles.sol";
 
 /**
  * ERC1167 implementation to create new holders
@@ -57,10 +60,17 @@ contract NativasFactory is Context, Controllable {
      *
      * Requirements:
      *
-     * - the caller must have the contract controller.
+     * - the caller must be admin.
+     * - new controller must implement IAccessControl interface
      */
     function transferControl(address controller_) public virtual {
-        require(controller() == _msgSender(), "ERC1167E01");
+        require(_hasRole(Roles.ADMIN_ROLE), "ERC1167E01");
+        require(
+            IERC165(controller_).supportsInterface(
+                type(IAccessControl).interfaceId
+            ),
+            "ERC1167E02"
+        );
         _transferControl(controller_);
     }
 
@@ -69,7 +79,7 @@ contract NativasFactory is Context, Controllable {
      *
      * Requirements:
      *
-     * - the caller must be the contract controller.
+     * - the caller must be editor.
      */
     function setHolder(
         address entity_,
@@ -79,7 +89,7 @@ contract NativasFactory is Context, Controllable {
         address controller_,
         address operator_
     ) public virtual {
-        require(controller() == _msgSender(), "ERC1167E02");
+        require(_hasRole(Roles.EDITOR_ROLE), "ERC1167E03");
         _setHolder(entity_, holderId_, nin_, name_, operator_, controller_);
     }
 
@@ -105,5 +115,12 @@ contract NativasFactory is Context, Controllable {
         );
         _holders[holderId] = holderAddress;
         emit HolderCreated(holderId, holderAddress);
+    }
+
+    /**
+     * @dev See {IAccessControl-hasRole}
+     */
+    function _hasRole(bytes32 role) internal virtual returns (bool) {
+        return IAccessControl(controller()).hasRole(role, _msgSender());
     }
 }

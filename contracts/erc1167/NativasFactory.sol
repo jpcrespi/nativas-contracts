@@ -70,7 +70,7 @@ contract NativasFactory is Context, Controllable {
             IERC165(controller_).supportsInterface(
                 type(IAccessControl).interfaceId
             ),
-            "ERC1167E02"
+            "ERR-ERC1167-03"
         );
         _transferControl(controller_);
     }
@@ -90,7 +90,7 @@ contract NativasFactory is Context, Controllable {
         address controller_,
         address operator_
     ) public virtual {
-        require(_hasRole(Roles.MANAGER_ROLE), "ERR-ERC1167-03");
+        require(_hasRole(Roles.MANAGER_ROLE), "ERR-ERC1167-04");
         _setHolder(entity_, holderId_, nin_, name_, operator_, controller_);
     }
 
@@ -102,7 +102,7 @@ contract NativasFactory is Context, Controllable {
      * - the caller must be editor.
      */
     function setTemplate(address template_) public virtual {
-        require(_hasRole(Roles.ADMIN_ROLE), "ERR-ERC1167-04");
+        require(_hasRole(Roles.ADMIN_ROLE), "ERR-ERC1167-05");
         _setTemplate(template_);
     }
 
@@ -117,7 +117,7 @@ contract NativasFactory is Context, Controllable {
         address controller,
         address operator
     ) internal virtual {
-        require(_template != address(0), "ERR-ERC1167-05");
+        require(_template != address(0), "ERR-ERC1167-06");
         address holderAddress = _template.clone();
         IERC1155Holder(holderAddress).init(
             entity,
@@ -147,12 +147,12 @@ contract NativasFactory is Context, Controllable {
      * - tem template contract must implemente the IERC1155Holder interface
      */
     function _setTemplate(address template_) internal virtual {
-        require(template_ != address(0), "ERR-ERC1167-06");
+        require(template_ != address(0), "ERR-ERC1167-07");
         require(
             IERC165(template_).supportsInterface(
                 type(IERC1155Holder).interfaceId
             ),
-            "ERR-ERC1167-07"
+            "ERR-ERC1167-08"
         );
         _template = template_;
     }

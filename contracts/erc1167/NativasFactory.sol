@@ -89,7 +89,7 @@ contract NativasFactory is Context, Controllable {
         address controller_,
         address operator_
     ) public virtual {
-        require(_hasRole(Roles.EDITOR_ROLE), "ERC1167E03");
+        require(_hasRole(Roles.MANAGER_ROLE), "ERC1167E03");
         _setHolder(entity_, holderId_, nin_, name_, operator_, controller_);
     }
 

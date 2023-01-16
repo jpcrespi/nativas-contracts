@@ -165,7 +165,7 @@ contract NativasAdapter is
         returns (bool)
     {
         address owner = _msgSender();
-        _transfer(owner, owner, to, amount);
+        _transfer(owner, to, amount);
         return true;
     }
 
@@ -173,31 +173,22 @@ contract NativasAdapter is
      * @dev See {IERC20-transferFrom}.
      */
     function transferFrom(
-        address from,
-        address to,
-        uint256 amount
+        address,
+        address,
+        uint256
     ) public virtual override returns (bool) {
-        address operator = _msgSender();
-        _transfer(operator, from, to, amount);
-        return true;
+        require(false);
+        return false;
     }
 
     /**
      * @dev See {IERC1155ERC20-safeAdapterTransferFrom}
      */
     function _transfer(
-        address operator,
         address from,
         address to,
         uint256 amount
     ) internal virtual {
-        _entity.safeAdapterTransferFrom(
-            operator,
-            from,
-            to,
-            _tokenId,
-            amount,
-            ""
-        );
+        _entity.safeAdapterTransferFrom(from, to, _tokenId, amount, "");
     }
 }

@@ -54,7 +54,6 @@ contract ERC1155ERC20 is ERC1155Supply, IERC1155ERC20 {
      * - the caller MUST be the token adapter.
      */
     function safeAdapterTransferFrom(
-        address operator,
         address from,
         address to,
         uint256 tokenId,
@@ -62,11 +61,7 @@ contract ERC1155ERC20 is ERC1155Supply, IERC1155ERC20 {
         bytes memory data
     ) public virtual override {
         require(_msgSender() == _adapters[tokenId], "ERC1155AE01");
-        require(
-            operator == from || isApprovedForAll(from, operator),
-            "ERC1155AE04"
-        );
-        _safeAdapterTransferFrom(operator, from, to, tokenId, amount, data);
+        _safeAdapterTransferFrom(from, to, tokenId, amount, data);
     }
 
     /**
@@ -110,7 +105,6 @@ contract ERC1155ERC20 is ERC1155Supply, IERC1155ERC20 {
      * {IERC1155Receiver-onERC1155Received} and return the acceptance magic value.
      */
     function _safeAdapterTransferFrom(
-        address operator,
         address from,
         address to,
         uint256 tokenId,
@@ -118,15 +112,8 @@ contract ERC1155ERC20 is ERC1155Supply, IERC1155ERC20 {
         bytes memory data
     ) internal virtual {
         require(to != address(0), "ERC1155AE02");
-        _transferFrom(operator, from, to, tokenId, amount, data);
-        _doSafeTransferAcceptanceCheck(
-            operator,
-            from,
-            to,
-            tokenId,
-            amount,
-            data
-        );
+        _transferFrom(from, from, to, tokenId, amount, data);
+        _doSafeTransferAcceptanceCheck(from, from, to, tokenId, amount, data);
     }
 
     /**

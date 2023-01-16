@@ -15,7 +15,6 @@ interface IERC1155ERC20 is IERC1155, IERC1155Supply {
      * @dev See {IERC1155-safeTransferFrom}.
      */
     function safeAdapterTransferFrom(
-        address operator,
         address from,
         address to,
         uint256 tokenId,

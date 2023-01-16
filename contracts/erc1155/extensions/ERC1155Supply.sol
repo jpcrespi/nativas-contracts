@@ -57,7 +57,7 @@ contract ERC1155Supply is ERC1155, IERC1155Supply {
             for (uint256 i = 0; i < tokenIds.length; ++i) {
                 uint256 id = tokenIds[i];
                 uint256 amount = amounts[i];
-                require(_totalSupply[id] >= amount, "ERC1155SE01");
+                require(_totalSupply[id] >= amount, "ERR-ERC1155S-01");
                 unchecked {
                     _totalSupply[id] -= amount;
                 }

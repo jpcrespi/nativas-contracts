@@ -48,7 +48,7 @@ contract ERC1155 is Context, ERC165, ERC1155Common, IERC1155 {
         override
         returns (uint256)
     {
-        require(account != address(0), "ERC1155E01");
+        require(account != address(0), "ERR-ERC1155-01");
         return _balances[tokenId][account];
     }
 
@@ -63,7 +63,7 @@ contract ERC1155 is Context, ERC165, ERC1155Common, IERC1155 {
         address[] memory accounts,
         uint256[] memory tokenIds
     ) public view virtual override returns (uint256[] memory) {
-        require(accounts.length == tokenIds.length, "ERC1155E02");
+        require(accounts.length == tokenIds.length, "ERR-ERC1155-02");
 
         uint256[] memory batchBalances = new uint256[](accounts.length);
 
@@ -108,7 +108,7 @@ contract ERC1155 is Context, ERC165, ERC1155Common, IERC1155 {
         uint256 amount,
         bytes memory data
     ) public virtual override {
-        require(_isOwnerOrApproved(from), "ERC1155E03");
+        require(_isOwnerOrApproved(from), "ERR-ERC1155-03");
         _safeTransferFrom(from, to, tokenId, amount, data);
     }
 
@@ -122,7 +122,7 @@ contract ERC1155 is Context, ERC165, ERC1155Common, IERC1155 {
         uint256[] memory amounts,
         bytes memory data
     ) public virtual override {
-        require(_isOwnerOrApproved(from), "ERC1155E04");
+        require(_isOwnerOrApproved(from), "ERR-ERC1155-04");
         _safeBatchTransferFrom(from, to, tokenIds, amounts, data);
     }
 
@@ -145,7 +145,7 @@ contract ERC1155 is Context, ERC165, ERC1155Common, IERC1155 {
         uint256 amount,
         bytes memory data
     ) internal virtual {
-        require(to != address(0), "ERC1155E05");
+        require(to != address(0), "ERR-ERC1155-05");
 
         address operator = _msgSender();
 
@@ -178,8 +178,8 @@ contract ERC1155 is Context, ERC165, ERC1155Common, IERC1155 {
         uint256[] memory amounts,
         bytes memory data
     ) internal virtual {
-        require(tokenIds.length == amounts.length, "ERC1155E06");
-        require(to != address(0), "ERC1155E07");
+        require(tokenIds.length == amounts.length, "ERR-ERC1155-06");
+        require(to != address(0), "ERR-ERC1155-07");
 
         address operator = _msgSender();
 
@@ -250,7 +250,7 @@ contract ERC1155 is Context, ERC165, ERC1155Common, IERC1155 {
         uint256 amount
     ) internal virtual {
         uint256 fromBalance = _balances[tokenId][from];
-        require(fromBalance >= amount, "ERC1155E08");
+        require(fromBalance >= amount, "ERR-ERC1155-08");
         unchecked {
             _balances[tokenId][from] = fromBalance - amount;
         }
@@ -283,7 +283,7 @@ contract ERC1155 is Context, ERC165, ERC1155Common, IERC1155 {
         address operator,
         bool approved
     ) internal virtual {
-        require(owner != operator, "ERC1155E09");
+        require(owner != operator, "ERR-ERC1155-08");
         _operatorApprovals[owner][operator] = approved;
         emit ApprovalForAll(owner, operator, approved);
     }

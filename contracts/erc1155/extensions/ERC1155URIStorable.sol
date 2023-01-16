@@ -95,7 +95,7 @@ contract ERC1155URIStorable is ERC1155, IERC1155MetadataURI {
     ) internal virtual override {
         super._beforeTokenTransfer(operator, from, to, tokenIds, amounts, data);
         for (uint256 i = 0; i < tokenIds.length; ++i) {
-            require(exists(tokenIds[i]) == true, "ERC1155UE01");
+            require(exists(tokenIds[i]) == true, "ERR-ERC1155U-01");
         }
     }
 }

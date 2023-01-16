@@ -29,7 +29,7 @@ contract ERC1155ERC20 is ERC1155Supply, IERC1155ERC20 {
      * @dev Set NativasAdapter contract template
      */
     constructor(address template_) {
-        _template = template_;
+        _setTemplate(template_);
     }
 
     /**
@@ -60,7 +60,7 @@ contract ERC1155ERC20 is ERC1155Supply, IERC1155ERC20 {
         uint256 amount,
         bytes memory data
     ) public virtual override {
-        require(_msgSender() == _adapters[tokenId], "ERC1155AE01");
+        require(_msgSender() == _adapters[tokenId], "ERR-ERC1155A-01");
         _safeAdapterTransferFrom(from, to, tokenId, amount, data);
     }
 
@@ -86,6 +86,7 @@ contract ERC1155ERC20 is ERC1155Supply, IERC1155ERC20 {
         string memory symbol,
         uint8 decimals
     ) internal virtual {
+        require(_template != address(0), "ERR-ERC1155A-02");
         address adapter = _template.clone();
         IERC20Adapter(adapter).init(tokenId, name, symbol, decimals);
         _adapters[tokenId] = adapter;
@@ -111,7 +112,7 @@ contract ERC1155ERC20 is ERC1155Supply, IERC1155ERC20 {
         uint256 amount,
         bytes memory data
     ) internal virtual {
-        require(to != address(0), "ERC1155AE02");
+        require(to != address(0), "ERR-ERC1155A-03");
         _transferFrom(from, from, to, tokenId, amount, data);
         _doSafeTransferAcceptanceCheck(from, from, to, tokenId, amount, data);
     }
@@ -133,7 +134,26 @@ contract ERC1155ERC20 is ERC1155Supply, IERC1155ERC20 {
     ) internal virtual override {
         super._beforeTokenTransfer(operator, from, to, tokenIds, amounts, data);
         for (uint256 i = 0; i < tokenIds.length; ++i) {
-            require(exists(tokenIds[i]) == true, "ERC1155AE03");
+            require(exists(tokenIds[i]) == true, "ERR-ERC1155A-04");
         }
+    }
+
+    /**
+     * @dev Sets the adapter template contracts
+     *
+     * Requirements:
+     *
+     * - the template address must not be address 0.
+     * - tem template contract must implemente the IERC20Adapter interface
+     */
+    function _setTemplate(address template_) internal virtual {
+        require(template_ != address(0), "ERR-ERC1155A-05");
+        require(
+            IERC165(template_).supportsInterface(
+                type(IERC20Adapter).interfaceId
+            ),
+            "ERR-ERC1155A-06"
+        );
+        _template = template_;
     }
 }

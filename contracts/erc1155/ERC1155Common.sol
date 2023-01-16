@@ -47,7 +47,7 @@ contract ERC1155Common {
             );
             require(
                 response == IERC1155TokenReceiver.onERC1155Received.selector,
-                "ERC1155E10"
+                "ERR-ERC1155C-01"
             );
         }
     }
@@ -74,7 +74,7 @@ contract ERC1155Common {
             require(
                 response ==
                     IERC1155TokenReceiver.onERC1155BatchReceived.selector,
-                "ERC1155E11"
+                "ERR-ERC1155C-02"
             );
         }
     }

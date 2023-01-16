@@ -38,7 +38,7 @@ contract NativasFactory is Context, Controllable {
     constructor(address controller_, address template_)
         Controllable(controller_)
     {
-        _template = template_;
+        _setTemplate(template_);
     }
 
     /**
@@ -64,7 +64,8 @@ contract NativasFactory is Context, Controllable {
      * - new controller must implement IAccessControl interface
      */
     function transferControl(address controller_) public virtual {
-        require(_hasRole(Roles.ADMIN_ROLE), "ERC1167E01");
+        require(_hasRole(Roles.ADMIN_ROLE), "ERR-ERC1167-01");
+        require(controller_ != address(0), "ERR-ERC1167-02");
         require(
             IERC165(controller_).supportsInterface(
                 type(IAccessControl).interfaceId
@@ -89,8 +90,20 @@ contract NativasFactory is Context, Controllable {
         address controller_,
         address operator_
     ) public virtual {
-        require(_hasRole(Roles.MANAGER_ROLE), "ERC1167E03");
+        require(_hasRole(Roles.MANAGER_ROLE), "ERR-ERC1167-03");
         _setHolder(entity_, holderId_, nin_, name_, operator_, controller_);
+    }
+
+    /**
+     * @dev See {NativasFactory-_updateTemplate}
+     *
+     * Requirements:
+     *
+     * - the caller must be editor.
+     */
+    function setTemplate(address template_) public virtual {
+        require(_hasRole(Roles.ADMIN_ROLE), "ERR-ERC1167-04");
+        _setTemplate(template_);
     }
 
     /**
@@ -104,6 +117,7 @@ contract NativasFactory is Context, Controllable {
         address controller,
         address operator
     ) internal virtual {
+        require(_template != address(0), "ERR-ERC1167-05");
         address holderAddress = _template.clone();
         IERC1155Holder(holderAddress).init(
             entity,
@@ -122,5 +136,24 @@ contract NativasFactory is Context, Controllable {
      */
     function _hasRole(bytes32 role) internal virtual returns (bool) {
         return IAccessControl(controller()).hasRole(role, _msgSender());
+    }
+
+    /**
+     * @dev Sets the holder template contract
+     *
+     * Requirements:
+     *
+     * - the template address must not be address 0.
+     * - tem template contract must implemente the IERC1155Holder interface
+     */
+    function _setTemplate(address template_) internal virtual {
+        require(template_ != address(0), "ERR-ERC1167-06");
+        require(
+            IERC165(template_).supportsInterface(
+                type(IERC1155Holder).interfaceId
+            ),
+            "ERR-ERC1167-07"
+        );
+        _template = template_;
     }
 }

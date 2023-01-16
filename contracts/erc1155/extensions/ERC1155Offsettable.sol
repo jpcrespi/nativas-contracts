@@ -21,7 +21,7 @@ contract ERC1155Offsettable is ERC1155Burnable {
      * @dev Set IERC1155Logger implementation
      */
     constructor(address logger_) {
-        _logger = IERC1155Logger(logger_);
+        _setLogger(logger_);
     }
 
     /**
@@ -52,7 +52,7 @@ contract ERC1155Offsettable is ERC1155Burnable {
         string memory reason,
         bytes memory data
     ) public virtual {
-        require(_offsettable[tokenId], "ERC1155OE02");
+        require(_offsettable[tokenId], "ERR-ERC1155O-01");
         _safeBurn(account, tokenId, amount, data);
         _offset(account, tokenId, amount, reason);
     }
@@ -73,7 +73,7 @@ contract ERC1155Offsettable is ERC1155Burnable {
     ) public virtual {
         _safeBurnBatch(account, tokenIds, amounts, data);
         for (uint256 i = 0; i < tokenIds.length; i++) {
-            require(_offsettable[tokenIds[i]], "ERC1155OE04");
+            require(_offsettable[tokenIds[i]], "ERR-ERC1155O-02");
             _offset(account, tokenIds[i], amounts[i], reasons[i]);
         }
     }
@@ -95,5 +95,24 @@ contract ERC1155Offsettable is ERC1155Burnable {
         string memory reason
     ) internal virtual {
         _logger.offset(account, tokenId, amount, reason);
+    }
+
+    /**
+     * @dev Sets the logger contract
+     *
+     * Requirements:
+     *
+     * - the template address must not be address 0.
+     * - tem template contract must implemente the IERC1155Logger interface
+     */
+    function _setLogger(address logger_) internal virtual {
+        require(logger_ != address(0), "ERR-ERC1155O-03");
+        require(
+            IERC165(logger_).supportsInterface(
+                type(IERC1155Logger).interfaceId
+            ),
+            "ERR-ERC1155O-04"
+        );
+        _logger = IERC1155Logger(logger_);
     }
 }

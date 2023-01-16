@@ -68,6 +68,6 @@ contract ERC1155Pausable is ERC1155 {
         bytes memory data
     ) internal virtual override {
         super._beforeTokenTransfer(operator, from, to, tokenIds, amounts, data);
-        require(paused() == false, "ERC1155PE01");
+        require(paused() == false, "ERR-ERC1155P-01");
     }
 }

@@ -24,7 +24,7 @@ contract ERC1155Burnable is ERC1155 {
         uint256 amount,
         bytes memory data
     ) internal virtual {
-        require(_isOwnerOrApproved(account), "ERC1155BE01");
+        require(_isOwnerOrApproved(account), "ERR-ERC1155B-01");
         _burn(account, tokenId, amount, data);
     }
 
@@ -42,7 +42,7 @@ contract ERC1155Burnable is ERC1155 {
         uint256[] memory amounts,
         bytes memory data
     ) internal virtual {
-        require(_isOwnerOrApproved(account), "ERC1155BE02");
+        require(_isOwnerOrApproved(account), "ERR-ERC1155B-02");
         _burnBatch(account, tokenIds, amounts, data);
     }
 
@@ -62,7 +62,7 @@ contract ERC1155Burnable is ERC1155 {
         uint256 amount,
         bytes memory data
     ) internal virtual {
-        require(from != address(0), "ERC1155BE03");
+        require(from != address(0), "ERR-ERC1155B-03");
 
         address operator = _msgSender();
         uint256[] memory tokenIds = _asSingletonArray(tokenId);
@@ -78,7 +78,7 @@ contract ERC1155Burnable is ERC1155 {
         );
 
         uint256 fromBalance = _balances[tokenId][from];
-        require(fromBalance >= amount, "ERC1155BE04");
+        require(fromBalance >= amount, "ERR-ERC1155B-04");
         unchecked {
             _balances[tokenId][from] = fromBalance - amount;
         }
@@ -111,8 +111,8 @@ contract ERC1155Burnable is ERC1155 {
         uint256[] memory amounts,
         bytes memory data
     ) internal virtual {
-        require(from != address(0), "ERC1155BE05");
-        require(tokenIds.length == amounts.length, "ERC1155BE06");
+        require(from != address(0), "ERR-ERC1155B-05");
+        require(tokenIds.length == amounts.length, "ERR-ERC1155B-06");
 
         address operator = _msgSender();
 
@@ -129,7 +129,7 @@ contract ERC1155Burnable is ERC1155 {
             uint256 id = tokenIds[i];
             uint256 amount = amounts[i];
             uint256 fromBalance = _balances[id][from];
-            require(fromBalance >= amount, "ERC1155BE07");
+            require(fromBalance >= amount, "ERR-ERC1155B-07");
             unchecked {
                 _balances[id][from] = fromBalance - amount;
             }

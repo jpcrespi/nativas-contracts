@@ -45,7 +45,8 @@ contract NativasOffset is Context, Controllable, IERC1155Logger {
      * @dev See {Controllable-_transferControl}.
      */
     function transferControl(address controller_) public virtual {
-        require(controller() == _msgSender(), "OFFSETE02");
+        require(controller() == _msgSender(), "ERR-ERC1155L-01");
+        require(controller_ != address(0), "ERR-ERC1155L-02");
         _transferControl(controller_);
     }
 
@@ -62,7 +63,7 @@ contract NativasOffset is Context, Controllable, IERC1155Logger {
         virtual
         returns (uint256)
     {
-        require(account != address(0), "ERC1155E01");
+        require(account != address(0), "ERR-ERC1155L-03");
         return _balances[tokenId][account];
     }
 
@@ -77,7 +78,7 @@ contract NativasOffset is Context, Controllable, IERC1155Logger {
         address[] memory accounts,
         uint256[] memory tokenIds
     ) public view virtual returns (uint256[] memory) {
-        require(accounts.length == tokenIds.length, "ERC1155E02");
+        require(accounts.length == tokenIds.length, "ERR-ERC1155L-04");
 
         uint256[] memory batchBalances = new uint256[](accounts.length);
 
@@ -131,7 +132,7 @@ contract NativasOffset is Context, Controllable, IERC1155Logger {
         uint256 amount,
         string memory reason
     ) public virtual override {
-        require(controller() == _msgSender(), "OFFSETE02");
+        require(controller() == _msgSender(), "ERR-ERC1155L-05");
         _offset(account, tokenId, amount, reason);
     }
 

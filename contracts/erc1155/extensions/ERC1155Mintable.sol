@@ -27,7 +27,7 @@ contract ERC1155Mintable is ERC1155 {
         uint256 amount,
         bytes memory data
     ) internal virtual {
-        require(to != address(0), "ERC1155ME01");
+        require(to != address(0), "ERR-ERC1155M-01");
 
         address operator = _msgSender();
         uint256[] memory tokenIds = _asSingletonArray(tokenId);
@@ -67,8 +67,8 @@ contract ERC1155Mintable is ERC1155 {
         uint256[] memory amounts,
         bytes memory data
     ) internal virtual {
-        require(to != address(0), "ERC1155ME02");
-        require(tokenIds.length == amounts.length, "ERC1155ME03");
+        require(to != address(0), "ERR-ERC1155M-02");
+        require(tokenIds.length == amounts.length, "ERR-ERC1155M-03");
 
         address operator = _msgSender();
 

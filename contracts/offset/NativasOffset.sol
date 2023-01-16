@@ -5,13 +5,14 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/Context.sol";
+import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import "../../interfaces/erc1155/IERC1155Logger.sol";
 import "../access/Controllable.sol";
 
 /**
  * @dev Offset Implementation
  */
-contract NativasOffset is Context, Controllable, IERC1155Logger {
+contract NativasOffset is ERC165, Context, Controllable, IERC1155Logger {
     /**
      * @dev Offset model
      */
@@ -40,6 +41,21 @@ contract NativasOffset is Context, Controllable, IERC1155Logger {
      * @dev Set Offset contract controller.
      */
     constructor() Controllable(_msgSender()) {}
+
+    /**
+     * @dev See {IERC165-supportsInterface}.
+     */
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        virtual
+        override
+        returns (bool success)
+    {
+        return
+            interfaceId == type(IERC1155Logger).interfaceId ||
+            super.supportsInterface(interfaceId);
+    }
 
     /**
      * @dev See {Controllable-_transferControl}.

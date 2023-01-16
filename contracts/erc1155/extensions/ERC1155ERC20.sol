@@ -62,6 +62,10 @@ contract ERC1155ERC20 is ERC1155Supply, IERC1155ERC20 {
         bytes memory data
     ) public virtual override {
         require(_msgSender() == _adapters[tokenId], "ERC1155AE01");
+        require(
+            operator == from || isApprovedForAll(from, operator),
+            "ERC1155AE04"
+        );
         _safeAdapterTransferFrom(operator, from, to, tokenId, amount, data);
     }
 

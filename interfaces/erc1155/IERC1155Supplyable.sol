@@ -7,7 +7,7 @@ pragma solidity ^0.8.0;
 /**
  * @title Extension of ERC1155 that adds tracking of total supply per id.
  */
-interface IERC1155Supply {
+interface IERC1155Supplyable {
     /**
      * Useful for scenarios where Fungible and Non-fungible tokens have to be
      * clearly identified. Note: While a totalSupply of 1 might mean the

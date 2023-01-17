@@ -5,46 +5,31 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "../../../interfaces/erc1155/IERC1155MetadataURI.sol";
-import "../ERC1155.sol";
+import "./ERC1155Base.sol";
 
 /**
  * @dev ERC1155 token with storage based token URI management.
  */
-contract ERC1155URIStorable is ERC1155, IERC1155MetadataURI {
+contract ERC1155URIStorable is ERC1155Base {
     using Strings for uint256;
     // Used as the URI for all token types by relying on ID substitution.
-    string internal _baseURI;
+    string private _baseURI;
     // Mapping for token URIs
     mapping(uint256 => string) private _tokenURIs;
 
     /**
      * @dev set base uri
      */
-    constructor(string memory uri_) {
-        _setBaseURI(uri_);
-    }
-
-    /**
-     * @dev See {IERC165-supportsInterface}.
-     */
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        virtual
-        override
-        returns (bool success)
-    {
-        return
-            interfaceId == type(IERC1155MetadataURI).interfaceId ||
-            super.supportsInterface(interfaceId);
+    constructor(string memory baseURI_) {
+        _setBaseURI(baseURI_);
     }
 
     /**
      * @dev See {IERC1155MetadataURI-uri}.
      *
-     * This implementation returns the concatenation of the `_uri`
+     * This implementation returns the concatenation of the `_baseURI`
      * and the token-specific uri if the latter is set
+     *
      */
     function uri(uint256 tokenId)
         public
@@ -53,18 +38,23 @@ contract ERC1155URIStorable is ERC1155, IERC1155MetadataURI {
         override
         returns (string memory)
     {
-        return string(abi.encodePacked(_baseURI, _tokenURIs[tokenId]));
+        string memory tokenURI = _tokenURIs[tokenId];
+        return
+            bytes(tokenURI).length > 0
+                ? string(abi.encodePacked(_baseURI, tokenURI))
+                : super.uri(tokenId);
     }
 
     /**
      * @dev Indicates whether any token exist with a given id, or not.
      */
     function exists(uint256 tokenId) public view virtual returns (bool) {
-        return bytes(_tokenURIs[tokenId]).length > 0;
+        string memory tokenURI = _tokenURIs[tokenId];
+        return bytes(tokenURI).length > 0;
     }
 
     /**
-     * @dev Sets `baseURI` as the `_uri` for all tokens
+     * @dev Sets `baseURI` as the `_baseURI` for all tokens
      */
     function _setBaseURI(string memory baseURI_) internal virtual {
         _baseURI = baseURI_;
@@ -95,7 +85,7 @@ contract ERC1155URIStorable is ERC1155, IERC1155MetadataURI {
     ) internal virtual override {
         super._beforeTokenTransfer(operator, from, to, tokenIds, amounts, data);
         for (uint256 i = 0; i < tokenIds.length; ++i) {
-            require(exists(tokenIds[i]) == true, "ERR-ERC1155U-01");
+            require(exists(tokenIds[i]), "ERR-ERC1155U-01");
         }
     }
 }

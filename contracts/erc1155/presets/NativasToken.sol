@@ -25,27 +25,27 @@ contract NativasToken is
 {
     constructor(
         address controller_,
-        string memory uri_,
+        string memory baseURI_,
         address template_,
         address logger_
     )
         Controllable(controller_)
-        ERC1155URIStorable(uri_)
+        ERC1155URIStorable(baseURI_)
         ERC1155ERC20(template_)
         ERC1155Swappable(logger_)
     {}
 
     /**
-     * @dev See {IERC165-supportsInterface}.
+     * @dev See {ERC1155URIStorable-uri}.
      */
-    function supportsInterface(bytes4 interfaceId)
+    function uri(uint256 tokenId)
         public
         view
         virtual
         override(ERC1155, ERC1155URIStorable)
-        returns (bool success)
+        returns (string memory)
     {
-        return super.supportsInterface(interfaceId);
+        return super.uri(tokenId);
     }
 
     /**
@@ -69,12 +69,13 @@ contract NativasToken is
         string memory name,
         string memory symbol,
         uint8 decimals,
-        string memory uri,
+        string memory tokenURI,
         bool offsettable
     ) public virtual {
-        setAdapter(tokenId, name, symbol, decimals);
-        setOffsettable(tokenId, offsettable);
-        setURI(tokenId, uri);
+        require(_hasRole(Roles.EDITOR_ROLE), "ERR-ERC1155N-01");
+        _setAdapter(tokenId, name, symbol, decimals);
+        _setOffsettable(tokenId, offsettable);
+        _setURI(tokenId, tokenURI);
     }
 
     /**
@@ -86,13 +87,13 @@ contract NativasToken is
      * - new controller must implement IAccessControl interface
      */
     function transferControl(address controller_) public virtual {
-        require(_hasRole(Roles.ADMIN_ROLE), "ERR-ERC1155N-01");
-        require(controller_ != address(0), "ERR-ERC1155N-02");
+        require(_hasRole(Roles.ADMIN_ROLE), "ERR-ERC1155N-02");
+        require(controller_ != address(0), "ERR-ERC1155N-03");
         require(
             IERC165(controller_).supportsInterface(
                 type(IAccessControl).interfaceId
             ),
-            "ERR-ERC1155N-03"
+            "ERR-ERC1155N-04"
         );
         _transferControl(controller_);
     }
@@ -107,11 +108,11 @@ contract NativasToken is
     function burn(
         address account,
         uint256 tokenId,
-        uint256 amount,
-        bytes memory data
+        uint256 amount
     ) public virtual {
-        require(_hasRole(Roles.BURNER_ROLE), "ERR-ERC1155N-04");
-        _safeBurn(account, tokenId, amount, data);
+        require(_hasRole(Roles.BURNER_ROLE), "ERR-ERC1155N-05");
+        require(_isOwnerOrApproved(account), "ERR-ERC1155N-0");
+        _burn(account, tokenId, amount);
     }
 
     /**
@@ -124,11 +125,11 @@ contract NativasToken is
     function burnBatch(
         address account,
         uint256[] memory tokenIds,
-        uint256[] memory amounts,
-        bytes memory data
+        uint256[] memory amounts
     ) public virtual {
-        require(_hasRole(Roles.BURNER_ROLE), "ERR-ERC1155N-05");
-        _safeBurnBatch(account, tokenIds, amounts, data);
+        require(_hasRole(Roles.BURNER_ROLE), "ERR-ERC1155N-07");
+        require(_isOwnerOrApproved(account), "ERR-ERC1155N-08");
+        _burnBatch(account, tokenIds, amounts);
     }
 
     /**
@@ -144,7 +145,7 @@ contract NativasToken is
         uint256 amount,
         bytes memory data
     ) public virtual {
-        require(_hasRole(Roles.MINTER_ROLE), "ERR-ERC1155N-06");
+        require(_hasRole(Roles.MINTER_ROLE), "ERR-ERC1155N-09");
         _mint(to, tokenId, amount, data);
     }
 
@@ -161,7 +162,7 @@ contract NativasToken is
         uint256[] memory amounts,
         bytes memory data
     ) public virtual {
-        require(_hasRole(Roles.MINTER_ROLE), "ERR-ERC1155N-07");
+        require(_hasRole(Roles.MINTER_ROLE), "ERR-ERC1155N-10");
         _mintBatch(to, tokenIds, amounts, data);
     }
 
@@ -178,7 +179,7 @@ contract NativasToken is
         string memory symbol,
         uint8 decimals
     ) public virtual {
-        require(_hasRole(Roles.EDITOR_ROLE), "ERR-ERC1155N-08");
+        require(_hasRole(Roles.EDITOR_ROLE), "ERR-ERC1155N-11");
         _setAdapter(tokenId, name, symbol, decimals);
     }
 
@@ -190,7 +191,7 @@ contract NativasToken is
      * - the caller must be editor.
      */
     function setTemplate(address template_) public virtual {
-        require(_hasRole(Roles.ADMIN_ROLE), "ERR-ERC1155N-09");
+        require(_hasRole(Roles.ADMIN_ROLE), "ERR-ERC1155N-12");
         _setTemplate(template_);
     }
 
@@ -202,7 +203,7 @@ contract NativasToken is
      * - the caller must be pauser.
      */
     function pause() public virtual {
-        require(_hasRole(Roles.PAUSER_ROLE), "ERR-ERC1155N-10");
+        require(_hasRole(Roles.PAUSER_ROLE), "ERR-ERC1155N-13");
         _pause();
     }
 
@@ -214,7 +215,7 @@ contract NativasToken is
      * - the caller must be pauser.
      */
     function unpause() public virtual {
-        require(_hasRole(Roles.PAUSER_ROLE), "ERR-ERC1155N-11");
+        require(_hasRole(Roles.PAUSER_ROLE), "ERR-ERC1155N-14");
         _unpause();
     }
 
@@ -226,7 +227,7 @@ contract NativasToken is
      * - the caller must be editor
      */
     function setBaseURI(string memory baseURI) public virtual {
-        require(_hasRole(Roles.EDITOR_ROLE), "ERR-ERC1155N-12");
+        require(_hasRole(Roles.EDITOR_ROLE), "ERR-ERC1155N-15");
         _setBaseURI(baseURI);
     }
 
@@ -238,7 +239,7 @@ contract NativasToken is
      * - the caller must be editor.
      */
     function setURI(uint256 tokenId, string memory tokenURI) public virtual {
-        require(_hasRole(Roles.EDITOR_ROLE), "ERR-ERC1155N-13");
+        require(_hasRole(Roles.EDITOR_ROLE), "ERR-ERC1155N-16");
         _setURI(tokenId, tokenURI);
     }
 
@@ -250,7 +251,7 @@ contract NativasToken is
      * - the caller must be editor
      */
     function setOffsettable(uint256 tokenId, bool enabled) public virtual {
-        require(_hasRole(Roles.EDITOR_ROLE), "ERR-ERC1155N-14");
+        require(_hasRole(Roles.EDITOR_ROLE), "ERR-ERC1155N-17");
         _setOffsettable(tokenId, enabled);
     }
 
@@ -262,7 +263,7 @@ contract NativasToken is
      * - the caller must be editor.
      */
     function setLogger(address logger_) public virtual {
-        require(_hasRole(Roles.ADMIN_ROLE), "ERR-ERC1155N-15");
+        require(_hasRole(Roles.ADMIN_ROLE), "ERR-ERC1155N-18");
         _setLogger(logger_);
     }
 
@@ -280,7 +281,8 @@ contract NativasToken is
         uint256 amount,
         bytes memory data
     ) public virtual {
-        require(_hasRole(Roles.SWAPPER_ROLE), "ERR-ERC1155N-16");
+        require(_hasRole(Roles.SWAPPER_ROLE), "ERR-ERC1155N-19");
+        require(_isOwnerOrApproved(account), "");
         _swap(account, fromTokenId, toTokenId, amount, data);
     }
 
@@ -298,7 +300,8 @@ contract NativasToken is
         uint256[] memory amounts,
         bytes memory data
     ) public virtual {
-        require(_hasRole(Roles.SWAPPER_ROLE), "ERR-ERC1155N-17");
+        require(_hasRole(Roles.SWAPPER_ROLE), "ERR-ERC1155N-20");
+        require(_isOwnerOrApproved(account), "");
         _swapBatch(account, fromTokenIds, toTokenIds, amounts, data);
     }
 

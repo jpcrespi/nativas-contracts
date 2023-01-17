@@ -6,12 +6,11 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "./ERC1155Offsettable.sol";
-import "./ERC1155Mintable.sol";
 
 /**
  * @dev Offset Implementation
  */
-contract ERC1155Swappable is ERC1155Offsettable, ERC1155Mintable {
+contract ERC1155Swappable is ERC1155Offsettable {
     /**
      * @dev See {ERC1155Offsettable-constructor}
      */
@@ -26,7 +25,7 @@ contract ERC1155Swappable is ERC1155Offsettable, ERC1155Mintable {
     ) internal virtual {
         require(_offsettable[fromTokenId] == false, "ERR-ERC1155W-01");
         require(_offsettable[toTokenId] == true, "ERR-ERC1155W-02");
-        _safeBurn(account, fromTokenId, amount, data);
+        _burn(account, fromTokenId, amount);
         _mint(account, toTokenId, amount, data);
     }
 
@@ -43,7 +42,7 @@ contract ERC1155Swappable is ERC1155Offsettable, ERC1155Mintable {
         for (uint256 i = 0; i < toTokenIds.length; i++) {
             require(_offsettable[toTokenIds[i]] == true, "ERR-ERC1155W-04");
         }
-        _safeBurnBatch(account, fromTokenIds, amounts, data);
+        _burnBatch(account, fromTokenIds, amounts);
         _mintBatch(account, toTokenIds, amounts, data);
     }
 }

@@ -7,10 +7,10 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 import "../../interfaces/erc1155/IERC1155ERC20.sol";
-import "../../interfaces/erc20/IERC20.sol";
 import "../../interfaces/erc20/IERC20Adapter.sol";
-import "../../interfaces/erc20/IERC20Metadata.sol";
 
 /**
  * @title ERC20 inplementation that adds backward compatibility

@@ -4,13 +4,13 @@
 
 pragma solidity ^0.8.0;
 
-import "../../../interfaces/erc1155/IERC1155Supply.sol";
-import "../ERC1155.sol";
+import "../../../interfaces/erc1155/IERC1155Supplyable.sol";
+import "./ERC1155Base.sol";
 
 /**
  * @dev Extension of ERC1155 that adds tracking of total supply per id.
  */
-contract ERC1155Supply is ERC1155, IERC1155Supply {
+contract ERC1155Supplyable is ERC1155Base, IERC1155Supplyable {
     // total supply
     mapping(uint256 => uint256) internal _totalSupply;
 
@@ -57,9 +57,13 @@ contract ERC1155Supply is ERC1155, IERC1155Supply {
             for (uint256 i = 0; i < tokenIds.length; ++i) {
                 uint256 id = tokenIds[i];
                 uint256 amount = amounts[i];
-                require(_totalSupply[id] >= amount, "ERR-ERC1155S-01");
+                uint256 supply = _totalSupply[id];
+                require(
+                    supply >= amount,
+                    "ERC1155Supplyable: burn amount exceeds totalSupply"
+                );
                 unchecked {
-                    _totalSupply[id] -= amount;
+                    _totalSupply[id] = supply - amount;
                 }
             }
         }

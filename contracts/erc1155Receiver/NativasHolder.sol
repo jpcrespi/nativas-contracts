@@ -8,9 +8,9 @@ import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import "@openzeppelin/contracts/utils/introspection/IERC165.sol";
 import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
-import "../../interfaces/erc1155/IERC1155.sol";
+import "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol";
+import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 import "../../interfaces/erc1155/IERC1155Holder.sol";
-import "../../interfaces/erc1155/IERC1155TokenReceiver.sol";
 import "../access/Controllable.sol";
 
 /**
@@ -22,7 +22,7 @@ contract NativasHolder is
     Controllable,
     Initializable,
     IERC1155Holder,
-    IERC1155TokenReceiver
+    IERC1155Receiver
 {
     // Holder metadata
     uint256 internal _id;
@@ -89,11 +89,11 @@ contract NativasHolder is
         public
         view
         virtual
-        override
+        override(ERC165, IERC165)
         returns (bool)
     {
         return
-            interfaceId == type(IERC1155TokenReceiver).interfaceId ||
+            interfaceId == type(IERC1155Receiver).interfaceId ||
             interfaceId == type(IERC1155Holder).interfaceId ||
             super.supportsInterface(interfaceId);
     }

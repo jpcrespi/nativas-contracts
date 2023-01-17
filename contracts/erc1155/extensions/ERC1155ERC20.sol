@@ -7,12 +7,12 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/proxy/Clones.sol";
 import "../../../interfaces/erc1155/IERC1155ERC20.sol";
 import "../../../interfaces/erc20/IERC20Adapter.sol";
-import "./ERC1155Supply.sol";
+import "./ERC1155Supplyable.sol";
 
 /**
  *
  */
-contract ERC1155ERC20 is ERC1155Supply, IERC1155ERC20 {
+contract ERC1155ERC20 is ERC1155Supplyable, IERC1155ERC20 {
     using Clones for address;
 
     // NativasAdapter template
@@ -47,6 +47,19 @@ contract ERC1155ERC20 is ERC1155Supply, IERC1155ERC20 {
     }
 
     /**
+     * @dev Indicates whether any token exist with a given id, or not.
+     */
+    function exists(uint256 tokenId)
+        public
+        view
+        virtual
+        override
+        returns (bool)
+    {
+        return _adapters[tokenId] != address(0);
+    }
+
+    /**
      * @dev Perform tranfer from adapter contract.
      *
      * Requirements:
@@ -61,20 +74,7 @@ contract ERC1155ERC20 is ERC1155Supply, IERC1155ERC20 {
         bytes memory data
     ) public virtual override {
         require(_msgSender() == _adapters[tokenId], "ERR-ERC1155A-01");
-        _safeAdapterTransferFrom(from, to, tokenId, amount, data);
-    }
-
-    /**
-     * @dev Indicates whether any token exist with a given id, or not.
-     */
-    function exists(uint256 tokenId)
-        public
-        view
-        virtual
-        override
-        returns (bool)
-    {
-        return _adapters[tokenId] != address(0);
+        _safeTransferFrom(from, to, tokenId, amount, data);
     }
 
     /**
@@ -94,27 +94,22 @@ contract ERC1155ERC20 is ERC1155Supply, IERC1155ERC20 {
     }
 
     /**
-     * @dev Transfers `amount` tokens of token type `tokenId` from `from` to `to`.
-     *
-     * Emits a {TransferSingle} event.
+     * @dev Sets the adapter template contracts
      *
      * Requirements:
      *
-     * - `to` cannot be the zero address.
-     * - `from` must have a balance of tokens of type `tokenId` of at least `amount`.
-     * - If `to` refers to a smart contract, it must implement
-     * {IERC1155Receiver-onERC1155Received} and return the acceptance magic value.
+     * - the template address must not be address 0.
+     * - tem template contract must implemente the IERC20Adapter interface
      */
-    function _safeAdapterTransferFrom(
-        address from,
-        address to,
-        uint256 tokenId,
-        uint256 amount,
-        bytes memory data
-    ) internal virtual {
-        require(to != address(0), "ERR-ERC1155A-03");
-        _transferFrom(from, from, to, tokenId, amount, data);
-        _doSafeTransferAcceptanceCheck(from, from, to, tokenId, amount, data);
+    function _setTemplate(address template_) internal virtual {
+        require(template_ != address(0), "ERR-ERC1155A-05");
+        require(
+            IERC165(template_).supportsInterface(
+                type(IERC20Adapter).interfaceId
+            ),
+            "ERR-ERC1155A-06"
+        );
+        _template = template_;
     }
 
     /**
@@ -136,24 +131,5 @@ contract ERC1155ERC20 is ERC1155Supply, IERC1155ERC20 {
         for (uint256 i = 0; i < tokenIds.length; ++i) {
             require(exists(tokenIds[i]) == true, "ERR-ERC1155A-04");
         }
-    }
-
-    /**
-     * @dev Sets the adapter template contracts
-     *
-     * Requirements:
-     *
-     * - the template address must not be address 0.
-     * - tem template contract must implemente the IERC20Adapter interface
-     */
-    function _setTemplate(address template_) internal virtual {
-        require(template_ != address(0), "ERR-ERC1155A-05");
-        require(
-            IERC165(template_).supportsInterface(
-                type(IERC20Adapter).interfaceId
-            ),
-            "ERR-ERC1155A-06"
-        );
-        _template = template_;
     }
 }

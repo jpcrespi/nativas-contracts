@@ -151,7 +151,7 @@ contract NativasAdapter is
      * @dev See {IERC20-approve}.
      */
     function approve(address, uint256) public virtual override returns (bool) {
-        require(false, "ERR-ERC20A-01");
+        require(false, "NativasAdapter: method not allowed");
         return false;
     }
 
@@ -177,7 +177,7 @@ contract NativasAdapter is
         address,
         uint256
     ) public virtual override returns (bool) {
-        require(false, "ERR-ERC20A-02");
+        require(false, "NativasAdapter: method not allowed");
         return false;
     }
 

@@ -51,7 +51,10 @@ contract ERC1155Offsettable is ERC1155Base {
         uint256 amount,
         string memory reason
     ) public virtual {
-        require(_isOwnerOrApproved(account), "ERR-ERC1155O-01");
+        require(
+            _isOwnerOrApproved(account),
+            "ERC1155Offsettable: caller is not token owner or approved"
+        );
         _burn(account, tokenId, amount);
         _offset(account, tokenId, amount, reason);
     }
@@ -69,7 +72,10 @@ contract ERC1155Offsettable is ERC1155Base {
         uint256[] memory amounts,
         string[] memory reasons
     ) public virtual {
-        require(_isOwnerOrApproved(account), "ERR-ERC1155O-02");
+        require(
+            _isOwnerOrApproved(account),
+            "ERC1155Offsettable: caller is not token owner or approved"
+        );
         _burnBatch(account, tokenIds, amounts);
         _offsetBatch(account, tokenIds, amounts, reasons);
     }
@@ -104,7 +110,10 @@ contract ERC1155Offsettable is ERC1155Base {
         uint256 amount,
         string memory reason
     ) internal virtual {
-        require(_offsettable[tokenId], "ERR-ERC1155O-03");
+        require(
+            _offsettable[tokenId] == true,
+            "ERC1155Offsettable: token must be offsettable"
+        );
         _logger.offset(account, tokenId, amount, reason);
     }
 
@@ -117,12 +126,15 @@ contract ERC1155Offsettable is ERC1155Base {
      * - tem template contract must implemente the IERC1155Logger interface
      */
     function _setLogger(address logger_) internal virtual {
-        require(logger_ != address(0), "ERR-ERC1155O-04");
+        require(
+            logger_ != address(0),
+            "ERC1155Offsettable: new logger is the zero address"
+        );
         require(
             IERC165(logger_).supportsInterface(
                 type(IERC1155Logger).interfaceId
             ),
-            "ERR-ERC1155O-05"
+            "ERC1155Offsettable: new template does not support IERC1155Logger interface"
         );
         _logger = IERC1155Logger(logger_);
     }

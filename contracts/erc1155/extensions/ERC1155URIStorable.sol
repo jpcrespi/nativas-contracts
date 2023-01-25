@@ -85,7 +85,10 @@ contract ERC1155URIStorable is ERC1155Base {
     ) internal virtual override {
         super._beforeTokenTransfer(operator, from, to, tokenIds, amounts, data);
         for (uint256 i = 0; i < tokenIds.length; ++i) {
-            require(exists(tokenIds[i]), "ERR-ERC1155U-01");
+            require(
+                exists(tokenIds[i]),
+                "ERC1155URIStorable: token uri does not exist"
+            );
         }
     }
 }

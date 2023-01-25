@@ -23,8 +23,14 @@ contract ERC1155Swappable is ERC1155Offsettable {
         uint256 amount,
         bytes memory data
     ) internal virtual {
-        require(_offsettable[fromTokenId] == false, "ERR-ERC1155W-01");
-        require(_offsettable[toTokenId] == true, "ERR-ERC1155W-02");
+        require(
+            _offsettable[fromTokenId] == false,
+            "ERC1155Swappable: token from must not be offsettable"
+        );
+        require(
+            _offsettable[toTokenId] == true,
+            "ERC1155Swappable: token to must be offsettable"
+        );
         _burn(account, fromTokenId, amount);
         _mint(account, toTokenId, amount, data);
     }
@@ -37,10 +43,16 @@ contract ERC1155Swappable is ERC1155Offsettable {
         bytes memory data
     ) internal virtual {
         for (uint256 i = 0; i < fromTokenIds.length; i++) {
-            require(_offsettable[fromTokenIds[i]] == false, "ERR-ERC1155W-03");
+            require(
+                _offsettable[fromTokenIds[i]] == false,
+                "ERC1155Swappable: token from must not be offsettable"
+            );
         }
         for (uint256 i = 0; i < toTokenIds.length; i++) {
-            require(_offsettable[toTokenIds[i]] == true, "ERR-ERC1155W-04");
+            require(
+                _offsettable[toTokenIds[i]] == true,
+                "ERC1155Swappable: token to must be offsettable"
+            );
         }
         _burnBatch(account, fromTokenIds, amounts);
         _mintBatch(account, toTokenIds, amounts, data);

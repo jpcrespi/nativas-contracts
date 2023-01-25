@@ -102,8 +102,14 @@ contract NativasHolder is
      * @dev See {Controllable-_transferControl}.
      */
     function transferControl(address controller_) public virtual {
-        require(controller() == _msgSender(), "ERR-ERC1155R-01");
-        require(controller_ != address(0), "ERR-ERC1155R-02");
+        require(
+            controller() == _msgSender(),
+            "NativasHolder: caller is not the controller"
+        );
+        require(
+            controller_ != address(0),
+            "NativasHolder: new controller is the zero address"
+        );
         _transferControl(controller_);
     }
 
@@ -119,7 +125,10 @@ contract NativasHolder is
         address operator_,
         bool approved_
     ) public virtual {
-        require(controller() == _msgSender(), "ERR-ERC1155R-03");
+        require(
+            controller() == _msgSender(),
+            "NativasHolder: caller is not the controller"
+        );
         _setApprovalForAll(entity_, operator_, approved_);
     }
 
@@ -131,7 +140,10 @@ contract NativasHolder is
      * - the caller must be the controller.
      */
     function setName(string memory name_) public virtual {
-        require(controller() == _msgSender(), "ERR-ERC1155R-04");
+        require(
+            controller() == _msgSender(),
+            "NativasHolder: caller is not the controller"
+        );
         _setName(name_);
     }
 
@@ -152,7 +164,7 @@ contract NativasHolder is
         }
         require(
             IERC165(entity_).supportsInterface(type(IERC1155).interfaceId),
-            "ERR-ERC1155R-05"
+            "NativasHolder: entity does not support IERC1155 interface"
         );
         IERC1155(entity_).setApprovalForAll(operator_, approved_);
     }

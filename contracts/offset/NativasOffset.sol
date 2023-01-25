@@ -61,8 +61,14 @@ contract NativasOffset is ERC165, Context, Controllable, IERC1155Logger {
      * @dev See {Controllable-_transferControl}.
      */
     function transferControl(address controller_) public virtual {
-        require(controller() == _msgSender(), "ERR-ERC1155L-01");
-        require(controller_ != address(0), "ERR-ERC1155L-02");
+        require(
+            controller() == _msgSender(),
+            "NativasOffset: caller is not the controller"
+        );
+        require(
+            controller_ != address(0),
+            "NativasOffset: new controller is the zero address"
+        );
         _transferControl(controller_);
     }
 
@@ -79,7 +85,10 @@ contract NativasOffset is ERC165, Context, Controllable, IERC1155Logger {
         virtual
         returns (uint256)
     {
-        require(account != address(0), "ERR-ERC1155L-03");
+        require(
+            account != address(0),
+            "NativasOffset: caller is the zero address"
+        );
         return _balances[tokenId][account];
     }
 
@@ -88,13 +97,16 @@ contract NativasOffset is ERC165, Context, Controllable, IERC1155Logger {
      *
      * Requirements:
      *
-     * - `accounts` and `ids` must have the same length.
+     * - `accounts` and `ids` caller must have the same length.
      */
     function balanceOfBatch(
         address[] memory accounts,
         uint256[] memory tokenIds
     ) public view virtual returns (uint256[] memory) {
-        require(accounts.length == tokenIds.length, "ERR-ERC1155L-04");
+        require(
+            accounts.length == tokenIds.length,
+            "NativasOffset: accounts and token ids length mismatch"
+        );
 
         uint256[] memory batchBalances = new uint256[](accounts.length);
 
@@ -148,7 +160,10 @@ contract NativasOffset is ERC165, Context, Controllable, IERC1155Logger {
         uint256 amount,
         string memory reason
     ) public virtual override {
-        require(controller() == _msgSender(), "ERR-ERC1155L-05");
+        require(
+            controller() == _msgSender(),
+            "NativasOffset: caller is not the controller"
+        );
         _offset(account, tokenId, amount, reason);
     }
 

@@ -73,7 +73,10 @@ contract ERC1155ERC20 is ERC1155Supplyable, IERC1155ERC20 {
         uint256 amount,
         bytes memory data
     ) public virtual override {
-        require(_msgSender() == _adapters[tokenId], "ERR-ERC1155A-01");
+        require(
+            _msgSender() == _adapters[tokenId],
+            "ERC1155ERC20: caller is not the token adapter"
+        );
         _safeTransferFrom(from, to, tokenId, amount, data);
     }
 
@@ -86,7 +89,10 @@ contract ERC1155ERC20 is ERC1155Supplyable, IERC1155ERC20 {
         string memory symbol,
         uint8 decimals
     ) internal virtual {
-        require(_template != address(0), "ERR-ERC1155A-02");
+        require(
+            _template != address(0),
+            "ERC1155ERC20: template is the zero address"
+        );
         address adapter = _template.clone();
         IERC20Adapter(adapter).init(tokenId, name, symbol, decimals);
         _adapters[tokenId] = adapter;
@@ -102,12 +108,15 @@ contract ERC1155ERC20 is ERC1155Supplyable, IERC1155ERC20 {
      * - tem template contract must implemente the IERC20Adapter interface
      */
     function _setTemplate(address template_) internal virtual {
-        require(template_ != address(0), "ERR-ERC1155A-05");
+        require(
+            template_ != address(0),
+            "ERC1155ERC20: new template is the zero address"
+        );
         require(
             IERC165(template_).supportsInterface(
                 type(IERC20Adapter).interfaceId
             ),
-            "ERR-ERC1155A-06"
+            "ERC1155ERC20: new template does not support IERC20Adapter interface"
         );
         _template = template_;
     }
@@ -129,7 +138,10 @@ contract ERC1155ERC20 is ERC1155Supplyable, IERC1155ERC20 {
     ) internal virtual override {
         super._beforeTokenTransfer(operator, from, to, tokenIds, amounts, data);
         for (uint256 i = 0; i < tokenIds.length; ++i) {
-            require(exists(tokenIds[i]) == true, "ERR-ERC1155A-04");
+            require(
+                exists(tokenIds[i]) == true,
+                "ERC1155ERC20: token adapter does not exist"
+            );
         }
     }
 }

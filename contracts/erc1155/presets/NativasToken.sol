@@ -120,10 +120,6 @@ contract NativasToken is
         uint256 amount
     ) public virtual {
         require(
-            _hasRole(Roles.BURNER_ROLE),
-            "NativasToken: caller must have burner role to burn"
-        );
-        require(
             _isOwnerOrApproved(account),
             "NativasToken: caller is not token owner or approved"
         );
@@ -142,10 +138,6 @@ contract NativasToken is
         uint256[] memory tokenIds,
         uint256[] memory amounts
     ) public virtual {
-        require(
-            _hasRole(Roles.BURNER_ROLE),
-            "NativasToken: caller must have burner role to burn"
-        );
         require(
             _isOwnerOrApproved(account),
             "NativasToken: caller is not token owner or approved"

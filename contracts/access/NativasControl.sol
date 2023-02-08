@@ -16,7 +16,6 @@ contract NativasControl is AccessControlEnumerable {
      */
     constructor() {
         _grantRole(Roles.ADMIN_ROLE, _msgSender());
-        _grantRole(Roles.BURNER_ROLE, _msgSender());
         _grantRole(Roles.MINTER_ROLE, _msgSender());
         _grantRole(Roles.PAUSER_ROLE, _msgSender());
         _grantRole(Roles.EDITOR_ROLE, _msgSender());

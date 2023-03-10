@@ -17,13 +17,9 @@ contract ERC1155Supplyable is ERC1155Base, IERC1155Supplyable {
     /**
      * @dev Total amount of tokens in with a given id.
      */
-    function totalSupply(uint256 tokenId)
-        public
-        view
-        virtual
-        override
-        returns (uint256 supply)
-    {
+    function totalSupply(
+        uint256 tokenId
+    ) public view virtual override returns (uint256 supply) {
         return _totalSupply[tokenId];
     }
 

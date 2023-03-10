@@ -3,7 +3,7 @@
     "solidity.compileUsingRemoteVersion": "v0.8.17+commit.8df45f5",
     "solidity.defaultCompiler": "localNodeModule",
     "solidity.remappings": [
-        "@openzeppelin/=/Users/juanpablo/.brownie/packages/OpenZeppelin/openzeppelin-contracts@4.8.0"
+        "@openzeppelin/=/Users/juanpablo/.brownie/packages/OpenZeppelin/openzeppelin-contracts@4.8.2"
         //,"@openzeppelin/=/home/jpcre/.brownie/packages/OpenZeppelin/openzeppelin-contracts@4.5.0"
     ]
 }

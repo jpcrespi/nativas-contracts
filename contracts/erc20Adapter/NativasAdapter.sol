@@ -65,13 +65,9 @@ contract NativasAdapter is
     /**
      * @dev See {IERC165-supportsInterface}.
      */
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        virtual
-        override
-        returns (bool)
-    {
+    function supportsInterface(
+        bytes4 interfaceId
+    ) public view virtual override returns (bool) {
         return
             interfaceId == type(IERC20).interfaceId ||
             interfaceId == type(IERC20Adapter).interfaceId ||
@@ -124,26 +120,19 @@ contract NativasAdapter is
     /**
      * @dev See {IERC20-balanceOf}.
      */
-    function balanceOf(address account)
-        public
-        view
-        virtual
-        override
-        returns (uint256)
-    {
+    function balanceOf(
+        address account
+    ) public view virtual override returns (uint256) {
         return _entity.balanceOf(account, _tokenId);
     }
 
     /**
      * @dev See {IERC20-allowance}.
      */
-    function allowance(address, address)
-        public
-        view
-        virtual
-        override
-        returns (uint256)
-    {
+    function allowance(
+        address,
+        address
+    ) public view virtual override returns (uint256) {
         return 0;
     }
 
@@ -158,12 +147,10 @@ contract NativasAdapter is
     /**
      * @dev See {IERC20-transfer}.
      */
-    function transfer(address to, uint256 amount)
-        public
-        virtual
-        override
-        returns (bool)
-    {
+    function transfer(
+        address to,
+        uint256 amount
+    ) public virtual override returns (bool) {
         address owner = _msgSender();
         _transfer(owner, to, amount);
         return true;

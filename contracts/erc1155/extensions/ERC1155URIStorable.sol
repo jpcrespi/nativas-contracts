@@ -31,13 +31,9 @@ contract ERC1155URIStorable is ERC1155Base {
      * and the token-specific uri if the latter is set
      *
      */
-    function uri(uint256 tokenId)
-        public
-        view
-        virtual
-        override
-        returns (string memory)
-    {
+    function uri(
+        uint256 tokenId
+    ) public view virtual override returns (string memory) {
         string memory tokenURI = _tokenURIs[tokenId];
         return
             bytes(tokenURI).length > 0

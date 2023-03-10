@@ -2,12 +2,12 @@ dotenv: .env
 wallets:
   from_key: ${PRIVATE_KEY}
 dependencies:
-  - OpenZeppelin/openzeppelin-contracts@4.8.0
+  - OpenZeppelin/openzeppelin-contracts@4.8.2
 compiler:
   solc:
     version: 0.8.17
     remappings:
-      - "@openzeppelin=OpenZeppelin/openzeppelin-contracts@4.8.0"
+      - "@openzeppelin=OpenZeppelin/openzeppelin-contracts@4.8.2"
 networks:
   default: development
   development:

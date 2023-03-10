@@ -38,7 +38,9 @@ contract NativasToken is
     /**
      * @dev See {ERC1155URIStorable-uri}.
      */
-    function uri(uint256 tokenId)
+    function uri(
+        uint256 tokenId
+    )
         public
         view
         virtual
@@ -51,7 +53,9 @@ contract NativasToken is
     /**
      * @dev Indicates whether any token exist with a given id, or not.
      */
-    function exists(uint256 tokenId)
+    function exists(
+        uint256 tokenId
+    )
         public
         view
         virtual
@@ -328,10 +332,6 @@ contract NativasToken is
             _hasRole(Roles.SWAPPER_ROLE),
             "NativasToken: caller must have swapper role to swap"
         );
-        require(
-            _isOwnerOrApproved(account),
-            "NativasToken: caller is not token owner or approved"
-        );
         _swap(account, fromTokenId, toTokenId, amount, data);
     }
 
@@ -352,10 +352,6 @@ contract NativasToken is
         require(
             _hasRole(Roles.SWAPPER_ROLE),
             "NativasToken: caller must have swapper role to swap"
-        );
-        require(
-            _isOwnerOrApproved(account),
-            "NativasToken: caller is not token owner or approved"
         );
         _swapBatch(account, fromTokenIds, toTokenIds, amounts, data);
     }

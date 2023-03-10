@@ -19,12 +19,9 @@ contract ERC1155Base is ERC1155 {
     /**
      * @dev See {ERC1155-isApprovedForAll}
      */
-    function _isOwnerOrApproved(address account)
-        internal
-        view
-        virtual
-        returns (bool)
-    {
+    function _isOwnerOrApproved(
+        address account
+    ) internal view virtual returns (bool) {
         return
             account == _msgSender() || isApprovedForAll(account, _msgSender());
     }

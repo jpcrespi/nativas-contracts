@@ -49,13 +49,9 @@ contract ERC1155ERC20 is ERC1155Supplyable, IERC1155ERC20 {
     /**
      * @dev Indicates whether any token exist with a given id, or not.
      */
-    function exists(uint256 tokenId)
-        public
-        view
-        virtual
-        override
-        returns (bool)
-    {
+    function exists(
+        uint256 tokenId
+    ) public view virtual override returns (bool) {
         return _adapters[tokenId] != address(0);
     }
 

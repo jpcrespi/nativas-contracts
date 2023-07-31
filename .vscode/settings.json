@@ -1,6 +1,7 @@
 {
   "python.formatting.provider": "black",
   "solidity.compileUsingRemoteVersion": "v0.8.2+commit.661d1103",
+  //"solidity.compileUsingRemoteVersion": "v0.8.17+commit.8df45f5",
   "solidity.defaultCompiler": "localNodeModule",
   "solidity.remappings": [
     "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/"

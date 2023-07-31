@@ -15,6 +15,7 @@
     "migrate:typechain": "tsc --project tsconfig.migrate.json --outDir migrations",
     "migrate:truffle": "truffle migrate",
     "migrate": "yarn migrate:clean && yarn migrate:typechain && yarn migrate:truffle",
+    "ganache": "ganache --port 8545 --db ./chain --mnemonic nativas --networkId 5777",
     "tests": "truffle test"
   },
   "author": "",
@@ -40,6 +41,7 @@
     "eslint": "^8.46.0",
     "eslint-config-prettier": "^8.9.0",
     "eslint-plugin-prettier": "^5.0.0",
+    "ganache": "^7.9.0",
     "prettier": "^3.0.0",
     "typechain": "^8.3.1",
     "typescript": "^5.1.6"

@@ -1,2 +1,2 @@
 #!/bin/bash
-ganache --port 7545 --db ./chain --mnemonic nativas --networkId 1337
+ganache --port 8545 --db ./chain --mnemonic nativas --networkId 5777

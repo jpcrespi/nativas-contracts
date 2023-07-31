@@ -357,3 +357,6 @@ ipfs
 
 # Truffle
 migrations
+
+# Ganache
+chain

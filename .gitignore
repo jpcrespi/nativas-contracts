@@ -354,3 +354,6 @@ LOG.old
 
 ## IPFS
 ipfs
+
+# Truffle
+migrations
